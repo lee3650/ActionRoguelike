@@ -28,7 +28,7 @@ public class PlayerDodgeState : State
     {
         dodgeDir = Input.GetDirectionalInput();
         MovementController.AddForce(DodgeSpeed, dodgeDir);
-        rotateDir = -KeyboardInput.GetRotationFromDirection(dodgeDir);
+        rotateDir = KeyboardInput.GetRotationFromDirection(dodgeDir);
         dodgeTimer = DodgeLength; 
     }
 

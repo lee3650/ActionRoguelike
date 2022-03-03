@@ -6,12 +6,12 @@ public class KeyboardInput : PlayerInput
 {
     public static float GetRotationFromDirection(Vector2 dir)
     {
-        return Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x) + 90f; 
+        return Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x); 
     }
 
     public override float GetDirectionToFace()
     {
-        Vector2 delta = new Vector2(((Vector2)transform.position - GetWorldMousePos()).x, ((Vector2)transform.position - GetWorldMousePos()).y);
+        Vector2 delta = GetWorldMousePos() - (Vector2)transform.position; 
         return GetRotationFromDirection(delta);
     }
 
