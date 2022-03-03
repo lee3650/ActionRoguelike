@@ -8,8 +8,10 @@ public class PlayerDodgeState : State
     [SerializeField] PlayerMoveState PlayerMoveState;
     [SerializeField] PlayerInput Input;
     [SerializeField] float DodgeSpeed;
-    [SerializeField] float DodgeCooldown;
     [SerializeField] float DodgeLength;
+    [SerializeField] float RecoverySpeed;
+    [SerializeField] float RecoveryLength; 
+    [SerializeField] float DodgeCooldown;
 
     private float dodgeTimer = 0f; 
 
@@ -29,14 +31,20 @@ public class PlayerDodgeState : State
         dodgeDir = Input.GetDirectionalInput();
         MovementController.AddForce(DodgeSpeed, dodgeDir);
         rotateDir = KeyboardInput.GetRotationFromDirection(dodgeDir);
-        dodgeTimer = DodgeLength; 
+        dodgeTimer = DodgeLength + RecoveryLength; 
     }
 
     public override void UpdateState()
     {
         dodgeTimer -= Time.deltaTime;
 
-        MovementController.AddForce(DodgeSpeed, dodgeDir);
+        if (dodgeTimer > RecoveryLength)
+        {
+            MovementController.AddForce(DodgeSpeed, dodgeDir);
+        } else
+        {
+            MovementController.AddForce(RecoverySpeed, dodgeDir);
+        }
 
         MovementController.RotateInDirection(rotateDir);
 

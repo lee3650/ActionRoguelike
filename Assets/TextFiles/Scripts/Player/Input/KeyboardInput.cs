@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class KeyboardInput : PlayerInput
 {
+    private float lastAttackPress;
+    private float lastDodgePress; 
+
     public static float GetRotationFromDirection(Vector2 dir)
     {
         return Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x); 
@@ -37,11 +40,23 @@ public class KeyboardInput : PlayerInput
 
     public override bool Attack()
     {
-        return Input.GetMouseButtonDown(0);
+        return Time.realtimeSinceStartup - lastAttackPress < Time.fixedDeltaTime;
     }
 
     public override bool Dodge()
     {
-        return Input.GetKeyDown(KeyCode.Space);
+        return Time.realtimeSinceStartup - lastDodgePress < Time.fixedDeltaTime; 
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            lastAttackPress = Time.realtimeSinceStartup;
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            lastDodgePress = Time.realtimeSinceStartup;
+        }
     }
 }

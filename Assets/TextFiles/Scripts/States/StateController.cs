@@ -27,7 +27,7 @@ public class StateController : MonoBehaviour, LateInitializable
         CurrentState.EnterState();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         CurrentState.UpdateState();
     }

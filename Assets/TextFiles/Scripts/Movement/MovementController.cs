@@ -11,7 +11,6 @@ public class MovementController : MonoBehaviour
 
     public void MoveInDirection(Vector2 dir)
     {
-        //That obviously is not permanent. 
         rb.AddForce(dir * baseMoveSpeed);
     }
 
@@ -22,6 +21,6 @@ public class MovementController : MonoBehaviour
 
     public void RotateInDirection(float dir)
     {
-        rb.rotation = Mathf.LerpAngle(rb.rotation, dir, RotateSpeed * Time.deltaTime);
+        rb.rotation = Mathf.LerpAngle(rb.rotation, dir, RotateSpeed);
     }
 }
