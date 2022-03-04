@@ -4,26 +4,29 @@ using UnityEngine;
 
 public class PlayerAttackState : State
 {
-    [SerializeField] MeleeWeapon MeleeWeapon;
+    [SerializeField] WeaponManager WeaponManager;
     [SerializeField] PlayerMoveState PlayerMoveState;
     [SerializeField] MovementController MovementController;
     [SerializeField] PlayerInput PlayerInput;
 
     public override void EnterState()
     {
-        MeleeWeapon.StartAttack();
+        WeaponManager.PauseFaceInput();
+        WeaponManager.StartAttack();
     }
+
     public override void UpdateState()
     {
         MovementController.MoveInDirection(PlayerInput.GetDirectionalInput());
 
-        if (MeleeWeapon.AttackFinished())
+        if (WeaponManager.AttackFinished())
         {
             StateController.EnterState(PlayerMoveState);
         }
     }
+
     public override void ExitState()
     {
-
+        WeaponManager.PlayFaceInput();
     }
 }

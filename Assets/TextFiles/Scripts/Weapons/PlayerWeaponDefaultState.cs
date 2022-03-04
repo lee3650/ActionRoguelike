@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class PlayerWeaponDefaultState : State, LateInitializable
 {
-    [SerializeField] FacePlayerInput FacePlayerInput;
-    [SerializeField] SwingState SwingState;
+    [SerializeField] AnticipationState AnticipationState;
     [SerializeField] MeleeWeapon MyWeapon;
 
     public void LateInit()
@@ -15,17 +14,19 @@ public class PlayerWeaponDefaultState : State, LateInitializable
 
     private void OnStartAttack()
     {
-        StateController.EnterState(SwingState);
+        StateController.EnterState(AnticipationState);
     }
 
     public override void EnterState()
     {
+
     }
 
     public override void UpdateState()
     {
-        FacePlayerInput.FaceInput();
+
     }
+
     public override void ExitState()
     {
 
