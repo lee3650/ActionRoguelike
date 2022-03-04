@@ -17,7 +17,7 @@ public class PlayerMoveState : State
     public override void UpdateState()
     {
         MovementController.MoveInDirection(PlayerInput.GetDirectionalInput());
-        MovementController.RotateInDirection(PlayerInput.GetDirectionToFace());
+        //MovementController.RotateInDirection(PlayerInput.GetDirectionToFace());
 
         if (PlayerInput.Attack())
         {

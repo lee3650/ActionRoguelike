@@ -19,8 +19,13 @@ public class MovementController : MonoBehaviour
         rb.AddForce(force * dir);
     }
 
-    public void RotateInDirection(float dir)
+    public void PhysicallyRotateInDirection(float dir)
     {
         rb.rotation = Mathf.LerpAngle(rb.rotation, dir, RotateSpeed);
+    }
+
+    public float GetRotation()
+    {
+        return rb.rotation; 
     }
 }

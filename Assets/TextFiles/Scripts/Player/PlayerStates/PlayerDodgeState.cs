@@ -36,7 +36,7 @@ public class PlayerDodgeState : State
 
     public override void UpdateState()
     {
-        dodgeTimer -= Time.deltaTime;
+        dodgeTimer -= Time.fixedDeltaTime;
 
         if (dodgeTimer > RecoveryLength)
         {
@@ -46,7 +46,7 @@ public class PlayerDodgeState : State
             MovementController.AddForce(RecoverySpeed, dodgeDir);
         }
 
-        MovementController.RotateInDirection(rotateDir);
+        //MovementController.RotateInDirection(rotateDir);
 
         if (dodgeTimer <= 0)
         {
