@@ -13,10 +13,26 @@ public class AnticipationState : State
 
     [SerializeField] SwingState SwingState;
 
+    [SerializeField] ReversedTracker ReversedTracker;
+
     private float timer = 0f;
+
+    private float adjustment = 0f;
+
+    private int dir; 
 
     public override void EnterState()
     {
+        if (ReversedTracker.Reversed)
+        {
+            adjustment = 180f;
+        } else
+        {
+            adjustment = 0; 
+        }
+        
+        dir = ReversedTracker.Reversed ? 1 : -1;
+
         timer = 0f; 
     }
 
@@ -26,11 +42,12 @@ public class AnticipationState : State
 
         float t = timer / AnticipationLength;
 
+
         //move ourselves
-        transform.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(0f, AnticipationDist, t, -1));
+        transform.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(adjustment, -dir * AnticipationDist + adjustment, t, dir));
 
         //move the weapon sprite/collider
-        Hand.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(0f, WristRotDist, t, -1));
+        Hand.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(adjustment, -dir * WristRotDist + adjustment, t, dir));
 
         if (timer >= AnticipationLength)
         {

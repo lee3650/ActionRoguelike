@@ -9,11 +9,15 @@ public class SwingState : State
     [SerializeField] float WristDist;
     [SerializeField] RecoveryState RecoveryState;
     [SerializeField] TrailRenderer TrailRenderer;
-    [SerializeField] Transform Hand; 
+    [SerializeField] Transform Hand;
+
+    [SerializeField] ReversedTracker ReversedTracker;
 
     private float timer = 0f;
     private float startRotation = 0f;
     private float startHandRotation = 0f;
+
+    private int dir; 
 
     public override void EnterState()
     {
@@ -21,6 +25,8 @@ public class SwingState : State
         TrailRenderer.emitting = true;
         startRotation = transform.localEulerAngles.z;
         startHandRotation = Hand.localEulerAngles.z;
+
+        dir = ReversedTracker.Reversed ? -1 : 1; 
     }
 
     public override void UpdateState()
@@ -29,8 +35,8 @@ public class SwingState : State
 
         float t = timer / SwingLength;
 
-        transform.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(startRotation, startRotation + SwingDistance, t, 1));
-        Hand.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(startHandRotation, startHandRotation + WristDist, t, 1));
+        transform.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(startRotation, startRotation + dir * SwingDistance, t, dir));
+        Hand.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(startHandRotation, startHandRotation + dir * WristDist, t, dir));
 
         if (timer > SwingLength)
         {

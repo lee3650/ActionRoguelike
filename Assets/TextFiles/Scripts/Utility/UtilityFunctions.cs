@@ -43,8 +43,6 @@ public class UtilityFunctions : MonoBehaviour
 
         float delta = end - start;
 
-        print("delta: " + delta);
-
         return (t * delta) + start;
     }
 }
