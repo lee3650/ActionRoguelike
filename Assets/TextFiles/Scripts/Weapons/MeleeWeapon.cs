@@ -14,6 +14,11 @@ public class MeleeWeapon : Weapon
         finishedAttack = true;
     }
 
+    public override void LandedHit(GameObject hit)
+    {
+        MyWielder.OnHitLands(hit);
+    }
+
     public override void StartAttack()
     {
         finishedAttack = false;
@@ -24,4 +29,5 @@ public class MeleeWeapon : Weapon
     {
         return finishedAttack; 
     }
+
 }

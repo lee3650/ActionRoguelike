@@ -2,13 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponManager : MonoBehaviour
+public class WeaponManager : MonoBehaviour, SecondInitializable
 {
     [SerializeField] FacePlayerInput FacePlayerInput;
     [SerializeField] Transform WeaponCenterParent;
-    [SerializeField] Weapon CurrentWeapon; 
-
+    [SerializeField] Weapon CurrentWeapon;
+    [SerializeField] PlayerWielder PlayerWielder;
+    
     private bool faceInput = true; 
+
+    public void SecondInit()
+    {
+        CurrentWeapon.SetWielder(PlayerWielder);
+    }
 
     private void FixedUpdate()
     {

@@ -11,6 +11,8 @@ public class SwingState : State
     [SerializeField] TrailRenderer TrailRenderer;
     [SerializeField] Transform Hand;
 
+    [SerializeField] Collider2D WeaponCollider;
+
     [SerializeField] ReversedTracker ReversedTracker;
 
     private float timer = 0f;
@@ -21,6 +23,7 @@ public class SwingState : State
 
     public override void EnterState()
     {
+        WeaponCollider.enabled = true;
         timer = 0f;
         TrailRenderer.emitting = true;
         startRotation = transform.localEulerAngles.z;
@@ -46,6 +49,8 @@ public class SwingState : State
 
     public override void ExitState()
     {
+        WeaponCollider.enabled = false;
+
         TrailRenderer.emitting = false; 
     }
 }

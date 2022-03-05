@@ -10,7 +10,8 @@ public class RecoveryState : State
     [SerializeField] PlayerWeaponDefaultState defaultState;
     [SerializeField] MeleeWeapon MyWeapon;
 
-    [SerializeField] bool toggleReverse; 
+    [SerializeField] bool toggleReverse;
+    [SerializeField] bool toggleEnd; 
 
     [SerializeField] ReversedTracker ReversedTracker;
 
@@ -30,7 +31,7 @@ public class RecoveryState : State
         dir = ReversedTracker.Reversed ? 1 : -1;
         w_dir = ReversedTracker.Reversed ? -WristDir : WristDir;
 
-        if (toggleReverse)
+        if (toggleEnd)
         {
             end = ReversedTracker.Reversed ? 0 : 180;
         } else
