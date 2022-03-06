@@ -6,7 +6,6 @@ public class MeleeCollisionHandler : WeaponCollisionHandler, LateInitializable
 {
     [SerializeField] MeleeWeapon MyWeapon;
     [SerializeField] GameEvent MyEventTemplate;
-    [SerializeField] SendCollision MyCollisionSender;
 
     private List<Entity> hitEntities = new List<Entity>(); 
 

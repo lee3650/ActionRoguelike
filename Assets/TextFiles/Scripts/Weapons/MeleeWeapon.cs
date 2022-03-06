@@ -7,7 +7,25 @@ public class MeleeWeapon : Weapon
 {
     public event Action OnStartAttack = delegate { };
 
-    private bool finishedAttack = false;
+    private bool finishedAttack = true;
+
+    [SerializeField] SpriteRenderer[] Images; 
+
+    public override void Select()
+    {
+        foreach (SpriteRenderer sr in Images)
+        {
+            sr.enabled = true; 
+        }
+    }
+
+    public override void Deselect()
+    {
+        foreach(SpriteRenderer sr in Images)
+        {
+            sr.enabled = false;
+        }
+    }
 
     public void FinishedAttack()
     {

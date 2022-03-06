@@ -5,11 +5,26 @@ using UnityEngine;
 public class KeyboardInput : PlayerInput
 {
     private float lastAttackPress;
-    private float lastDodgePress; 
+    private float lastDodgePress;
+    private float lastPositiveScroll;
+    private float lastNegativeScroll;
 
     public static float GetRotationFromDirection(Vector2 dir)
     {
         return Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x); 
+    }
+
+    public override int SelectionDelta()
+    {
+        if (Time.realtimeSinceStartup - lastPositiveScroll < Time.fixedDeltaTime)
+        {
+            return 1;
+        }
+        if (Time.realtimeSinceStartup - lastNegativeScroll < Time.fixedDeltaTime)
+        {
+            return -1;
+        }
+        return 0;
     }
 
     public override float GetDirectionToFace()
@@ -48,6 +63,11 @@ public class KeyboardInput : PlayerInput
         return Time.realtimeSinceStartup - lastDodgePress < Time.fixedDeltaTime; 
     }
 
+    public override bool PickUpItems()
+    {
+        return Input.GetKeyDown(KeyCode.E);
+    }
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -57,6 +77,14 @@ public class KeyboardInput : PlayerInput
         if (Input.GetKeyDown(KeyCode.Space))
         {
             lastDodgePress = Time.realtimeSinceStartup;
+        }
+        if (Input.mouseScrollDelta.y > 0)
+        {
+            lastPositiveScroll = Time.realtimeSinceStartup;
+        }
+        else if (Input.mouseScrollDelta.y < 0)
+        {
+            lastNegativeScroll = Time.realtimeSinceStartup; 
         }
     }
 }

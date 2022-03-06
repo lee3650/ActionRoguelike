@@ -2,18 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponManager : MonoBehaviour, SecondInitializable
+public class WeaponManager : MonoBehaviour
 {
     [SerializeField] FacePlayerInput FacePlayerInput;
-    [SerializeField] Transform WeaponCenterParent;
     [SerializeField] Weapon CurrentWeapon;
     [SerializeField] PlayerWielder PlayerWielder;
     
     private bool faceInput = true; 
 
-    public void SecondInit()
+    public Weapon GetCurrentWeapon()
     {
-        CurrentWeapon.SetWielder(PlayerWielder);
+        return CurrentWeapon; 
+    }
+
+    public void SelectWeapon(Weapon newWeapon)
+    {
+        CurrentWeapon?.Deselect();
+        newWeapon.SetWielder(PlayerWielder);
+        newWeapon.Select();
+        CurrentWeapon = newWeapon;
     }
 
     private void FixedUpdate()

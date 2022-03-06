@@ -10,4 +10,6 @@ public abstract class PlayerInput : MonoBehaviour
     public abstract float GetDirectionToFace();
     public abstract bool Attack();
     public abstract bool Dodge();
+    public abstract bool PickUpItems();
+    public abstract int SelectionDelta();
 }

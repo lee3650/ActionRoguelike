@@ -8,6 +8,7 @@ public class PlayerMoveState : State
     [SerializeField] PlayerInput PlayerInput;
     [SerializeField] PlayerAttackState PlayerAttackState;
     [SerializeField] PlayerDodgeState PlayerDodgeState;
+    [SerializeField] PickUpWeapon PickUpWeapon;
 
     public override void EnterState()
     {
@@ -17,7 +18,11 @@ public class PlayerMoveState : State
     public override void UpdateState()
     {
         MovementController.MoveInDirection(PlayerInput.GetDirectionalInput());
-        //MovementController.RotateInDirection(PlayerInput.GetDirectionToFace());
+
+        if (PlayerInput.SelectionDelta() != 0)
+        {
+            PickUpWeapon.ChangeSelection(PlayerInput.SelectionDelta());
+        }
 
         if (PlayerInput.Attack())
         {
