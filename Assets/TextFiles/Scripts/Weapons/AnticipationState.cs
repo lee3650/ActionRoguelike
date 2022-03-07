@@ -9,7 +9,7 @@ public class AnticipationState : State
     [SerializeField] float AnticipationDist;
     [Tooltip("Unit = degrees")]
     [SerializeField] float WristRotDist;
-    [SerializeField] Transform Hand;
+    [SerializeField] HandAndArmGetter HandAndArm;
 
     [SerializeField] SwingState SwingState;
 
@@ -18,6 +18,8 @@ public class AnticipationState : State
     private float timer = 0f;
 
     private float adjustment = 0f;
+
+    private float startRot = 0f;
 
     private int dir; 
 
@@ -30,7 +32,7 @@ public class AnticipationState : State
         {
             adjustment = 0; 
         }
-        
+
         dir = ReversedTracker.Reversed ? 1 : -1;
 
         timer = 0f; 
@@ -43,11 +45,9 @@ public class AnticipationState : State
         float t = timer / AnticipationLength;
 
 
-        //move ourselves
-        transform.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(adjustment, -dir * AnticipationDist + adjustment, t, dir));
+        HandAndArm.Arm.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(adjustment, -dir * AnticipationDist + adjustment, t, dir));
 
-        //move the weapon sprite/collider
-        Hand.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(adjustment, -dir * WristRotDist + adjustment, t, dir));
+        HandAndArm.Hand.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(adjustment, -dir * WristRotDist + adjustment, t, dir));
 
         if (timer >= AnticipationLength)
         {

@@ -42,7 +42,7 @@ public class PickUpWeapon : MonoBehaviour, LateInitializable
         w.Deselect();
         w.transform.parent = WeaponParent;
         w.transform.localEulerAngles = Vector3.zero;
-        w.transform.localPosition = Vector3.zero; 
+        w.transform.localPosition = w.GetRelativePosition(); 
     }
 
     private List<Weapon> GetNearbyWeapons()

@@ -9,6 +9,7 @@ public class PlayerMoveState : State
     [SerializeField] PlayerAttackState PlayerAttackState;
     [SerializeField] PlayerDodgeState PlayerDodgeState;
     [SerializeField] PickUpWeapon PickUpWeapon;
+    [SerializeField] TalentManager TalentManager;
 
     public override void EnterState()
     {
@@ -22,6 +23,16 @@ public class PlayerMoveState : State
         if (PlayerInput.SelectionDelta() != 0)
         {
             PickUpWeapon.ChangeSelection(PlayerInput.SelectionDelta());
+        }
+
+        int tal = PlayerInput.GetTalentToActivate();
+
+        if (TalentManager.IsActiveTalentValid(tal))
+        {
+            State newState = TalentManager.GetActiveTalent(tal);
+            StateController.EnterState(newState);
+            //not sure if the return is necessary
+            return; 
         }
 
         if (PlayerInput.Attack())

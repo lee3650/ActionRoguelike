@@ -6,6 +6,7 @@ using UnityEngine;
 //and use it for testing... 
 public abstract class PlayerInput : MonoBehaviour
 {
+    public abstract int GetTalentToActivate();
     public abstract Vector2 GetDirectionalInput();
     public abstract float GetDirectionToFace();
     public abstract bool Attack();

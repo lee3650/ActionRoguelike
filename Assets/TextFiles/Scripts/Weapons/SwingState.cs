@@ -9,7 +9,7 @@ public class SwingState : State
     [SerializeField] float WristDist;
     [SerializeField] RecoveryState RecoveryState;
     [SerializeField] TrailRenderer TrailRenderer;
-    [SerializeField] Transform Hand;
+    [SerializeField] HandAndArmGetter HandAndArm;
 
     [SerializeField] SendCollision Collider;
 
@@ -26,8 +26,8 @@ public class SwingState : State
         Collider.StartColliding();
         timer = 0f;
         TrailRenderer.emitting = true;
-        startRotation = transform.localEulerAngles.z;
-        startHandRotation = Hand.localEulerAngles.z;
+        startRotation = HandAndArm.Arm.localEulerAngles.z;
+        startHandRotation = HandAndArm.Hand.localEulerAngles.z;
 
         dir = ReversedTracker.Reversed ? -1 : 1; 
     }
@@ -38,8 +38,8 @@ public class SwingState : State
 
         float t = timer / SwingLength;
 
-        transform.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(startRotation, startRotation + dir * SwingDistance, t, dir));
-        Hand.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(startHandRotation, startHandRotation + dir * WristDist, t, dir));
+        HandAndArm.Arm.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(startRotation, startRotation + dir * SwingDistance, t, dir));
+        HandAndArm.Hand.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(startHandRotation, startHandRotation + dir * WristDist, t, dir));
 
         if (timer > SwingLength)
         {

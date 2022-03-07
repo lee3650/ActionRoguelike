@@ -5,7 +5,7 @@ using UnityEngine;
 public class RecoveryState : State
 {
     [SerializeField] float RecoveryLength;
-    [SerializeField] Transform Hand;
+    [SerializeField] HandAndArmGetter HandAndArm;
     [SerializeField] [Range(-1, 1)] int WristDir;
     [SerializeField] PlayerWeaponDefaultState defaultState;
     [SerializeField] MeleeWeapon MyWeapon;
@@ -26,8 +26,8 @@ public class RecoveryState : State
     public override void EnterState()
     {
         timer = 0f;
-        startRotation = transform.localEulerAngles.z;
-        startHandRotation = Hand.localEulerAngles.z;
+        startRotation = HandAndArm.Arm.localEulerAngles.z;
+        startHandRotation = HandAndArm.Hand.localEulerAngles.z;
         dir = ReversedTracker.Reversed ? 1 : -1;
         w_dir = ReversedTracker.Reversed ? -WristDir : WristDir;
 
@@ -38,16 +38,16 @@ public class RecoveryState : State
         {
             end = 0f;
         }
-
     }
+
     public override void UpdateState()
     {
         timer += Time.fixedDeltaTime;
 
-        float t = timer / RecoveryLength; 
+        float t = timer / RecoveryLength;
 
-        transform.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(startRotation, end, t, dir));
-        Hand.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(startHandRotation, end, t, w_dir));
+        HandAndArm.Arm.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(startRotation, end, t, dir));
+        HandAndArm.Hand.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(startHandRotation, end, t, w_dir));
 
         if (timer >= RecoveryLength)
         {

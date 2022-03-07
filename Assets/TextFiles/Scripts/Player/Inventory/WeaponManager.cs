@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class WeaponManager : MonoBehaviour
 {
+    [SerializeField] Transform Arm;
+    [SerializeField] Transform Hand;
     [SerializeField] FacePlayerInput FacePlayerInput;
     [SerializeField] Weapon CurrentWeapon;
     [SerializeField] PlayerWielder PlayerWielder;
@@ -18,7 +20,7 @@ public class WeaponManager : MonoBehaviour
     public void SelectWeapon(Weapon newWeapon)
     {
         CurrentWeapon?.Deselect();
-        newWeapon.SetWielder(PlayerWielder);
+        newWeapon.SetWielder(PlayerWielder, Hand, Arm);
         newWeapon.Select();
         CurrentWeapon = newWeapon;
     }

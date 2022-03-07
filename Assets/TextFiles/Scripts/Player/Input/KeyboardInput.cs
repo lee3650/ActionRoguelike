@@ -2,16 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KeyboardInput : PlayerInput
+public class KeyboardInput : PlayerInput, Initializable
 {
+    [SerializeField] KeyCode[] TalentBinds = new KeyCode[TalentManager.MaxActiveTalents];
+    private float[] LastTalentPresses;
+
     private float lastAttackPress;
     private float lastDodgePress;
     private float lastPositiveScroll;
     private float lastNegativeScroll;
 
+    public void Init()
+    {
+        LastTalentPresses = new float[TalentBinds.Length];
+    }
+
     public static float GetRotationFromDirection(Vector2 dir)
     {
         return Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x); 
+    }
+
+    public override int GetTalentToActivate()
+    {
+        for (int i = 0; i < LastTalentPresses.Length; i++)
+        {
+            if (Time.realtimeSinceStartup - LastTalentPresses[i] < Time.fixedDeltaTime)
+            {
+                return i;
+            }
+        }
+        return -1; 
     }
 
     public override int SelectionDelta()
@@ -85,6 +105,14 @@ public class KeyboardInput : PlayerInput
         else if (Input.mouseScrollDelta.y < 0)
         {
             lastNegativeScroll = Time.realtimeSinceStartup; 
+        }
+
+        for (int i = 0; i < TalentBinds.Length; i++)
+        {
+            if (Input.GetKeyDown(TalentBinds[i]))
+            {
+                LastTalentPresses[i] = Time.realtimeSinceStartup; 
+            }
         }
     }
 }
