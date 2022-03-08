@@ -111,6 +111,7 @@ public class KeyboardInput : PlayerInput, Initializable
         {
             if (Input.GetKeyDown(TalentBinds[i]))
             {
+                print("got talent bind for " + TalentBinds[i]);
                 LastTalentPresses[i] = Time.realtimeSinceStartup; 
             }
         }

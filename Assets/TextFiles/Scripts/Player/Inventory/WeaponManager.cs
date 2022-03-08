@@ -31,9 +31,17 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
+
     public void StartAction(string action)
     {
         CurrentWeapon.StartAction(action);
+
+        switch (action)
+        {
+            case "throw":
+                CurrentWeapon = null;
+                break; 
+        }
     }
 
     public bool ActionFinished()

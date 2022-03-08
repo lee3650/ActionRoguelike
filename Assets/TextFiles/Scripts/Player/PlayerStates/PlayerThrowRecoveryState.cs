@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerThrowAnticipateState : AbstractAnticipation
+public class PlayerThrowRecoveryState : AbstractRecovery
 {
     [SerializeField] WeaponManager WeaponManager;
     [SerializeField] MovementController MovementController;
@@ -10,7 +10,6 @@ public class PlayerThrowAnticipateState : AbstractAnticipation
 
     public override void EnterState()
     {
-        WeaponManager.PauseFaceInput();
         SetupState();
     }
 
@@ -22,6 +21,7 @@ public class PlayerThrowAnticipateState : AbstractAnticipation
 
     public override void ExitState()
     {
-
+        PartialExitState();
+        WeaponManager.PlayFaceInput();
     }
 }

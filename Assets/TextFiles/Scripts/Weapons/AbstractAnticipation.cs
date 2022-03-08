@@ -36,7 +36,7 @@ public abstract class AbstractAnticipation : State
     {
         timer += Time.fixedDeltaTime;
 
-        SwingAnimator.AnimateSwing(HandAndArm, adjustment, adjustment, -WristRotDist, -AnticipationDist, AnticipationLength, timer, dir, dir);
+        SwingAnimator.AnimateSwing(HandAndArm, adjustment, adjustment, WristRotDist, AnticipationDist, AnticipationLength, timer, dir, dir);
 
         if (timer >= AnticipationLength)
         {
