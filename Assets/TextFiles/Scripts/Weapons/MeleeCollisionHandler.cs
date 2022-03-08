@@ -11,11 +11,15 @@ public class MeleeCollisionHandler : WeaponCollisionHandler, LateInitializable
 
     public void LateInit()
     {
-        MyWeapon.OnStartAttack += OnStartAttack;
+        MyWeapon.OnStartAction += OnStartAction; ;
     }
 
-    private void OnStartAttack()
+    private void OnStartAction(string obj)
     {
+        //so, later we can just switch this and see what we want to do with it...
+        //actually, probably we shouldn't do this. We should
+        //Have a bunch of listeners that each listen for a single one and then activate this on a case by case basis, but for now
+        //it's fine. 
         hitEntities = new List<Entity>();
         hitEntities.Add(MyWeapon.GetWielder());
     }

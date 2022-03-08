@@ -5,9 +5,9 @@ using System;
 
 public class MeleeWeapon : Weapon
 {
-    public event Action OnStartAttack = delegate { };
+    public event Action<string> OnStartAction = delegate { };
 
-    private bool finishedAttack = true;
+    private bool finishedAction = true;
 
     [SerializeField] SpriteRenderer[] Images; 
 
@@ -29,7 +29,7 @@ public class MeleeWeapon : Weapon
 
     public void FinishedAttack()
     {
-        finishedAttack = true;
+        finishedAction = true;
     }
 
     public override void LandedHit(GameObject hit)
@@ -37,15 +37,15 @@ public class MeleeWeapon : Weapon
         MyWielder.OnHitLands(hit);
     }
 
-    public override void StartAttack()
+    public override void StartAction(string action)
     {
-        finishedAttack = false;
-        OnStartAttack();
+        finishedAction = false;
+        OnStartAction(action);
     }
 
-    public override bool AttackFinished()
+    public override bool ActionFinished()
     {
-        return finishedAttack; 
+        return finishedAction; 
     }
 
 }

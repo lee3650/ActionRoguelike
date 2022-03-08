@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class WeaponManager : MonoBehaviour
 {
-    [SerializeField] Transform Arm;
-    [SerializeField] Transform Hand;
     [SerializeField] FacePlayerInput FacePlayerInput;
-    [SerializeField] Weapon CurrentWeapon;
     [SerializeField] PlayerWielder PlayerWielder;
     
+    private Weapon CurrentWeapon;
     private bool faceInput = true; 
 
     public Weapon GetCurrentWeapon()
@@ -20,7 +18,7 @@ public class WeaponManager : MonoBehaviour
     public void SelectWeapon(Weapon newWeapon)
     {
         CurrentWeapon?.Deselect();
-        newWeapon.SetWielder(PlayerWielder, Hand, Arm);
+        newWeapon.SetWielder(PlayerWielder);
         newWeapon.Select();
         CurrentWeapon = newWeapon;
     }
@@ -33,14 +31,14 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-    public void StartAttack()
+    public void StartAction(string action)
     {
-        CurrentWeapon.StartAttack();
+        CurrentWeapon.StartAction(action);
     }
 
-    public bool AttackFinished()
+    public bool ActionFinished()
     {
-        return CurrentWeapon.AttackFinished();
+        return CurrentWeapon.ActionFinished();
     }
 
     public void PauseFaceInput()

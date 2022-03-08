@@ -6,16 +6,32 @@ public class PickUpWeapon : MonoBehaviour, LateInitializable
 {
     [SerializeField] WeaponManager WeaponManager;
     [SerializeField] Transform WeaponParent;
+    [SerializeField] Weapon DefaultWeapon; 
     [SerializeField] PlayerInput PlayerInput;
     [SerializeField] float reach; 
 
     [SerializeField] private List<Weapon> Inventory = new List<Weapon>();
 
+    [SerializeField] Component[] weaponDependencyInjectors;
+
+    private List<IDependencyInjector> DependencyInjectors;
+
     int selection = 0;
 
     public void LateInit()
     {
-        Inventory.Add(WeaponManager.GetCurrentWeapon());
+        DependencyInjectors = new List<IDependencyInjector>();
+        foreach (Component c in weaponDependencyInjectors)
+        {
+            IDependencyInjector di = c as IDependencyInjector;
+            if (di == null)
+            {
+                throw new System.Exception("Dependency injector " + c + " was null!");
+            }
+            DependencyInjectors.Add(di);
+        }
+
+        AddToInventory(DefaultWeapon);
         WeaponManager.SelectWeapon(Inventory[0]);
         selection = 0;
     }
@@ -43,6 +59,11 @@ public class PickUpWeapon : MonoBehaviour, LateInitializable
         w.transform.parent = WeaponParent;
         w.transform.localEulerAngles = Vector3.zero;
         w.transform.localPosition = w.GetRelativePosition(); 
+
+        foreach (IDependencyInjector di in DependencyInjectors)
+        {
+            di.InjectDependencies(w.GetTransform());
+        }
     }
 
     private List<Weapon> GetNearbyWeapons()

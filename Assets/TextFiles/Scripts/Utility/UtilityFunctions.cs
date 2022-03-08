@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class UtilityFunctions : MonoBehaviour
 {
+    public static float AnimateArc(float start, float dist, int dir, float t)
+    {
+        return UtilityFunctions.LerpAngleDirection(start, dir * dist + start, t, dir);
+    }
+
     /// <summary>
     /// Direction = -1, 1, or 0. 0 is equivalent to Mathf.LerpAngle. 
     /// </summary>

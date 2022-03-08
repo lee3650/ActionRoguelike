@@ -2,65 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RecoveryState : State
+public class RecoveryState : AbstractRecovery, Dependency<HandAndArmGetter>, Dependency<ReversedTracker>
 {
-    [SerializeField] float RecoveryLength;
-    [SerializeField] HandAndArmGetter HandAndArm;
-    [SerializeField] [Range(-1, 1)] int WristDir;
-    [SerializeField] PlayerWeaponDefaultState defaultState;
     [SerializeField] MeleeWeapon MyWeapon;
 
-    [SerializeField] bool toggleReverse;
-    [SerializeField] bool toggleEnd; 
+    public void InjectDependency(ReversedTracker reversedTracker)
+    {
+        ReversedTracker = reversedTracker;
+    }
 
-    [SerializeField] ReversedTracker ReversedTracker;
-
-    private float timer = 0f;
-    private float startRotation = 0f;
-    private float startHandRotation = 0f;
-
-    int dir;
-    int w_dir;
-    float end; 
+    public void InjectDependency(HandAndArmGetter handAndArmGetter)
+    {
+        HandAndArm = handAndArmGetter;
+    }
 
     public override void EnterState()
     {
-        timer = 0f;
-        startRotation = HandAndArm.Arm.localEulerAngles.z;
-        startHandRotation = HandAndArm.Hand.localEulerAngles.z;
-        dir = ReversedTracker.Reversed ? 1 : -1;
-        w_dir = ReversedTracker.Reversed ? -WristDir : WristDir;
-
-        if (toggleEnd)
-        {
-            end = ReversedTracker.Reversed ? 0 : 180;
-        } else
-        {
-            end = 0f;
-        }
+        SetupState();
     }
 
     public override void UpdateState()
     {
-        timer += Time.fixedDeltaTime;
-
-        float t = timer / RecoveryLength;
-
-        HandAndArm.Arm.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(startRotation, end, t, dir));
-        HandAndArm.Hand.localEulerAngles = new Vector3(0f, 0f, UtilityFunctions.LerpAngleDirection(startHandRotation, end, t, w_dir));
-
-        if (timer >= RecoveryLength)
-        {
-            StateController.EnterState(defaultState);
-        }
+        PartialUpdate();
     }
 
     public override void ExitState()
     {
+        PartialExitState();
         MyWeapon.FinishedAttack();
-        if (toggleReverse)
-        {
-            ReversedTracker.ToggleReversed();
-        }
     }
 }
