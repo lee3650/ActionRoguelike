@@ -12,4 +12,9 @@ public class TrainingEntity : MonoBehaviour, Entity
 
         rb.AddForce(kbAmount * delta); 
     }
+
+    public Transform GetTransform()
+    {
+        return transform; 
+    }
 }

@@ -8,9 +8,20 @@ public class PlayerWielder : MonoBehaviour, Wielder
     [SerializeField] MovementController MovementController;
     [SerializeField] float hitkb;
 
+
     public void HandleEvent(GameEvent e)
     {
 
+    }
+
+    public Transform GetTransform()
+    {
+        return transform; 
+    }
+
+    public bool IsAlive()
+    {
+        return true; 
     }
 
     public void OnHitLands(GameObject hit)

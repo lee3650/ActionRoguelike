@@ -22,6 +22,11 @@ public abstract class Weapon : MonoBehaviour
         canPickUp = false;
     }
 
+    public void AllowPickup()
+    {
+        canPickUp = true; 
+    }
+
     public virtual Vector2 GetRelativePosition()
     {
         return RelativePosition;

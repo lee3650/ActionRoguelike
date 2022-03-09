@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class TalentManager : MonoBehaviour, Initializable
 {
-    [SerializeField] WeaponManager WeaponManager;
-
     public const int MaxActiveTalents = 5;
 
     [SerializeField] State[] ActiveTalents = new State[MaxActiveTalents];

@@ -11,6 +11,8 @@ public class MeleeWeapon : Weapon
 
     [SerializeField] SpriteRenderer[] Images;
 
+    [SerializeField] Collider2D col;
+
     //this is definitely duplication. 
     [SerializeField] List<string> HandledActions; 
 
@@ -20,6 +22,8 @@ public class MeleeWeapon : Weapon
         {
             sr.enabled = true; 
         }
+
+        col.enabled = true; 
     }
 
     public override bool ActionAllowed(string action)
@@ -34,6 +38,8 @@ public class MeleeWeapon : Weapon
         {
             sr.enabled = false;
         }
+
+        col.enabled = false;
     }
 
     public void FinishedAttack()
