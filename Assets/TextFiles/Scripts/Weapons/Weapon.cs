@@ -37,6 +37,8 @@ public abstract class Weapon : MonoBehaviour
         return canPickUp; 
     }
 
+    public abstract bool ActionAllowed(string action);
+
     public abstract void Deselect();
     public abstract void Select();
 

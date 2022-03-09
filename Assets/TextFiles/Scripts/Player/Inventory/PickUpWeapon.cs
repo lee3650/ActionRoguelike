@@ -52,6 +52,13 @@ public class PickUpWeapon : MonoBehaviour, LateInitializable
         WeaponManager.SelectWeapon(Inventory[selection]);
     }
 
+    public void RemoveSelectedWeapon()
+    {
+        Inventory.RemoveAt(selection);
+        ChangeSelection(-1);
+    }
+
+
     private void AddToInventory(Weapon w)
     {
         Inventory.Add(w);

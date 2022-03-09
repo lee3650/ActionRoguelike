@@ -27,17 +27,13 @@ public class PlayerMoveState : State
 
         int tal = PlayerInput.GetTalentToActivate();
 
-        if (TalentManager.IsActiveTalentValid(tal))
+        if (TalentManager.IsTalentAllowed(tal))
         {
             print("active talent valid!");
             State newState = TalentManager.GetActiveTalent(tal);
             StateController.EnterState(newState);
             //not sure if the return is necessary
             return; 
-        }
-        else
-        {
-            print("active talent invalid!");
         }
 
         if (PlayerInput.Attack())

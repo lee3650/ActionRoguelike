@@ -9,7 +9,10 @@ public class MeleeWeapon : Weapon
 
     private bool finishedAction = true;
 
-    [SerializeField] SpriteRenderer[] Images; 
+    [SerializeField] SpriteRenderer[] Images;
+
+    //this is definitely duplication. 
+    [SerializeField] List<string> HandledActions; 
 
     public override void Select()
     {
@@ -17,6 +20,12 @@ public class MeleeWeapon : Weapon
         {
             sr.enabled = true; 
         }
+    }
+
+    public override bool ActionAllowed(string action)
+    {
+        //might want a blacklist as well
+        return HandledActions.Contains(action);
     }
 
     public override void Deselect()

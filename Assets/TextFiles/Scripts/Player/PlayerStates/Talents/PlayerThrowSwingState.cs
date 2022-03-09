@@ -12,8 +12,6 @@ public class PlayerThrowSwingState : AbstractSwing
 
     private bool holdingWeapon = true;
 
-    private const string throwAction = "throw";
-
     public override void EnterState()
     {
         SetupState();
@@ -27,9 +25,9 @@ public class PlayerThrowSwingState : AbstractSwing
         if (timer > 0.5f * SwingLength && holdingWeapon)
         {
             holdingWeapon = false;
-            WeaponManager.StartAction(throwAction);
+            WeaponManager.StartAction(ActionStrings.ThrowAction);
             MovementController.AddForce(throwKB, -new Vector2(Mathf.Cos(PlayerInput.GetDirectionToFace() * Mathf.Deg2Rad), Mathf.Sin(PlayerInput.GetDirectionToFace() * Mathf.Deg2Rad)).normalized);
-            PickUpWeapon.ChangeSelection(-1);
+            PickUpWeapon.RemoveSelectedWeapon();
         }
     }
 

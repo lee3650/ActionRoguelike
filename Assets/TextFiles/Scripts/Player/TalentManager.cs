@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TalentManager : MonoBehaviour, Initializable
 {
+    [SerializeField] WeaponManager WeaponManager;
+
     public const int MaxActiveTalents = 5;
 
     [SerializeField] State[] ActiveTalents = new State[MaxActiveTalents];
@@ -40,6 +42,15 @@ public class TalentManager : MonoBehaviour, Initializable
     public bool IsActiveTalentValid(int index)
     {
         return index >= 0 && index < highestTalent; 
+    }
+
+    public bool IsTalentAllowed(int index)
+    {
+        if (IsActiveTalentValid(index))
+        {
+            return ((Talent)ActiveTalents[index]).CanUseTalent();
+        }
+        return false; 
     }
 
     public State GetActiveTalent(int index)

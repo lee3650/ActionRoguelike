@@ -94,7 +94,7 @@ public class KeyboardInput : PlayerInput, Initializable
         {
             lastAttackPress = Time.realtimeSinceStartup;
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetMouseButtonDown(1))
         {
             lastDodgePress = Time.realtimeSinceStartup;
         }

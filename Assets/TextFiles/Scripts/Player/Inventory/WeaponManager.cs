@@ -31,6 +31,15 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
+    public bool DoesCurrentWeaponAllowAction(string action)
+    {
+        if (CurrentWeapon != null)
+        {
+            print("current weapon can handle: " + action + " " + CurrentWeapon.ActionAllowed(action));
+            return CurrentWeapon.ActionAllowed(action);
+        }
+        return false; 
+    }
 
     public void StartAction(string action)
     {
