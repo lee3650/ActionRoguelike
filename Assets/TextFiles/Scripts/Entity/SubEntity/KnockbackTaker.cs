@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class KnockbackTaker : MonoBehaviour, SubEntity
 {
-    [SerializeField] Rigidbody2D rb;
+    [SerializeField] TakeKnockback takeKb;
     [SerializeField] float kbScalar; 
 
     public void HandleEvent(GameEvent g)
@@ -14,12 +14,15 @@ public class KnockbackTaker : MonoBehaviour, SubEntity
             case SignalType.Physical:
                 TakeKnockback(g.Sender.GetMyPosition(), kbScalar);
                 break;
+            case SignalType.Knockback:
+                TakeKnockback(g.Sender.GetMyPosition(), g.Magnitude);
+                break; 
         }
     }
 
     private void TakeKnockback(Vector2 source, float amt)
     {
         Vector2 delta = ((Vector2)transform.position - source).normalized;
-        rb.AddForce(delta * amt);
+        takeKb.ApplyKnockback(amt, delta);
     }
 }
