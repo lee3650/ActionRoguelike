@@ -9,7 +9,6 @@ public class TrainingEntity : MonoBehaviour, Entity
     public void HandleEvent(GameEvent e) 
     {
         Vector2 delta = ((Vector2)transform.position - e.Sender.GetMyPosition()).normalized;
-
         rb.AddForce(kbAmount * delta); 
     }
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface Entity
+public interface SubEntity
 {
     void HandleEvent(GameEvent e);
 }

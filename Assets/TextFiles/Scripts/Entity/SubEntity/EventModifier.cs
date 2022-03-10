@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface Entity
+public interface EventModifier
 {
-    void HandleEvent(GameEvent e);
+    void ModifyEvents(List<GameEvent> events);
 }

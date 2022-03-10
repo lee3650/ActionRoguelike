@@ -32,7 +32,6 @@ public class SwingState : AbstractSwing, Dependency<HandAndArmGetter>, Dependenc
     public override void ExitState()
     {
         Collider.StopColliding();
-
         TrailRenderer.emitting = false; 
     }
 }

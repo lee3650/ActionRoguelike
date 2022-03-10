@@ -76,7 +76,7 @@ public class WeaponThrowState : State, Dependency<Transform>, Dependency<Directi
             {
                 if (target.IsAlive())
                 {
-                    EndThrow(target.GetTransform());
+                    EndThrow(collision.transform);
                 }
                 else
                 {
@@ -84,7 +84,6 @@ public class WeaponThrowState : State, Dependency<Transform>, Dependency<Directi
                 }
             }
         }
-
 
         EndThrow(collision.transform);
     }
