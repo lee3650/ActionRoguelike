@@ -28,7 +28,7 @@ public class PlayerWeaponDefaultState : State, LateInitializable
 
     public override void EnterState()
     {
-
+        MyWeapon.SetAttackStage(AttackStage.Idle);
     }
 
     public override void UpdateState()

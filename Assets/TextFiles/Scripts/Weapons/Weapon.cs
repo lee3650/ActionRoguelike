@@ -8,7 +8,9 @@ public abstract class Weapon : MonoBehaviour
 
     protected Targetable MyWielder;
 
-    protected bool canPickUp = true; 
+    protected bool canPickUp = true;
+
+    private AttackStage curStage = AttackStage.Idle;
 
     public virtual Transform GetTransform()
     {
@@ -40,6 +42,16 @@ public abstract class Weapon : MonoBehaviour
     public bool CanPickUp()
     {
         return canPickUp; 
+    }
+
+    public AttackStage GetCurrentStage()
+    {
+        return curStage;
+    }
+
+    public void SetAttackStage(AttackStage stage)
+    {
+        curStage = stage; 
     }
 
     public abstract bool ActionAllowed(string action);

@@ -10,6 +10,11 @@ public abstract class AbstractWeaponManager : MonoBehaviour
 
     public abstract void StartAction(string s);
 
+    public AttackStage GetCurrentStage()
+    {
+        return CurrentWeapon.GetCurrentStage();
+    }
+
     public void SelectWeapon(Weapon newWeapon)
     {
         CurrentWeapon?.Deselect();

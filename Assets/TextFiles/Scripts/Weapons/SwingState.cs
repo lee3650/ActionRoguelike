@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SwingState : AbstractSwing, Dependency<HandAndArmGetter>, Dependency<ReversedTracker>
 {
+    [SerializeField] Weapon MyWeapon;
     [SerializeField] private SendCollision Collider;
     [SerializeField] private TrailRenderer TrailRenderer;
 
@@ -22,6 +23,7 @@ public class SwingState : AbstractSwing, Dependency<HandAndArmGetter>, Dependenc
         SetupState();
         Collider.StartColliding();
         TrailRenderer.emitting = true;
+        MyWeapon.SetAttackStage(AttackStage.Execution);
     }
 
     public override void UpdateState()
@@ -31,6 +33,8 @@ public class SwingState : AbstractSwing, Dependency<HandAndArmGetter>, Dependenc
 
     public override void ExitState()
     {
+        MyWeapon.SetAttackStage(AttackStage.Recovery);
+
         Collider.StopColliding();
         TrailRenderer.emitting = false; 
     }

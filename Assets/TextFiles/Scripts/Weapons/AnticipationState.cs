@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class AnticipationState : AbstractAnticipation, Dependency<HandAndArmGetter>, Dependency<ReversedTracker>
 {
+    [SerializeField] Weapon MyWeapon;
+
     public void InjectDependency(ReversedTracker reversedTracker)
     {
         ReversedTracker = reversedTracker;
@@ -17,6 +19,7 @@ public class AnticipationState : AbstractAnticipation, Dependency<HandAndArmGett
     public override void EnterState()
     {
         SetupState();
+        MyWeapon.SetAttackStage(AttackStage.Anticipation);
     }
 
     public override void UpdateState()
