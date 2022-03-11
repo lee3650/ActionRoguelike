@@ -7,7 +7,8 @@ public class SquashAndStretch : MonoBehaviour, Initializable
     [SerializeField] float SquashAmount;
     [SerializeField] float SquashTime;
     [SerializeField] float RecoveryTime;
-    [SerializeField] SpriteRenderer sr; 
+    [SerializeField] SpriteRenderer sr;
+    [SerializeField] Rigidbody2D rb; 
 
     Vector3 originalScale;
 
@@ -35,6 +36,8 @@ public class SquashAndStretch : MonoBehaviour, Initializable
 
             float curSquash = Mathf.Lerp(1f, SquashAmount, timer / SquashTime);
 
+            bottomEdge = GetBottomEdge();
+
             SetScale(curSquash);
 
             AdjustPosition(bottomEdge);
@@ -48,6 +51,8 @@ public class SquashAndStretch : MonoBehaviour, Initializable
             timer += Time.deltaTime;
 
             float curSquash = Mathf.Lerp(SquashAmount, 1f, timer / RecoveryTime);
+
+            bottomEdge = GetBottomEdge();
 
             SetScale(curSquash);
 

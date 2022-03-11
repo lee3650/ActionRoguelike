@@ -12,6 +12,11 @@ public class KeyboardInput : PlayerInput, Initializable
     private float lastPositiveScroll;
     private float lastNegativeScroll;
 
+    private float horInput;
+    private float vertInput;
+
+    const float frameThreshold = 1.9f; 
+
     public void Init()
     {
         LastTalentPresses = new float[TalentBinds.Length];
@@ -26,7 +31,7 @@ public class KeyboardInput : PlayerInput, Initializable
     {
         for (int i = 0; i < LastTalentPresses.Length; i++)
         {
-            if (Time.realtimeSinceStartup - LastTalentPresses[i] < Time.fixedDeltaTime)
+            if (Time.realtimeSinceStartup - LastTalentPresses[i] < frameThreshold * Time.fixedDeltaTime)
             {
                 return i;
             }
@@ -60,12 +65,12 @@ public class KeyboardInput : PlayerInput, Initializable
 
     private float GetHorizontalInput()
     {
-        return Input.GetAxisRaw("Horizontal");
+        return horInput;
     }
 
     private float GetVerticalInput()
     {
-        return Input.GetAxisRaw("Vertical");
+        return vertInput;
     }
 
     private Vector2 GetWorldMousePos()
@@ -75,12 +80,13 @@ public class KeyboardInput : PlayerInput, Initializable
 
     public override bool Attack()
     {
-        return Time.realtimeSinceStartup - lastAttackPress < Time.fixedDeltaTime;
+        return Time.realtimeSinceStartup - lastAttackPress < frameThreshold * Time.fixedDeltaTime;
+        //return Input.GetMouseButton(0);
     }
 
     public override bool Dodge()
     {
-        return Time.realtimeSinceStartup - lastDodgePress < Time.fixedDeltaTime; 
+        return Time.realtimeSinceStartup - lastDodgePress < frameThreshold * Time.fixedDeltaTime; 
     }
 
     public override bool PickUpItems()
@@ -106,6 +112,19 @@ public class KeyboardInput : PlayerInput, Initializable
         {
             lastNegativeScroll = Time.realtimeSinceStartup; 
         }
+
+        int left = Input.GetKey(KeyCode.A) ? -1 : 0;
+        int right = Input.GetKey(KeyCode.D) ? 1 : 0;
+
+        horInput = left + right;
+
+        int up = Input.GetKey(KeyCode.W) ? 1 : 0;
+        int down = Input.GetKey(KeyCode.S) ? -1 : 0;
+
+        vertInput = up + down; 
+
+        //vertInput = Input.GetAxisRaw("Vertical");
+        //horInput = Input.GetAxisRaw("Horizontal");
 
         for (int i = 0; i < TalentBinds.Length; i++)
         {
