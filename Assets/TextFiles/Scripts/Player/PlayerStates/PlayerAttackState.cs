@@ -9,12 +9,10 @@ public class PlayerAttackState : State
     [SerializeField] MovementController MovementController;
     [SerializeField] PlayerInput PlayerInput;
 
-    private const string attackAction = "attack";
-
     public override void EnterState()
     {
         WeaponManager.PauseFaceInput();
-        WeaponManager.StartAction(attackAction);
+        WeaponManager.StartAction(ActionStrings.AttackAction);
     }
 
     public override void UpdateState()

@@ -2,25 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponManager : MonoBehaviour
+public class WeaponManager : AbstractWeaponManager
 {
     [SerializeField] FacePlayerInput FacePlayerInput;
-    [SerializeField] PlayerWielder PlayerWielder;
     
-    private Weapon CurrentWeapon;
     private bool faceInput = true; 
 
     public Weapon GetCurrentWeapon()
     {
         return CurrentWeapon; 
-    }
-
-    public void SelectWeapon(Weapon newWeapon)
-    {
-        CurrentWeapon?.Deselect();
-        newWeapon.SetWielder(PlayerWielder);
-        newWeapon.Select();
-        CurrentWeapon = newWeapon;
     }
 
     private void FixedUpdate()
@@ -31,17 +21,7 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-    public bool DoesCurrentWeaponAllowAction(string action)
-    {
-        if (CurrentWeapon != null)
-        {
-            print("current weapon can handle: " + action + " " + CurrentWeapon.ActionAllowed(action));
-            return CurrentWeapon.ActionAllowed(action);
-        }
-        return false; 
-    }
-
-    public void StartAction(string action)
+    public override void StartAction(string action)
     {
         CurrentWeapon.StartAction(action);
 
@@ -51,11 +31,6 @@ public class WeaponManager : MonoBehaviour
                 CurrentWeapon = null;
                 break; 
         }
-    }
-
-    public bool ActionFinished()
-    {
-        return CurrentWeapon.ActionFinished();
     }
 
     public void PauseFaceInput()

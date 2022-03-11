@@ -47,11 +47,6 @@ public class MeleeWeapon : Weapon
         finishedAction = true;
     }
 
-    public override void LandedHit(GameObject hit)
-    {
-        MyWielder.OnHitLands(hit);
-    }
-
     public override void StartAction(string action)
     {
         finishedAction = false;

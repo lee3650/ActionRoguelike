@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class PickUpWeapon : MonoBehaviour, LateInitializable
 {
-    [SerializeField] WeaponManager WeaponManager;
+    [SerializeField] AbstractWeaponManager WeaponManager;
     [SerializeField] Transform WeaponParent;
     [SerializeField] Weapon DefaultWeapon; 
-    [SerializeField] PlayerInput PlayerInput;
-    [SerializeField] float reach; 
 
     [SerializeField] private List<Weapon> Inventory = new List<Weapon>();
 
@@ -58,8 +56,12 @@ public class PickUpWeapon : MonoBehaviour, LateInitializable
         ChangeSelection(-1);
     }
 
+    public bool Contains(Weapon w)
+    {
+        return Inventory.Contains(w);
+    }
 
-    private void AddToInventory(Weapon w)
+    public void AddToInventory(Weapon w)
     {
         Inventory.Add(w);
         w.Deselect();
@@ -70,37 +72,6 @@ public class PickUpWeapon : MonoBehaviour, LateInitializable
         foreach (IDependencyInjector di in DependencyInjectors)
         {
             di.InjectDependencies(w.GetTransform());
-        }
-    }
-
-    private List<Weapon> GetNearbyWeapons()
-    {
-        List<Weapon> weapons = new List<Weapon>();
-
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, reach);
-        foreach (Collider2D col in hits)
-        {
-            if (col.TryGetComponent<Weapon>(out Weapon w))
-            {
-                if (w.CanPickUp() && !Inventory.Contains(w))
-                {
-                    weapons.Add(w);
-                }
-            }
-        }
-
-        return weapons; 
-    }
-
-    private void Update()
-    {
-        if (PlayerInput.PickUpItems())
-        {
-            List<Weapon> weapons = GetNearbyWeapons();
-            foreach (Weapon w in weapons)
-            {
-                AddToInventory(w);
-            }
         }
     }
 }

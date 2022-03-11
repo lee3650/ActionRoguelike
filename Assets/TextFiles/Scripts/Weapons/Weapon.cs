@@ -6,7 +6,7 @@ public abstract class Weapon : MonoBehaviour
 {
     [SerializeField] protected Vector2 RelativePosition;
 
-    protected Wielder MyWielder;
+    protected Targetable MyWielder;
 
     protected bool canPickUp = true; 
 
@@ -15,7 +15,7 @@ public abstract class Weapon : MonoBehaviour
         return transform; 
     }
 
-    public virtual void SetWielder(Wielder newWielder)
+    public virtual void SetWielder(Targetable newWielder)
     {
         print("Set wielder: " + newWielder);
         MyWielder = newWielder;
@@ -49,7 +49,5 @@ public abstract class Weapon : MonoBehaviour
 
     public abstract void StartAction(string action);
     public abstract bool ActionFinished();
-    
-    public abstract void LandedHit(GameObject hit);
     
 }

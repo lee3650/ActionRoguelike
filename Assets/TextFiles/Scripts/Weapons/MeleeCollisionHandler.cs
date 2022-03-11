@@ -44,7 +44,6 @@ public class MeleeCollisionHandler : WeaponCollisionHandler, LateInitializable
                 foreach (GameEvent ge in MyEventTemplates)
                 {
                     ge.Sender = MyWeapon.GetWielder();
-                    MyWeapon.LandedHit(col.gameObject);
                     e.HandleEvent(GameEvent.CopyEvent(ge));
                     hitEntities.Add(e);
                     HitEntity(e);

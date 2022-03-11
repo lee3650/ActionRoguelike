@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class AddAndRemoveTarget : MonoBehaviour, Initializable, LateInitializable
 {
     private Targetable MyTarget; 
@@ -9,7 +10,6 @@ public class AddAndRemoveTarget : MonoBehaviour, Initializable, LateInitializabl
     public void Init()
     {
         MyTarget = GetComponent<Targetable>();
-        print("getting targetable! Targetable is " + MyTarget);
     }
 
     //not sure about that one 

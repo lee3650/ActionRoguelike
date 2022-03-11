@@ -5,7 +5,8 @@ using UnityEngine;
 public class SendCollision : MonoBehaviour
 {
     [SerializeField] WeaponCollisionHandler CollisionHandler;
-    [SerializeField] Collider2D myCol; 
+    [SerializeField] Collider2D myCol;
+    [SerializeField] string[] BlacklistLayers; 
 
     private Vector2 lastPos = Vector2.zero;
 
@@ -31,7 +32,10 @@ public class SendCollision : MonoBehaviour
 
         Vector2 delta = lastPos - (Vector2)transform.position;
 
-        RaycastHit2D[] hits = Physics2D.BoxCastAll(transform.position, myCol.bounds.size, transform.localEulerAngles.z, delta.normalized, delta.magnitude);
+        //technically this depends on faction... hm... we should probably inject it then 
+        LayerMask mask = ~LayerMask.GetMask(BlacklistLayers);
+
+        RaycastHit2D[] hits = Physics2D.BoxCastAll(transform.position, myCol.bounds.size, transform.localEulerAngles.z, delta.normalized, delta.magnitude, mask);
 
         Debug.DrawLine(lastPos, transform.position, Color.red, 10f);
 
