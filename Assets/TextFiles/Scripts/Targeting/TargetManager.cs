@@ -9,6 +9,12 @@ public class TargetManager : MonoBehaviour, Initializable
 
     private static Factions[] allFactions;
 
+    public static void ResetState()
+    {
+        TargetsByFaction = new Dictionary<Factions, List<Targetable>>();
+        allFactions = null; 
+    }
+
     public void Init()
     {
         allFactions = (Factions[])Enum.GetValues(typeof(Factions));
@@ -22,7 +28,6 @@ public class TargetManager : MonoBehaviour, Initializable
     public static Targetable GetNearestTarget(Vector2 position, Factions curFaction)
     {
         //oh right, we can make like an 'warring manager' or whatever, right, to track which factions are aggroed
-
         List<Targetable> candidates = new List<Targetable>();
 
         foreach (Factions f in allFactions)
@@ -37,6 +42,19 @@ public class TargetManager : MonoBehaviour, Initializable
         if (candidates.Count == 0)
         {
             return null; 
+        }
+
+        for (int i = candidates.Count - 1; i >= 0; i--)
+        {
+            if (candidates[i].IsAlive() == false)
+            {
+                candidates.RemoveAt(i);
+            }
+        }
+
+        if (candidates.Count == 0)
+        {
+            return null;
         }
 
         Targetable nearest = candidates[0];

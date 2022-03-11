@@ -5,7 +5,7 @@ using UnityEngine;
 
 public abstract class DependencyInjector<T> : MonoBehaviour, IDependencyInjector where T : Component
 {
-    [SerializeField] T DependencyToInject; 
+    [SerializeField] protected T DependencyToInject; 
 
     public void InjectDependencies(Transform dependent)
     {

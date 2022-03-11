@@ -55,4 +55,12 @@ public class TalentManager : MonoBehaviour, Initializable
     {
         return ActiveTalents[index];
     }
+
+    /// <summary>
+    /// Test method. Not for production use. 
+    /// </summary>
+    public void SetTalentSlot(int i, State talent)
+    {
+        ActiveTalents[i] = talent;
+    }
 }

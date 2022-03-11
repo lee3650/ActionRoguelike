@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System; 
+using System;
 
 public class HealthManager : MonoBehaviour, Initializable
 {
@@ -11,7 +11,12 @@ public class HealthManager : MonoBehaviour, Initializable
 
     [SerializeField] float MaxHealth;
 
-    [SerializeField] private float currentHealth; 
+    [SerializeField] private float currentHealth;
+
+    public float GetHealthPercentage()
+    {
+        return currentHealth / MaxHealth; 
+    }
 
     public void Init()
     {
@@ -22,6 +27,7 @@ public class HealthManager : MonoBehaviour, Initializable
     {
         currentHealth -= amt;
         DamageTaken();
+        HealthChanged();
         if (currentHealth <= 0)
         {
             currentHealth = 0;
@@ -34,4 +40,11 @@ public class HealthManager : MonoBehaviour, Initializable
         return currentHealth > 0;
     }
 
+    /// <summary>
+    /// Test method. Not for production use.
+    /// </summary>
+    public void SetMaxHealth(float max)
+    {
+        MaxHealth = max; 
+    }
 }

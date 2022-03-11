@@ -8,7 +8,8 @@ public class RushAttackState : State
     [SerializeField] AbstractWeaponManager WeaponManager;
     [SerializeField] DirectionSupplier MyDirection;
     [SerializeField] State NextState;
-    [SerializeField] float rushSpeed; 
+    [SerializeField] float rushSpeed;
+    [SerializeField] float backupSpeed;
 
     public override void EnterState()
     {
@@ -19,7 +20,7 @@ public class RushAttackState : State
     {
         if (WeaponManager.GetCurrentStage() == AttackStage.Anticipation)
         {
-            MovementController.AddForce(-0.5f * rushSpeed, MyDirection.GetDir());
+            MovementController.AddForce(backupSpeed, -MyDirection.GetDir());
         }
 
         if (WeaponManager.GetCurrentStage() == AttackStage.Execution)

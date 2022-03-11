@@ -18,7 +18,7 @@ public abstract class AbstractWeaponManager : MonoBehaviour
     public void SelectWeapon(Weapon newWeapon)
     {
         CurrentWeapon?.Deselect();
-        newWeapon.SetWielder(Wielder.GetComponent<Targetable>());
+        newWeapon.SetWielder(Wielder?.GetComponent<Targetable>());
         newWeapon.Select();
         CurrentWeapon = newWeapon;
     }

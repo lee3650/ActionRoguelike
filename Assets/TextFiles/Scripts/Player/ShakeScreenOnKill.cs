@@ -9,6 +9,7 @@ public class ShakeScreenOnKill : HitNotifier, LateInitializable
     [SerializeField] float shakeAmt;
     [SerializeField] float timeScale;
     [SerializeField] float stopLength;
+    [SerializeField] bool stopOnHit;
     [SerializeField] bool stopOnKill;
     [SerializeField] bool shakeOnHit;
     [SerializeField] bool stopOnDamage;
@@ -31,18 +32,21 @@ public class ShakeScreenOnKill : HitNotifier, LateInitializable
 
     public override void OnHit(Targetable hit)
     {
-        if (hit != null && !hit.IsAlive())
+        if (stopOnHit)
         {
-            if (stopOnKill)
-            {
-                StopAllCoroutines();
-                StartCoroutine(ScreenStop());
-            }
+            StopAllCoroutines();
+            StartCoroutine(ScreenStop());
+        }
 
-            if (shakeOnHit)
-            {
-                Camera.ApplyShake(shakeAmt, shakeLength);
-            }
+        if (shakeOnHit)
+        {
+            Camera.ApplyShake(shakeAmt, shakeLength);
+        }
+
+        if (hit != null && !hit.IsAlive() && stopOnKill)
+        {
+            StopAllCoroutines();
+            StartCoroutine(ScreenStop());
         }
     }
 

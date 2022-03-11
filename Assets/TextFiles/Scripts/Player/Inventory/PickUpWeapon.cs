@@ -74,4 +74,28 @@ public class PickUpWeapon : MonoBehaviour, LateInitializable
             di.InjectDependencies(w.GetTransform());
         }
     }
+
+    /// <summary>
+    /// Test method. Not for production use. 
+    /// </summary>
+    public void SetInjectors(Component[] injectors)
+    {
+        weaponDependencyInjectors = injectors; 
+    }
+
+    /// <summary>
+    /// Test method. Not for production use. 
+    /// </summary>
+    public void SetWeaponManager(AbstractWeaponManager awm)
+    {
+        WeaponManager = awm;
+    }
+
+    /// <summary>
+    /// Test method. Not for production use. 
+    /// </summary>
+    public void SetDefaultWeapon(Weapon w)
+    {
+        DefaultWeapon = w; 
+    }
 }
