@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DamageFlash : MonoBehaviour, SubEntity, Initializable
+public class DamageFlash : MonoBehaviour, Initializable, LateInitializable
 {
     [SerializeField] SpriteRenderer sr;
     [SerializeField] float FlashLength = 0.1f;
     [SerializeField] Color flashColor;
+    [SerializeField] HealthManager HealthManager;
 
     private Color initialColor;
 
@@ -15,22 +16,25 @@ public class DamageFlash : MonoBehaviour, SubEntity, Initializable
         //TODO - the material thing later
         initialColor = sr.color; 
     }
-    
-    public void HandleEvent(GameEvent e)
+
+    public void LateInit()
     {
-        switch (e.Type)
-        {
-            case SignalType.Physical:
-                StopAllCoroutines();
-                StartCoroutine(Flash());
-                break;
-        }
+        HealthManager.DamageTaken += DamageTaken;
+    }
+
+    private void DamageTaken()
+    {
+        StopAllCoroutines();
+        StartCoroutine(Flash());
     }
 
     private IEnumerator Flash()
     {
         sr.color = flashColor;
         yield return new WaitForSeconds(FlashLength);
-        sr.color = initialColor; 
+        if (HealthManager.IsAlive())
+        {
+            sr.color = initialColor;
+        }
     }
 }

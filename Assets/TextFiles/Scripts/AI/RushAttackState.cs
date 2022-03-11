@@ -17,6 +17,11 @@ public class RushAttackState : State
 
     public override void UpdateState()
     {
+        if (WeaponManager.GetCurrentStage() == AttackStage.Anticipation)
+        {
+            MovementController.AddForce(-0.5f * rushSpeed, MyDirection.GetDir());
+        }
+
         if (WeaponManager.GetCurrentStage() == AttackStage.Execution)
         {
             MovementController.AddForce(rushSpeed, MyDirection.GetDir());
