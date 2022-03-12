@@ -10,7 +10,9 @@ public class PlayerPickupState : State
     [SerializeField] HandAndArmGetter HandAndArmGetter;
 
     private float timer;
-    private float length; 
+    private float length;
+
+    DistanceJoint2D joint;
 
     public override void EnterState()
     {
@@ -24,6 +26,12 @@ public class PlayerPickupState : State
         length = AddToInventory.GetPickupDelay();
 
         HandAndArmGetter.SetHandPosition(AddToInventory.QueuedWeapon.transform.position);
+
+        if (AddToInventory.QueuedWeapon.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
+        {
+            joint = gameObject.AddComponent<DistanceJoint2D>();
+            joint.connectedBody = rb; 
+        }
 
         timer = 0f; 
     }
@@ -45,5 +53,10 @@ public class PlayerPickupState : State
     public override void ExitState()
     {
         HandAndArmGetter.ResetHandPosition();
+        if (joint != null)
+        {
+            Destroy(joint);
+            joint = null; 
+        }
     }
 }
