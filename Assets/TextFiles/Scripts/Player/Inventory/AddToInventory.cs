@@ -4,40 +4,111 @@ using UnityEngine;
 
 public class AddToInventory : MonoBehaviour
 {
-    [SerializeField] PlayerInput PlayerInput;
     [SerializeField] PickUpWeapon Inventory;
     [SerializeField] float reach; 
 
-    private List<Weapon> GetNearbyWeapons()
+    public Weapon QueuedWeapon
     {
-        List<Weapon> weapons = new List<Weapon>();
-
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, reach);
-        foreach (Collider2D col in hits)
-        {
-            if (col.TryGetComponent<Weapon>(out Weapon w))
-            {
-                print("found " + w);
-                if (w.CanPickUp() && !Inventory.Contains(w))
-                {
-                    print("adding " + w);
-                    weapons.Add(w);
-                }
-            }
-        }
-
-        return weapons;
+        get;
+        private set; 
     }
 
-    private void Update()
+    public void FindQueuedWeapon()
     {
-        if (PlayerInput.PickUpItems())
+        Weapon w = GetNearbyStuckWeapon();
+        QueuedWeapon = w; 
+    }
+
+    public float GetPickupDelay()
+    {
+        return QueuedWeapon.GetComponent<PickupLength>().LengthOfPickup; 
+    }
+
+    public bool HasQueuedWeapon()
+    {
+        return QueuedWeapon != null;
+    }
+
+    public void PickupQueued()
+    {
+        PickupWeaponNow(QueuedWeapon);
+    }
+
+    private void PickupWeaponNow(Weapon w)
+    {
+        Inventory.AddToInventory(w);
+    }
+
+    private Weapon PickupWeaponFromCollision(Collider2D col)
+    {
+        if (col.TryGetComponent<Weapon>(out Weapon w))
         {
-            List<Weapon> weapons = GetNearbyWeapons();
-            foreach (Weapon w in weapons)
+            print("found " + w);
+            if (CanPickUp(w))
             {
-                Inventory.AddToInventory(w);
+                print("adding " + w);
+                return w;
             }
         }
+
+        return null; 
+    }
+
+    public Weapon GetNearbyStuckWeapon()
+    {
+        List<Weapon> nearWeapons = GetNearbyWeapons();
+        
+        foreach (Weapon w in nearWeapons)
+        {
+            if (!CanPickUpWeaponNow(w))
+            {
+                return w; 
+            }
+        }
+
+        return null; 
+    }
+
+    private List<Weapon> GetNearbyWeapons()
+    {
+        List<Weapon> nearWeapons = new List<Weapon>();
+
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, reach);
+
+        foreach (Collider2D col in hits)
+        {
+            Weapon w = PickupWeaponFromCollision(col);
+            if (w != null)
+            {
+                nearWeapons.Add(w);
+            }
+        }
+        return nearWeapons; 
+    }
+
+    private void FixedUpdate()
+    {
+        List<Weapon> nearWeapons = GetNearbyWeapons();
+        foreach (Weapon w in nearWeapons)
+        {
+            if (CanPickUpWeaponNow(w))
+            {
+                PickupWeaponNow(w);
+            }
+        }
+    }
+
+    private bool CanPickUpWeaponNow(Weapon w)
+    {
+        if (w.TryGetComponent<PickupLength>(out PickupLength len))
+        {
+            return len.LengthOfPickup == 0;
+        }
+        return true; 
+    }
+
+    private bool CanPickUp(Weapon w)
+    {
+        return w.CanPickUp() && !Inventory.Contains(w);
     }
 }

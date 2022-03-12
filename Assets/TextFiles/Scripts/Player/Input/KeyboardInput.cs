@@ -91,7 +91,7 @@ public class KeyboardInput : PlayerInput, Initializable
 
     public override bool PickUpItems()
     {
-        return Input.GetKeyDown(KeyCode.E);
+        return Input.GetKey(KeyCode.E);
     }
 
     private void Update()

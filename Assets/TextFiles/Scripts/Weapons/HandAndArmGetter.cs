@@ -29,6 +29,11 @@ public class HandAndArmGetter : MonoBehaviour, Initializable
         Hand.localPosition = Vector2.Lerp(new Vector2(0, handStartPos.y - dist), handStartPos, t);
     }
 
+    public void SetHandPosition(Vector2 pos)
+    {
+        Hand.position = pos; 
+    }
+
     public void ResetHandPosition()
     {
         Hand.localPosition = handStartPos; 

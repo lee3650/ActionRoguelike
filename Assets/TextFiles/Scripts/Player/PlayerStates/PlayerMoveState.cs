@@ -10,6 +10,7 @@ public class PlayerMoveState : State
     [SerializeField] PlayerDodgeState PlayerDodgeState;
     [SerializeField] PickUpWeapon PickUpWeapon;
     [SerializeField] TalentManager TalentManager;
+    [SerializeField] PlayerPickupState PlayerPickupState;
 
     public override void EnterState()
     {
@@ -44,6 +45,12 @@ public class PlayerMoveState : State
         } else if (PlayerInput.Dodge() && PlayerDodgeState.CanDodge())
         {
             StateController.EnterState(PlayerDodgeState);
+        }
+
+        if (PlayerInput.PickUpItems())
+        {
+            StateController.EnterState(PlayerPickupState);
+            return; 
         }
     }
 
