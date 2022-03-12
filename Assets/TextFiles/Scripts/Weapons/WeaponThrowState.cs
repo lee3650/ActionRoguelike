@@ -11,7 +11,7 @@ public class WeaponThrowState : State, Dependency<Transform>, Dependency<Directi
     [SerializeField] float spinSpeed;
     [SerializeField] TrailRenderer TrailRenderer;
     [SerializeField] bool enableTrail;
-    [SerializeField] MeleeCollisionHandler MeleeCollisionHandler;
+    [SerializeField] GenericCollisionHandler CollisionHandler;
     [SerializeField] State NextState;
     
     private Transform wielder;
@@ -66,7 +66,7 @@ public class WeaponThrowState : State, Dependency<Transform>, Dependency<Directi
             return;
         }
 
-        MeleeCollisionHandler.HandleCollision(collision);
+        CollisionHandler.HandleCollision(collision);
 
         if (collision.TryGetComponent<Entity>(out Entity e))
         {

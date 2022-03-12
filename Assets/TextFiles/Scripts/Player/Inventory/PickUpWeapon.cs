@@ -6,29 +6,16 @@ public class PickUpWeapon : MonoBehaviour, LateInitializable
 {
     [SerializeField] AbstractWeaponManager WeaponManager;
     [SerializeField] Transform WeaponParent;
-    [SerializeField] Weapon DefaultWeapon; 
+    [SerializeField] Weapon DefaultWeapon;
+
+    [SerializeField] InjectionSet InjectionSet;
 
     [SerializeField] private List<Weapon> Inventory = new List<Weapon>();
-
-    [SerializeField] Component[] weaponDependencyInjectors;
-
-    private List<IDependencyInjector> DependencyInjectors;
 
     int selection = 0;
 
     public void LateInit()
     {
-        DependencyInjectors = new List<IDependencyInjector>();
-        foreach (Component c in weaponDependencyInjectors)
-        {
-            IDependencyInjector di = c as IDependencyInjector;
-            if (di == null)
-            {
-                throw new System.Exception("Dependency injector " + c + " was null!");
-            }
-            DependencyInjectors.Add(di);
-        }
-
         AddToInventory(DefaultWeapon);
         WeaponManager.SelectWeapon(Inventory[0]);
         selection = 0;
@@ -64,15 +51,13 @@ public class PickUpWeapon : MonoBehaviour, LateInitializable
     public void AddToInventory(Weapon w)
     {
         Inventory.Add(w);
+
+        InjectionSet.InjectDependencies(w.GetTransform());
+
         w.Deselect();
         w.transform.parent = WeaponParent;
         w.transform.localEulerAngles = Vector3.zero;
         w.transform.localPosition = w.GetRelativePosition(); 
-
-        foreach (IDependencyInjector di in DependencyInjectors)
-        {
-            di.InjectDependencies(w.GetTransform());
-        }
     }
 
     /// <summary>
@@ -80,7 +65,12 @@ public class PickUpWeapon : MonoBehaviour, LateInitializable
     /// </summary>
     public void SetInjectors(Component[] injectors)
     {
-        weaponDependencyInjectors = injectors; 
+        if (InjectionSet == null)
+        {
+            InjectionSet = gameObject.AddComponent<InjectionSet>();
+            InjectionSet.SetInjectors(injectors);
+            InjectionSet.Init();
+        }
     }
 
     /// <summary>

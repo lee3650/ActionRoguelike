@@ -10,6 +10,8 @@ public class RushAttackState : State
     [SerializeField] State NextState;
     [SerializeField] float rushSpeed;
     [SerializeField] float backupSpeed;
+    [SerializeField] List<AttackStage> ForwardStage = new List<AttackStage>() { AttackStage.Execution };
+    [SerializeField] List<AttackStage> BackwardStage = new List<AttackStage>() { AttackStage.Anticipation };
 
     public override void EnterState()
     {
@@ -18,12 +20,12 @@ public class RushAttackState : State
 
     public override void UpdateState()
     {
-        if (WeaponManager.GetCurrentStage() == AttackStage.Anticipation)
+        if (BackwardStage.Contains(WeaponManager.GetCurrentStage()))
         {
             MovementController.AddForce(backupSpeed, -MyDirection.GetDir());
         }
 
-        if (WeaponManager.GetCurrentStage() == AttackStage.Execution)
+        if (ForwardStage.Contains(WeaponManager.GetCurrentStage()))
         {
             MovementController.AddForce(rushSpeed, MyDirection.GetDir());
         }

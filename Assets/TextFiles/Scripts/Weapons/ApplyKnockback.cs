@@ -8,16 +8,16 @@ public class ApplyKnockback : MonoBehaviour, Dependency<TakeKnockback>, Dependen
     /// Applies knockback to the wielder of this weapon when a hit lands
     /// </summary>
     [SerializeField] float amt;
-    [SerializeField] MeleeWeapon MeleeWeapon;
-    [SerializeField] MeleeCollisionHandler MeleeCollisionHandler;
+    [SerializeField] GenericWeapon MyWeapon;
+    [SerializeField] GenericCollisionHandler CollisionHandler;
 
     TakeKnockback takeKnockback;
     DirectionSupplier directionSupplier;
 
     public void Init()
     {
-        MeleeWeapon.OnStartAction += OnStartAction;
-        MeleeCollisionHandler.HitEntity += HitEntity;
+        MyWeapon.OnStartAction += OnStartAction;
+        CollisionHandler.HitEntity += HitEntity;
     }
 
     private void HitEntity(Entity obj)

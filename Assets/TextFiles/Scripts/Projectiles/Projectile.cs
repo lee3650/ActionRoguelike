@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeleeWeapon : GenericWeapon
+public abstract class Projectile : MonoBehaviour
 {
-
+    public abstract void Launch();
 }

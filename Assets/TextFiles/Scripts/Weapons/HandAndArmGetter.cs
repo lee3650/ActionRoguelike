@@ -2,14 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandAndArmGetter : MonoBehaviour
+public class HandAndArmGetter : MonoBehaviour, Initializable
 {
     [SerializeField] private Transform Hand;
     [SerializeField] private Transform Arm;
 
+    private Vector2 handStartPos; 
+
     public void SetHandRotation(float rot)
     {
         Hand.localEulerAngles = new Vector3(0f, 0f, rot);
+    }
+
+    public void Init()
+    {
+        handStartPos = Hand.localPosition; 
+    }
+
+    public void AnimateHandOut(float dist, float t)
+    {
+        Hand.localPosition = Vector2.Lerp(handStartPos, new Vector2(0, handStartPos.y - dist), t);
+    }
+
+    public void AnimateHandReset(float dist, float t)
+    {
+        Hand.localPosition = Vector2.Lerp(new Vector2(0, handStartPos.y - dist), handStartPos, t);
+    }
+
+    public void ResetHandPosition()
+    {
+        Hand.localPosition = handStartPos; 
     }
 
     public void SetArmRotation(float rot)

@@ -17,8 +17,10 @@ public class AddToInventory : MonoBehaviour
         {
             if (col.TryGetComponent<Weapon>(out Weapon w))
             {
+                print("found " + w);
                 if (w.CanPickUp() && !Inventory.Contains(w))
                 {
+                    print("adding " + w);
                     weapons.Add(w);
                 }
             }

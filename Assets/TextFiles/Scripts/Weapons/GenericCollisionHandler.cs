@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeleeCollisionHandler : WeaponCollisionHandler, LateInitializable
+public class GenericCollisionHandler : WeaponCollisionHandler, LateInitializable
 {
-    [SerializeField] MeleeWeapon MyWeapon;
+    [SerializeField] GenericWeapon MyWeapon;
     [SerializeField] List<GameEvent> MyEventTemplates;
 
     //We also need to know when we hit any collider so we can stop... um...
@@ -13,14 +13,10 @@ public class MeleeCollisionHandler : WeaponCollisionHandler, LateInitializable
 
     private List<Entity> hitEntities = new List<Entity>();
 
-    private float lastHit;
-
     public void LateInit()
     {
         MyWeapon.OnStartAction += OnStartAction;
-        lastHit = 0f; 
     }
-
 
     private bool ShouldUseCollision(Entity e)
     {
@@ -29,8 +25,6 @@ public class MeleeCollisionHandler : WeaponCollisionHandler, LateInitializable
 
     private void OnStartAction(string action)
     {
-        //later - switch action or have one handler per action 
-
         hitEntities = new List<Entity>();
         hitEntities.Add(MyWeapon.GetWielder());
     }
@@ -47,7 +41,6 @@ public class MeleeCollisionHandler : WeaponCollisionHandler, LateInitializable
                     e.HandleEvent(GameEvent.CopyEvent(ge));
                     hitEntities.Add(e);
                     HitEntity(e);
-                    lastHit = Time.realtimeSinceStartup;
                 }
             }
         } 

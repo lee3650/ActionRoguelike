@@ -6,8 +6,7 @@ public class PlayerWeaponDefaultState : State, LateInitializable
 {
     [SerializeField] List<string> Actions;
     [SerializeField] State[] Reactions;
-    [SerializeField] AnticipationState AnticipationState;
-    [SerializeField] MeleeWeapon MyWeapon;
+    [SerializeField] GenericWeapon MyWeapon;
 
     public void LateInit()
     {

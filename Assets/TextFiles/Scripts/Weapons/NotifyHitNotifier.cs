@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NotifyHitNotifier : MonoBehaviour, Dependency<HitNotifier>, LateInitializable
 {
-    [SerializeField] MeleeCollisionHandler WeaponCollisionHandler;
+    [SerializeField] GenericCollisionHandler WeaponCollisionHandler;
 
     private HitNotifier HitNotifier;
 
