@@ -15,6 +15,8 @@ public class GenericWeapon : Weapon
     //this is definitely duplication. 
     [SerializeField] List<string> HandledActions;
 
+    public event Action<bool> SelectionChanged = delegate { };
+
     public override void Select()
     {
         foreach (SpriteRenderer sr in Images)
@@ -22,6 +24,7 @@ public class GenericWeapon : Weapon
             sr.enabled = true;
         }
         col.enabled = true;
+        SelectionChanged(true);
     }
 
     public override bool ActionAllowed(string action)
@@ -37,6 +40,8 @@ public class GenericWeapon : Weapon
             sr.enabled = false;
         }
         col.enabled = false;
+
+        SelectionChanged(false);
     }
 
     public void FinishedAttack()

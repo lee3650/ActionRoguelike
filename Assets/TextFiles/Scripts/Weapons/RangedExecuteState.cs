@@ -10,6 +10,9 @@ public class RangedExecuteState : State, Dependency<HandAndArmGetter>
     [SerializeField] Projectile MyProjectile;
     [SerializeField] InjectionSet InjectionSet;
     [SerializeField] State NextState;
+    [SerializeField] float ExecuteLength;
+
+    float timer = 0f; 
 
     public void InjectDependency(HandAndArmGetter h)
     {
@@ -24,16 +27,21 @@ public class RangedExecuteState : State, Dependency<HandAndArmGetter>
         InjectionSet.InjectDependencies(instance.transform);
         instance.Launch();
 
-        StateController.EnterState(NextState);
+        HandAndArmGetter.ResetHandPosition();
+
+        timer = 0f; 
     }
 
     public override void UpdateState()
     {
-
+        timer += Time.fixedDeltaTime; 
+        if (timer > ExecuteLength)
+        {
+            StateController.EnterState(NextState);
+        }
     }
     public override void ExitState()
     {
-        HandAndArmGetter.ResetHandPosition();
         MyWeapon.SetAttackStage(AttackStage.Recovery);
         MyWeapon.FinishedAttack();
     }

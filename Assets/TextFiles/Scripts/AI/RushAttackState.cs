@@ -12,6 +12,8 @@ public class RushAttackState : State
     [SerializeField] float backupSpeed;
     [SerializeField] List<AttackStage> ForwardStage = new List<AttackStage>() { AttackStage.Execution };
     [SerializeField] List<AttackStage> BackwardStage = new List<AttackStage>() { AttackStage.Anticipation };
+    [SerializeField] FaceTarget FaceTarget;
+    [SerializeField] bool RotateWhileAttacking; 
 
     public override void EnterState()
     {
@@ -33,6 +35,11 @@ public class RushAttackState : State
         if (WeaponManager.ActionFinished())
         {
             StateController.EnterState(NextState);
+        }
+
+        if (RotateWhileAttacking)
+        {
+            FaceTarget.LookAtTarget();
         }
     }
 
