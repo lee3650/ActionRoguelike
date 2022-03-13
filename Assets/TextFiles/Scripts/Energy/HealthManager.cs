@@ -23,6 +23,16 @@ public class HealthManager : MonoBehaviour, Initializable
         currentHealth = MaxHealth; 
     }
 
+    public void Heal(float amt)
+    {
+        currentHealth += amt; 
+        if (currentHealth > MaxHealth)
+        {
+            currentHealth = MaxHealth; 
+        }
+        HealthChanged();
+    }
+
     public void TakeDamage(float amt)
     {
         currentHealth -= amt;
@@ -33,6 +43,12 @@ public class HealthManager : MonoBehaviour, Initializable
             currentHealth = 0;
             OnDeath();
         }
+    }
+
+    public void IncreaseMaxHealth(float amt)
+    {
+        MaxHealth += amt;
+        Heal(amt);
     }
 
     public bool IsAlive()

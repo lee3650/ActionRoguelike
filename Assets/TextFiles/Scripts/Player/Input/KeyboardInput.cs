@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class KeyboardInput : PlayerInput, Initializable
 {
-    [SerializeField] KeyCode[] TalentBinds = new KeyCode[TalentManager.MaxActiveTalents];
+    [SerializeField] KeyCode[] TalentBinds = new KeyCode[ActiveTalentManager.MaxActiveTalents];
     private float[] LastTalentPresses;
 
     private float lastAttackPress;

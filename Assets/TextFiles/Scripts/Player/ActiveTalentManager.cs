@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TalentManager : MonoBehaviour, Initializable
+public class ActiveTalentManager : MonoBehaviour, Initializable
 {
     public const int MaxActiveTalents = 5;
 

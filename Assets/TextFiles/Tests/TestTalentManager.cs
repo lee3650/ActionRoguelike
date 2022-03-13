@@ -6,7 +6,7 @@ using UnityEngine.TestTools;
 
 public class TestTalentManager
 {
-    TalentManager tm;
+    ActiveTalentManager tm;
 
     EmptyTalent[] talents;
 
@@ -15,7 +15,7 @@ public class TestTalentManager
     [SetUp]
     public void Setup()
     {
-        tm = GetEmptyObject.GetEmpty().AddComponent<TalentManager>();
+        tm = GetEmptyObject.GetEmpty().AddComponent<ActiveTalentManager>();
 
         talents = new EmptyTalent[numTalents];
 

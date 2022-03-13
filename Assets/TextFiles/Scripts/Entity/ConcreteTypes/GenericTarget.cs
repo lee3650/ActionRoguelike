@@ -7,17 +7,25 @@ public class GenericTarget : MonoBehaviour, Targetable, Initializable
     [SerializeField] Factions Faction;
     [SerializeField] HealthManager HealthManager;
 
-    SubEntity[] SubEntities;
-    EventModifier[] EventModifiers; 
+    List<SubEntity> SubEntities;
+    List<EventModifier> EventModifiers; 
 
     public void Init()
     {
-        SubEntities = GetComponents<SubEntity>();
-        EventModifiers = GetComponents<EventModifier>();
-        if (EventModifiers == null)
-        {
-            EventModifiers = new EventModifier[0];
-        }
+        SubEntities = new List<SubEntity>();
+        SubEntities.AddRange(GetComponents<SubEntity>());
+        EventModifiers = new List<EventModifier>();
+        EventModifiers.AddRange(GetComponents<EventModifier>());
+    }
+
+    public void AddEventModifier(EventModifier modifier)
+    {
+        EventModifiers.Insert(0, modifier);
+    }
+
+    public void RemoveEventModifier(EventModifier modifier)
+    {
+        EventModifiers.Remove(modifier);
     }
 
     public Factions GetMyFaction()

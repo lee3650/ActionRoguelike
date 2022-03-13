@@ -9,7 +9,7 @@ public class PlayerMoveState : State
     [SerializeField] PlayerAttackState PlayerAttackState;
     [SerializeField] PlayerDodgeState PlayerDodgeState;
     [SerializeField] PickUpWeapon PickUpWeapon;
-    [SerializeField] TalentManager TalentManager;
+    [SerializeField] ActiveTalentManager TalentManager;
     [SerializeField] PlayerPickupState PlayerPickupState;
 
     public override void EnterState()

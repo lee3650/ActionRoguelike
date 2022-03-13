@@ -12,6 +12,11 @@ public class SplashOnDamage : MonoBehaviour, SubEntity
 
     public void HandleEvent(GameEvent e)
     {
+        if (!SpraySetting.EnableSpray)
+        {
+            return; 
+        }
+
         switch (e.Type)
         {
             case SignalType.Physical:
