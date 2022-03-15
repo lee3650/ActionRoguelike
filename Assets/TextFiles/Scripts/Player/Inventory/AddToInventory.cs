@@ -43,10 +43,8 @@ public class AddToInventory : MonoBehaviour
     {
         if (col.TryGetComponent<Weapon>(out Weapon w))
         {
-            print("found " + w);
             if (CanPickUp(w))
             {
-                print("adding " + w);
                 return w;
             }
         }

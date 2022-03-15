@@ -16,6 +16,13 @@ public class ManaManager : MonoBehaviour, Initializable
         curMana = 0f; 
     }
 
+    public void LerpCharge(float length, float delta)
+    {
+        float diff = (ChargeAmt * delta) / length;
+        curMana -= diff;
+        ManaChanged();
+    }
+
     public bool ChargesRemaining(int number)
     {
         return curMana >= number * ChargeAmt;

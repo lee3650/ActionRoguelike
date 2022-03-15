@@ -11,6 +11,7 @@ public class LevelupPanel : MonoBehaviour, LateInitializable
     [SerializeField] Transform UpgradeParent;
     [SerializeField] LevelingManager LevelingManager;
     [SerializeField] TimeScaleManager TimeScaleManager;
+    [SerializeField] KeyFromTalent KeyFromTalent;
 
     private List<UpgradeDisplay> upgradeDisplays;
 

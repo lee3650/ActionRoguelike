@@ -12,13 +12,13 @@ public class RecallPolicy : TalentPolicy, Dependency<ActiveTalentManager>
     }
 
     [SerializeField] TalentPolicy[] Upgrades;
-    [SerializeField] PlayerRecallState RecallState; 
+    [SerializeField] State State; 
 
     private int nextUpgrade = 0; 
 
     public override void ApplyPolicy()
     {
-        ActiveTalentManager.AddTalent(RecallState);
+        ActiveTalentManager.AddTalent(State);
     }
 
     public override TalentPolicy GetNextUpgrade()

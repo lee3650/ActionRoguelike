@@ -22,6 +22,11 @@ public class KeyboardInput : PlayerInput, Initializable
         LastTalentPresses = new float[TalentBinds.Length];
     }
 
+    public override string GetTalentKey(int index)
+    {
+        return TalentBinds[index].ToString();
+    }
+
     public static float GetRotationFromDirection(Vector2 dir)
     {
         return Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x); 
@@ -128,7 +133,7 @@ public class KeyboardInput : PlayerInput, Initializable
 
         for (int i = 0; i < TalentBinds.Length; i++)
         {
-            if (Input.GetKeyDown(TalentBinds[i]))
+            if (Input.GetKey(TalentBinds[i]))
             {
                 print("got talent bind for " + TalentBinds[i]);
                 LastTalentPresses[i] = Time.realtimeSinceStartup; 

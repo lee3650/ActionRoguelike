@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class ActiveTalentManager : MonoBehaviour, Initializable
 {
-    public const int MaxActiveTalents = 5;
+    public const int MaxActiveTalents = 6;
 
-    [SerializeField] State[] ActiveTalents = new State[MaxActiveTalents];
+    [SerializeField] State[] ActiveTalents = new State[MaxActiveTalents - 1];
 
     private int highestTalent = 0;
 
     public void Init()
     {
         highestTalent = 0;
-        for (int i = MaxActiveTalents; i >= 1; i--)
+        for (int i = MaxActiveTalents - 1; i >= 1; i--)
         {
             if (ActiveTalents[i - 1] != null)
             {
@@ -21,6 +21,20 @@ public class ActiveTalentManager : MonoBehaviour, Initializable
                 break;  
             }
         }
+    }
+
+    public int GetTalentIndex(State talent) 
+    {
+        int result = -1; 
+        for (int i = 0; i < highestTalent; i++)
+        {
+            if (ActiveTalents[i] == talent)
+            {
+                result = i;
+                break;
+            }
+        }
+        return result; 
     }
 
     public void AddTalent(State newTalent)

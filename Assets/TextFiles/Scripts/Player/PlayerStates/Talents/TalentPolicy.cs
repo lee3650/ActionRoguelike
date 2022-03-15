@@ -25,7 +25,7 @@ public abstract class TalentPolicy : MonoBehaviour
         }
     }
 
-    public string Description
+    public virtual string Description
     {
         get
         {
