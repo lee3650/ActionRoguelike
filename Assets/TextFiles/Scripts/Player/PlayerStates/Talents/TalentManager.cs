@@ -38,7 +38,6 @@ public class TalentManager : MonoBehaviour
             t.ApplyUpgrade();
         } else
         {
-            print("injecting dependencies!");
             InjectionSet.InjectDependencies(t.transform);
             t.transform.parent = Player;
             t.transform.localPosition = Vector3.zero;

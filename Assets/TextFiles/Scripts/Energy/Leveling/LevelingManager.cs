@@ -7,6 +7,8 @@ public class LevelingManager : MonoBehaviour
     [SerializeField] List<TalentInfo> UpgradeOptions;
     [SerializeField] TalentManager TalentManager;
 
+    private List<TalentInfo> furlough = new List<TalentInfo>();
+
     private const int talentsToShow = 3;
 
     public List<TalentInfo> GetUpgradeOptions()
@@ -23,7 +25,15 @@ public class LevelingManager : MonoBehaviour
 
         for (int i = 0; i < newTalents; i++)
         {
-            result.Add(UpgradeOptions[Random.Range(0, UpgradeOptions.Count)]);
+            if (UpgradeOptions.Count == 0)
+            {
+                break;
+            }
+
+            int op = Random.Range(0, UpgradeOptions.Count);
+            furlough.Add(UpgradeOptions[op]);
+            result.Add(UpgradeOptions[op]);
+            UpgradeOptions.RemoveAt(op);
         }
 
         return result; 
@@ -31,6 +41,16 @@ public class LevelingManager : MonoBehaviour
 
     public void UpgradeSelected(TalentInfo t)
     {
+        foreach (TalentInfo f in furlough)
+        {
+            if (f != t)
+            {
+                UpgradeOptions.Add(f);
+            }
+        }
+
+        furlough = new List<TalentInfo>();
+
         TalentManager.ApplyTalent(t);
 
         if (!t.Reusable)

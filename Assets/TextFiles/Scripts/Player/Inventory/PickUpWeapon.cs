@@ -12,6 +12,8 @@ public class PickUpWeapon : MonoBehaviour, LateInitializable
 
     [SerializeField] private List<Weapon> Inventory = new List<Weapon>();
 
+    public event System.Action<Weapon> PickedUpWeapon = delegate { };
+
     int selection = 0;
 
     public void LateInit()
@@ -50,6 +52,8 @@ public class PickUpWeapon : MonoBehaviour, LateInitializable
 
     public void AddToInventory(Weapon w)
     {
+        PickedUpWeapon(w);
+
         Inventory.Add(w);
 
         InjectionSet.InjectDependencies(w.GetTransform());
@@ -57,7 +61,7 @@ public class PickUpWeapon : MonoBehaviour, LateInitializable
         w.Deselect();
         w.transform.parent = WeaponParent;
         w.transform.localEulerAngles = Vector3.zero;
-        w.transform.localPosition = w.GetRelativePosition(); 
+        w.transform.localPosition = w.GetRelativePosition();
     }
 
     /// <summary>

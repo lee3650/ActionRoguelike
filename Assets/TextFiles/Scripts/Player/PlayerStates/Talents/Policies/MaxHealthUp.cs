@@ -9,7 +9,6 @@ public class MaxHealthUp : TalentPolicy, Dependency<HealthManager>
 
     public void InjectDependency(HealthManager h)
     {
-        print("hm dependency injected!");
         hm = h;
     }
 
@@ -17,6 +16,7 @@ public class MaxHealthUp : TalentPolicy, Dependency<HealthManager>
     {
         hm.IncreaseMaxHealth(healthIncrease);
     }
+
     public override void ApplyUpgrade(int index)
     {
         throw new System.Exception("Should not have applied an upgrade!");

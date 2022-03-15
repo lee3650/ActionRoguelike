@@ -6,6 +6,8 @@ public class StateController : MonoBehaviour, LateInitializable
 {
     [SerializeField] Component InitialState;
 
+    private List<State> StateHistory = new List<State>();
+
     private State CurrentState; 
 
     public void LateInit()
@@ -23,6 +25,12 @@ public class StateController : MonoBehaviour, LateInitializable
         CurrentState?.ExitState();
 
         CurrentState = newState;
+
+        StateHistory.Add(CurrentState);
+        if (StateHistory.Count > 10)
+        {
+            StateHistory.RemoveAt(0);
+        }
 
         CurrentState.EnterState();
     }

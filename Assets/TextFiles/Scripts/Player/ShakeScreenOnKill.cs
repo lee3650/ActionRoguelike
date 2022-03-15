@@ -5,9 +5,9 @@ using UnityEngine;
 public class ShakeScreenOnKill : HitNotifier, LateInitializable
 {
     [SerializeField] FollowTransform Camera;
+    [SerializeField] TimeScaleManager TimeScaleManager;
     [SerializeField] float shakeLength;
     [SerializeField] float shakeAmt;
-    [SerializeField] float timeScale;
     [SerializeField] float stopLength;
     [SerializeField] bool stopOnHit;
     [SerializeField] bool stopOnKill;
@@ -25,8 +25,7 @@ public class ShakeScreenOnKill : HitNotifier, LateInitializable
     {
         if (stopOnDamage)
         {
-            StopAllCoroutines();
-            StartCoroutine(ScreenStop());
+            TimeScaleManager.BeginFreeze(stopLength);
         }
     }
 
@@ -34,8 +33,7 @@ public class ShakeScreenOnKill : HitNotifier, LateInitializable
     {
         if (stopOnHit)
         {
-            StopAllCoroutines();
-            StartCoroutine(ScreenStop());
+            TimeScaleManager.BeginFreeze(stopLength);
         }
 
         if (shakeOnHit)
@@ -45,15 +43,7 @@ public class ShakeScreenOnKill : HitNotifier, LateInitializable
 
         if (hit != null && !hit.IsAlive() && stopOnKill)
         {
-            StopAllCoroutines();
-            StartCoroutine(ScreenStop());
+            TimeScaleManager.BeginFreeze(stopLength);
         }
-    }
-
-    IEnumerator ScreenStop()
-    {
-        Time.timeScale = timeScale;
-        yield return new WaitForSecondsRealtime(stopLength);
-        Time.timeScale = 1;
     }
 }

@@ -15,10 +15,10 @@ public class XPManager : MonoBehaviour, Initializable
     [SerializeField] float startXPReq = 4.5f;
     [SerializeField] float XPSlope = 1.5f;
     [SerializeField] float XPPower = 1f;
-
-    int curLevel;
-    float curXP;
-    float xpReq; 
+    [Space(20)]
+    [SerializeField] int curLevel;
+    [SerializeField] float curXP;
+    [SerializeField] float xpReq; 
 
     public void Init()
     {

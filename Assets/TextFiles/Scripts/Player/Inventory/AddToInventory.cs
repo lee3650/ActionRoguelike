@@ -91,6 +91,7 @@ public class AddToInventory : MonoBehaviour
         List<Weapon> nearWeapons = GetNearbyWeapons();
         foreach (Weapon w in nearWeapons)
         {
+            print("found weapon " + w);
             if (CanPickUpWeaponNow(w))
             {
                 PickupWeaponNow(w);

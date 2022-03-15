@@ -10,6 +10,7 @@ public class LevelupPanel : MonoBehaviour, LateInitializable
     [SerializeField] GameObject LeveledUpPanel;
     [SerializeField] Transform UpgradeParent;
     [SerializeField] LevelingManager LevelingManager;
+    [SerializeField] TimeScaleManager TimeScaleManager;
 
     private List<UpgradeDisplay> upgradeDisplays;
 
@@ -21,10 +22,8 @@ public class LevelupPanel : MonoBehaviour, LateInitializable
 
     private void LeveledUp()
     {
-        Time.timeScale = 0f;
+        TimeScaleManager.BeginUntimedFreeze();
         List<TalentInfo> levels = LevelingManager.GetUpgradeOptions();
-
-        print("leveled up!!!!");
 
         upgradeDisplays = new List<UpgradeDisplay>();
 
@@ -40,7 +39,6 @@ public class LevelupPanel : MonoBehaviour, LateInitializable
 
     public void UpgradeSelected(TalentInfo upgrade)
     {
-        Time.timeScale = 1f;
         LevelingManager.UpgradeSelected(upgrade);
 
         foreach (UpgradeDisplay ud in upgradeDisplays)
@@ -48,6 +46,10 @@ public class LevelupPanel : MonoBehaviour, LateInitializable
             Destroy(ud.gameObject);
         }
 
+        LeveledUpPanel.SetActive(false);
+
         upgradeDisplays = new List<UpgradeDisplay>();
+
+        TimeScaleManager.EndUntimedFreeze();
     }
 }
