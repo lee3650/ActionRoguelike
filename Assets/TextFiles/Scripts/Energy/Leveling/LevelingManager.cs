@@ -4,23 +4,23 @@ using UnityEngine;
 
 public class LevelingManager : MonoBehaviour
 {
-    [SerializeField] List<TalentInfo> UpgradeOptions;
+    [SerializeField] List<TalentPolicy> UpgradeOptions;
     [SerializeField] TalentManager TalentManager;
 
-    private List<TalentInfo> furlough = new List<TalentInfo>();
+    private List<TalentPolicy> furlough = new List<TalentPolicy>();
 
     private const int talentsToShow = 3;
 
-    public List<TalentInfo> GetUpgradeOptions()
+    public List<TalentPolicy> GetUpgradeOptions()
     {
         int numUpgrades = Random.Range(0, 100) < 50f ? 1 : 2;
 
-        List<TalentInfo> upgrades = TalentManager.GetUpgradableTalents(numUpgrades);
+        List<TalentPolicy> upgrades = TalentManager.GetUpgradableTalents(numUpgrades);
 
         //upgrades might be < numUpgrades
         int newTalents = talentsToShow - upgrades.Count;
 
-        List<TalentInfo> result = new List<TalentInfo>();
+        List<TalentPolicy> result = new List<TalentPolicy>();
         result.AddRange(upgrades);
 
         for (int i = 0; i < newTalents; i++)
@@ -39,9 +39,9 @@ public class LevelingManager : MonoBehaviour
         return result; 
     }
 
-    public void UpgradeSelected(TalentInfo t)
+    public void UpgradeSelected(TalentPolicy t)
     {
-        foreach (TalentInfo f in furlough)
+        foreach (TalentPolicy f in furlough)
         {
             if (f != t)
             {
@@ -49,7 +49,7 @@ public class LevelingManager : MonoBehaviour
             }
         }
 
-        furlough = new List<TalentInfo>();
+        furlough = new List<TalentPolicy>();
 
         TalentManager.ApplyTalent(t);
 

@@ -4,11 +4,44 @@ using UnityEngine;
 
 public abstract class TalentPolicy : MonoBehaviour
 {
-    [SerializeField] private bool upgradable = false; 
+    [SerializeField] string title;
+    [SerializeField] string description;
+    [SerializeField] bool reusable;
+    [SerializeField] private bool upgradable = false;
+
+    public bool Reusable
+    {
+        get
+        {
+            return reusable;
+        }
+    }
+
+    public string Title
+    {
+        get
+        {
+            return title;
+        }
+    }
+
+    public string Description
+    {
+        get
+        {
+            return description;
+        }
+    }
 
     public abstract void ApplyPolicy();
-    public abstract void ApplyUpgrade(int index);
-    public abstract TalentInfo GetNextUpgradeInfo();
+    public virtual TalentPolicy GetNextUpgrade()
+    {
+        return null; 
+    }
+
+    public virtual void AppliedNextUpgrade()
+    {
+    }
 
     public bool Upgradable
     {

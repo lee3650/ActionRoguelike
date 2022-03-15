@@ -23,11 +23,11 @@ public class LevelupPanel : MonoBehaviour, LateInitializable
     private void LeveledUp()
     {
         TimeScaleManager.BeginUntimedFreeze();
-        List<TalentInfo> levels = LevelingManager.GetUpgradeOptions();
+        List<TalentPolicy> levels = LevelingManager.GetUpgradeOptions();
 
         upgradeDisplays = new List<UpgradeDisplay>();
 
-        foreach (TalentInfo t in levels)
+        foreach (TalentPolicy t in levels)
         {
             UpgradeDisplay ud = Instantiate(UpgradeDisplay, UpgradeParent);
             ud.DisplayUpgrade(t, this.UpgradeSelected);
@@ -37,7 +37,7 @@ public class LevelupPanel : MonoBehaviour, LateInitializable
         LeveledUpPanel.SetActive(true);
     }
 
-    public void UpgradeSelected(TalentInfo upgrade)
+    public void UpgradeSelected(TalentPolicy upgrade)
     {
         LevelingManager.UpgradeSelected(upgrade);
 

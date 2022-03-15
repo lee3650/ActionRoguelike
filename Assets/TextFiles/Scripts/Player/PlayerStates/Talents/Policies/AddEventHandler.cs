@@ -22,14 +22,4 @@ public class AddEventHandler : TalentPolicy, Dependency<GenericTarget>, Initiali
     {
         MyTarget.AddEventModifier(myModifier);
     }
-
-    public override void ApplyUpgrade(int index)
-    {
-
-    }
-
-    public override TalentInfo GetNextUpgradeInfo()
-    {
-        return null; //?
-    }
 }

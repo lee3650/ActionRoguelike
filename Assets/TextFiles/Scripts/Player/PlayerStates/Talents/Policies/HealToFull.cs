@@ -20,14 +20,4 @@ public class HealToFull : TalentPolicy, Initializable, Dependency<HealthManager>
     {
         hm.Heal(10000f);
     }
-
-    public override void ApplyUpgrade(int index)
-    {
-        throw new System.Exception("Should not have applied an upgrade!");
-    }
-
-    public override TalentInfo GetNextUpgradeInfo()
-    {
-        return null; 
-    }
 }

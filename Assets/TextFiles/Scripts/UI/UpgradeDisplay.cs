@@ -7,10 +7,10 @@ public class UpgradeDisplay : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI TitleText;
     [SerializeField] TextMeshProUGUI BodyText; 
-    private System.Action<TalentInfo> SelectedAction;
-    private TalentInfo MyTalent; 
+    private System.Action<TalentPolicy> SelectedAction;
+    private TalentPolicy MyTalent; 
 
-    public void DisplayUpgrade(TalentInfo talent, System.Action<TalentInfo> selectedAction)
+    public void DisplayUpgrade(TalentPolicy talent, System.Action<TalentPolicy> selectedAction)
     {
         SelectedAction = selectedAction;
         MyTalent = talent;

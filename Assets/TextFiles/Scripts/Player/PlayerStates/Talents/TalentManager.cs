@@ -9,9 +9,9 @@ public class TalentManager : MonoBehaviour
     [SerializeField] InjectionSet InjectionSet;
     [SerializeField] Transform Player; 
 
-    public List<TalentInfo> GetUpgradableTalents(int numUpgrades)
+    public List<TalentPolicy> GetUpgradableTalents(int numUpgrades)
     {
-        List<TalentInfo> result = new List<TalentInfo>();
+        List<TalentPolicy> result = new List<TalentPolicy>();
 
         List<TalentPolicy> randomSort = (List<TalentPolicy>)UtilityRandom.SortByRandom(CurrentTalents);
 
@@ -19,7 +19,7 @@ public class TalentManager : MonoBehaviour
         {
             if (i.Upgradable)
             {
-                result.Add(i.GetNextUpgradeInfo());
+                result.Add(i.GetNextUpgrade());
                 numUpgrades--;
                 if (numUpgrades == 0)
                 {
@@ -31,24 +31,11 @@ public class TalentManager : MonoBehaviour
         return result; 
     }
 
-    public void ApplyTalent(TalentInfo t)
+    public void ApplyTalent(TalentPolicy t)
     {
-        if (t.IsUpgrade)
-        {
-            t.ApplyUpgrade();
-        } else
-        {
-            InjectionSet.InjectDependencies(t.transform);
-            t.transform.parent = Player;
-            t.transform.localPosition = Vector3.zero;
-            if (t.IsActiveTalent)
-            {
-                ActiveTalentManager.AddTalent(t.ActiveState);
-            } 
-            else
-            {
-                t.ApplyPolicy(); 
-            }
-        }
+        InjectionSet.InjectDependencies(t.transform);
+        t.transform.parent = Player;
+        t.transform.localPosition = Vector3.zero;
+        t.ApplyPolicy();
     }
 }

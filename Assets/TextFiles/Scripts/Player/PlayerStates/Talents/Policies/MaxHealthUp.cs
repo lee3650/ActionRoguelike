@@ -16,14 +16,4 @@ public class MaxHealthUp : TalentPolicy, Dependency<HealthManager>
     {
         hm.IncreaseMaxHealth(healthIncrease);
     }
-
-    public override void ApplyUpgrade(int index)
-    {
-        throw new System.Exception("Should not have applied an upgrade!");
-    }
-
-    public override TalentInfo GetNextUpgradeInfo()
-    {
-        return null; //?
-    }
 }
