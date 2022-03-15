@@ -23,6 +23,11 @@ public class GenericCollisionHandler : WeaponCollisionHandler, LateInitializable
         return !hitEntities.Contains(e);
     }
 
+    public void ResetHitEntities()
+    {
+        OnStartAction("");
+    }
+
     private void OnStartAction(string action)
     {
         hitEntities = new List<Entity>();

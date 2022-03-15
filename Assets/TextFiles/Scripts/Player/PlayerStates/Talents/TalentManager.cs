@@ -37,5 +37,7 @@ public class TalentManager : MonoBehaviour
         t.transform.parent = Player;
         t.transform.localPosition = Vector3.zero;
         t.ApplyPolicy();
+
+        CurrentTalents.Add(t);
     }
 }

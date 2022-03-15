@@ -15,7 +15,14 @@ public class PlayerRecallState : State, Talent, Dependency<MovementController>, 
 
     private Weapon thrownWeapon;
 
-    private Rigidbody2D lastWeapon; 
+    private Rigidbody2D lastWeapon;
+
+    private bool damageEnabled = false; 
+
+    public void EnableDamage()
+    {
+        damageEnabled = true; 
+    }
 
     public bool CanUseTalent()
     {
@@ -66,6 +73,12 @@ public class PlayerRecallState : State, Talent, Dependency<MovementController>, 
         thrownWeapon.GetComponent<PickupLength>().LengthOfPickup = 0f;
         lastWeapon = thrownWeapon.GetComponent<Rigidbody2D>();
         lastWeapon.isKinematic = false;
+
+        if (damageEnabled)
+        {
+            lastWeapon.GetComponent<GenericCollisionHandler>().ResetHitEntities();
+            lastWeapon.GetComponent<SendCollision>().StartColliding();
+        }
     }
 
     private void PickedUpLastWeapon()
@@ -91,7 +104,8 @@ public class PlayerRecallState : State, Talent, Dependency<MovementController>, 
 
         if (lastWeapon != null)
         {
-            lastWeapon.isKinematic = true; 
+            lastWeapon.isKinematic = true;
+            lastWeapon.GetComponent<SendCollision>().StopColliding();
         }
     }
 }
