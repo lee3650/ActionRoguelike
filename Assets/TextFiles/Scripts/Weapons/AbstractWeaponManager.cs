@@ -4,11 +4,16 @@ using UnityEngine;
 
 public abstract class AbstractWeaponManager : MonoBehaviour
 {
-    [SerializeField] GameObject Wielder; 
+    [SerializeField] GameObject Wielder;
 
     protected Weapon CurrentWeapon;
 
     public abstract void StartAction(string s);
+
+    public float GetRange()
+    {
+        return CurrentWeapon.GetAttackRange();
+    }
 
     public AttackStage GetCurrentStage()
     {

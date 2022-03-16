@@ -8,7 +8,7 @@ public class PursuitState : State
     [SerializeField] State DefaultState;
     [SerializeField] CurrentTarget CurrentTarget;
     [SerializeField] MovementController MovementController;
-    [SerializeField] float AttackRange; //duplication, fix later
+    [SerializeField] AbstractWeaponManager WeaponManager;
     [SerializeField] FaceTarget FaceTarget;
 
     public override void EnterState()
@@ -26,7 +26,7 @@ public class PursuitState : State
             Vector2 delta = targetPos - (Vector2)transform.position;
             MovementController.MoveInDirection(delta.normalized);
 
-            if (Vector2.Distance(targetPos, transform.position) < AttackRange)
+            if (Vector2.Distance(targetPos, transform.position) < WeaponManager.GetRange())
             {
                 StateController.EnterState(AttackState);
             }

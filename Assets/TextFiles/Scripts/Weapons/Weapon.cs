@@ -5,7 +5,13 @@ using UnityEngine;
 public abstract class Weapon : MonoBehaviour
 {
     [SerializeField] protected Vector2 RelativePosition;
+    [SerializeField] protected float AttackRange; 
 
+    public float GetAttackRange()
+    {
+        return AttackRange; 
+    }
+    
     protected Targetable MyWielder;
 
     protected bool canPickUp = true;
