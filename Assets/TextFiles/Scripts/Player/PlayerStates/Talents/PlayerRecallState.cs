@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerRecallState : State, Talent, Dependency<MovementController>, Dependency<PlayerInput>, Dependency<LastThrownWeaponManager>, Dependency<ManaManager>, Dependency<PlayerMoveState>
+public class PlayerRecallState : State, Talent, Dependency<MovementController>, Dependency<PlayerInput>, Dependency<LastThrownWeaponManager>, Dependency<ManaManager>, Dependency<PlayerMoveState>, Dependency<Rigidbody2D>
 {
-    [SerializeField] float recallSpeed = 300f; 
+    [SerializeField] float recallSpeed = 300f;
 
+    private Rigidbody2D playerRb;
     private LastThrownWeaponManager lastThrownWeapon; 
     private MovementController MovementController;
     private PlayerInput PlayerInput;
@@ -27,6 +28,11 @@ public class PlayerRecallState : State, Talent, Dependency<MovementController>, 
     public bool CanUseTalent()
     {
         return ManaManager.ChargesRemaining(1);
+    }
+
+    public void InjectDependency(Rigidbody2D rb)
+    {
+        playerRb = rb; 
     }
 
     public void InjectDependency(PlayerMoveState p)
@@ -88,8 +94,12 @@ public class PlayerRecallState : State, Talent, Dependency<MovementController>, 
 
     public override void UpdateState()
     {
+        //lead the "shot"
+        Vector2 newPos = playerRb.position;
+        float timeToArrive = Vector2.Distance(playerRb.position, lastWeapon.position) / recallSpeed;
+        newPos = playerRb.position + (playerRb.velocity * timeToArrive);
         //I'm going to do this in a really crappy way for now. 
-        lastWeapon.AddForce(((Vector2)transform.position - lastWeapon.position) * recallSpeed);
+        lastWeapon.velocity = ((newPos - lastWeapon.position).normalized * recallSpeed);
 
         print("in recall state!");
 
