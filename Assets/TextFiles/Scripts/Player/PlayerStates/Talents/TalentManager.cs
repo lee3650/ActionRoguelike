@@ -9,6 +9,11 @@ public class TalentManager : MonoBehaviour
     [SerializeField] InjectionSet InjectionSet;
     [SerializeField] Transform Player; 
 
+    public List<TalentPolicy> GetCurrentTalents()
+    {
+        return CurrentTalents; 
+    }
+
     public List<TalentPolicy> GetUpgradableTalents(int numUpgrades)
     {
         List<TalentPolicy> result = new List<TalentPolicy>();
