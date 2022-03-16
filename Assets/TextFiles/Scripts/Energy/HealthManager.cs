@@ -23,6 +23,11 @@ public class HealthManager : MonoBehaviour, Initializable
         currentHealth = MaxHealth; 
     }
 
+    public float GetCurHealth()
+    {
+        return currentHealth; 
+    }
+
     public void Heal(float amt)
     {
         currentHealth += amt; 

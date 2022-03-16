@@ -13,7 +13,8 @@ public class LevelingManager : MonoBehaviour
 
     public List<TalentPolicy> GetUpgradeOptions()
     {
-        int numUpgrades = Random.Range(0, 100) < 50f ? 1 : 2;
+        //0, 1, or 2
+        int numUpgrades = Random.Range(0, 3);
 
         List<TalentPolicy> upgrades = TalentManager.GetUpgradableTalents(numUpgrades);
 
