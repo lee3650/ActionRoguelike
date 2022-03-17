@@ -31,7 +31,7 @@ public class LevelupPanel : MonoBehaviour, LateInitializable
         foreach (TalentPolicy t in levels)
         {
             UpgradeDisplay ud = Instantiate(UpgradeDisplay, UpgradeParent);
-            ud.DisplayUpgrade(t, this.UpgradeSelected);
+            ud.DisplayUpgrade(t, this.UpgradeSelected, KeyFromTalent);
             upgradeDisplays.Add(ud);
         }
 

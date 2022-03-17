@@ -17,6 +17,8 @@ public class TargetManager : MonoBehaviour, Initializable
 
     public void Init()
     {
+        ResetState();
+
         allFactions = (Factions[])Enum.GetValues(typeof(Factions));
 
         foreach (Factions f in allFactions)

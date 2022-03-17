@@ -8,6 +8,7 @@ public class Room : MonoBehaviour, LateInitializable
     [SerializeField] Doormat[] Doormats;
     [SerializeField] Door[] Doors;
 
+    private PlayerRoomSetter setter;
     private bool entered = false;
 
     public void LateInit()
@@ -29,7 +30,8 @@ public class Room : MonoBehaviour, LateInitializable
     {
         if (!AnyEnemiesLive())
         {
-            ModifyAllDoors(true);    
+            ModifyAllDoors(true);
+            setter.RoomClear = true; 
         }
     }
 
@@ -47,13 +49,17 @@ public class Room : MonoBehaviour, LateInitializable
         }
     }
 
-    public void TriggeredDoormat()
+    public void TriggeredDoormat(PlayerRoomSetter player)
     {
         print("got triggered!");
+
+        setter = player; 
+
         if (AnyEnemiesLive() && !entered)
         {
             print("doing stuff!");
-            entered = true; 
+            entered = true;
+            setter.RoomClear = false; 
 
             foreach (Doormat d in Doormats)
             {

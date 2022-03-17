@@ -66,6 +66,11 @@ public class WeaponThrowState : State, Dependency<Transform>, Dependency<Directi
             return;
         }
 
+        if (collision.TryGetComponent<Projectile>(out Projectile p))
+        {
+            return; 
+        }
+
         CollisionHandler.HandleCollision(collision);
 
         if (collision.TryGetComponent<Entity>(out Entity e))

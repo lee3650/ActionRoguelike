@@ -28,7 +28,9 @@ public class AddEventHandler : TalentPolicy, Dependency<GenericTarget>, Initiali
 
     public override TalentPolicy GetNextUpgrade()
     {
-        return Upgrades[nextUpgrade];
+        TalentPolicy upgrade = Upgrades[nextUpgrade];
+        upgrade.Parent = this; 
+        return upgrade;
     }
 
     public override void AppliedNextUpgrade()

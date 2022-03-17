@@ -11,6 +11,10 @@ public class LockedDoor : Door
     public override void Open()
     {
         open = true; 
+        if (!locked)
+        {
+            base.Open();
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

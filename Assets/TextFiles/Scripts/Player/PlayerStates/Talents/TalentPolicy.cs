@@ -8,8 +8,17 @@ public abstract class TalentPolicy : MonoBehaviour
     [SerializeField] string description;
     [SerializeField] bool reusable;
     [SerializeField] private bool upgradable = false;
-    [SerializeField] bool isUpgrade = false; 
-    
+    [SerializeField] bool isUpgrade = false;
+    [SerializeField] private bool isActiveTalent; 
+
+    public bool IsActiveTalent
+    {
+        get
+        {
+            return isActiveTalent;
+        }
+    }
+
     public bool IsUpgrade
     {
         get { return isUpgrade; }

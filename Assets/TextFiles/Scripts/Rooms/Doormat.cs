@@ -13,12 +13,12 @@ public class Doormat : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<PlayerIdentity>(out PlayerIdentity p))
+        if (collision.TryGetComponent<PlayerRoomSetter>(out PlayerRoomSetter p))
         {
             //technically I need to move player summons through as well, right?
             //Could be worth looking into 
             print("player collided!");
-            room.TriggeredDoormat();
+            room.TriggeredDoormat(p);
         }
     }
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class AddActiveTalent : TalentPolicy, Dependency<ActiveTalentManager>
 {
-    [SerializeField] KeyFromTalent KeyFromTalent;
     [SerializeField] bool RandomizeUpgrades; 
 
     private ActiveTalentManager ActiveTalentManager;
@@ -21,8 +20,6 @@ public class AddActiveTalent : TalentPolicy, Dependency<ActiveTalentManager>
     {
         ActiveTalentManager.AddTalent(State);
     }
-
-    public override string Description => base.Description + "\nPress " + KeyFromTalent.GetNextAvailableKey() + " to activate.";
 
     public override TalentPolicy GetNextUpgrade()
     {
