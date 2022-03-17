@@ -8,10 +8,13 @@ public class StateController : MonoBehaviour, LateInitializable
 
     private List<State> StateHistory = new List<State>();
 
-    private State CurrentState; 
+    private State CurrentState;
+
+    private bool initialized = false; 
 
     public void LateInit()
     {
+        initialized = true; 
         EnterState(InitialState as State); 
     }
 
@@ -37,6 +40,9 @@ public class StateController : MonoBehaviour, LateInitializable
 
     void FixedUpdate()
     {
-        CurrentState.UpdateState();
+        if (initialized)
+        {
+            CurrentState.UpdateState();
+        }
     }
 }

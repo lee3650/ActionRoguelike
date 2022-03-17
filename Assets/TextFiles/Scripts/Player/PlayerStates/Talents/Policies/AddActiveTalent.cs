@@ -30,7 +30,9 @@ public class AddActiveTalent : TalentPolicy, Dependency<ActiveTalentManager>
         {
             Upgrades = (List<TalentPolicy>)UtilityRandom.SortByRandom(Upgrades);
         }
-        return Upgrades[0];
+        TalentPolicy result = Upgrades[0];
+        result.Parent = this; 
+        return result;
     }
 
     public override void AppliedNextUpgrade()

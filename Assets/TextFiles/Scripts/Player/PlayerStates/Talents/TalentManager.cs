@@ -43,6 +43,11 @@ public class TalentManager : MonoBehaviour
         t.transform.localPosition = Vector3.zero;
         t.ApplyPolicy();
 
+        if (t.IsUpgrade)
+        {
+            t.Parent.AppliedNextUpgrade();
+        }
+
         CurrentTalents.Add(t);
     }
 }

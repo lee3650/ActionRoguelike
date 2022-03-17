@@ -11,7 +11,7 @@ public class HealthManager : MonoBehaviour, Initializable
 
     [SerializeField] float MaxHealth;
 
-    [SerializeField] private float currentHealth;
+    [SerializeField] private float currentHealth = 1;
 
     public float GetHealthPercentage()
     {
