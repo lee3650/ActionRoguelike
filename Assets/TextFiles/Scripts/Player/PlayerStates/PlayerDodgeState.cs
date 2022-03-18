@@ -29,6 +29,13 @@ public class PlayerDodgeState : State
     public override void EnterState()
     {
         dodgeDir = Input.GetDirectionalInput();
+        if (dodgeDir == Vector2.zero)
+        {
+            float z = Input.GetDirectionToFace();
+            Vector2 rounded = new Vector2(Mathf.Cos(z * Mathf.Deg2Rad), Mathf.Sin(z * Mathf.Deg2Rad));
+            rounded = new Vector2(Mathf.RoundToInt(rounded.x), Mathf.RoundToInt(rounded.y));
+            dodgeDir = rounded.normalized;
+        }
         MovementController.AddForce(DodgeSpeed, dodgeDir);
         rotateDir = KeyboardInput.GetRotationFromDirection(dodgeDir);
         dodgeTimer = DodgeLength + RecoveryLength; 
