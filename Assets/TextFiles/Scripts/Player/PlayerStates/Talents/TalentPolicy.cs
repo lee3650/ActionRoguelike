@@ -9,7 +9,9 @@ public abstract class TalentPolicy : MonoBehaviour
     [SerializeField] bool reusable;
     [SerializeField] private bool upgradable = false;
     [SerializeField] bool isUpgrade = false;
-    [SerializeField] private bool isActiveTalent; 
+    [SerializeField] private bool isActiveTalent;
+    [SerializeField] List<TalentPolicy> Upgrades;
+    [SerializeField] bool RandomizeUpgrades; 
 
     public bool IsActiveTalent
     {
@@ -55,13 +57,25 @@ public abstract class TalentPolicy : MonoBehaviour
     }
 
     public abstract void ApplyPolicy();
-    public virtual TalentPolicy GetNextUpgrade()
+
+    public TalentPolicy GetNextUpgrade()
     {
-        return null; 
+        if (RandomizeUpgrades)
+        {
+            Upgrades = (List<TalentPolicy>)UtilityRandom.SortByRandom(Upgrades);
+        }
+        TalentPolicy result = Upgrades[0];
+        result.Parent = this;
+        return result;
     }
 
-    public virtual void AppliedNextUpgrade()
+    public void AppliedNextUpgrade()
     {
+        Upgrades.RemoveAt(0);
+        if (Upgrades.Count == 0)
+        {
+            Upgradable = false;
+        }
     }
 
     public bool Upgradable

@@ -40,6 +40,15 @@ public class GenericTarget : MonoBehaviour, Targetable, Initializable
 
     public void HandleEvent(GameEvent e)
     {
+        if (e is PossibleGameEvent)
+        {
+            if (!UtilityRandom.PercentChance((e as PossibleGameEvent).Odds))
+            {
+                return; 
+            }
+            e = GameEvent.ConvertToGameEvent(e as PossibleGameEvent);
+        }
+
         List<GameEvent> eventList = new List<GameEvent>();
 
         eventList.Add(e);

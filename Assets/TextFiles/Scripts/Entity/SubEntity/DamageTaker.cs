@@ -11,6 +11,8 @@ public class DamageTaker : MonoBehaviour, SubEntity
         switch (e.Type)
         {
             case SignalType.Physical:
+            case SignalType.Fire:
+            case SignalType.Poison: 
                 HealthManager.TakeDamage(e.Magnitude);
                 break;
         }

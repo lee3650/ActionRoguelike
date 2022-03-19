@@ -6,4 +6,7 @@ public enum SignalType
 {
     Physical,
     Knockback, 
+    Freeze,
+    Fire, 
+    Poison, 
 }

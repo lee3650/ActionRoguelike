@@ -2,19 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RangedCollisionHandler : WeaponCollisionHandler
+public class RangedCollisionHandler : WeaponCollisionHandler, Dependency<AttackModifierList>
 {
     [SerializeField] Weapon MyWeapon;
-    [SerializeField] GameEvent[] EventTemplates; 
+    [SerializeField] GameEvent[] EventTemplates;
+
+    private AttackModifierList AttackModifierList;
+    public void InjectDependency(AttackModifierList aml)
+    {
+        AttackModifierList = aml; 
+    }
 
     public override void HandleCollision(Collider2D col)
     {
         if (col.TryGetComponent<Entity>(out Entity e))
         {
-            foreach (GameEvent et in EventTemplates)
+            List<GameEvent> effectiveEvents = new List<GameEvent>();
+            effectiveEvents.AddRange(EventTemplates);
+            if (EventTemplates == null)
             {
-                et.Sender = MyWeapon.GetWielder();
-                e.HandleEvent(GameEvent.CopyEvent(et));
+                throw new System.Exception("Attack modifiers was not injected!");
+            }
+
+            effectiveEvents.AddRange(AttackModifierList.GetAttackModifiers());
+
+            foreach (GameEvent ge in effectiveEvents)
+            {
+                ge.Sender = MyWeapon.GetWielder();
+                e.HandleEvent(GameEvent.CopyEvent(ge));
             }
         }
     }
