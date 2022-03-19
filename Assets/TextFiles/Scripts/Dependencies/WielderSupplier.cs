@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WielderSupplier : MonoBehaviour, Dependency<GenericTarget>
 {
-    private GenericTarget MyTarget; 
+    [SerializeField] private GenericTarget MyTarget; 
 
     public Targetable GetWielder()
     {
@@ -13,6 +13,6 @@ public class WielderSupplier : MonoBehaviour, Dependency<GenericTarget>
 
     public void InjectDependency(GenericTarget t)
     {
-
+        MyTarget = t; 
     }
 }

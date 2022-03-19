@@ -5,6 +5,7 @@ using UnityEngine;
 public class GenericCollisionHandler : WeaponCollisionHandler, LateInitializable, Dependency<AttackModifierList>
 {
     [SerializeField] GenericWeapon MyWeapon;
+    [SerializeField] WielderSupplier WielderSupplier;
     [SerializeField] List<GameEvent> MyEventTemplates;
 
     private AttackModifierList AttackModifiers; 
@@ -39,7 +40,7 @@ public class GenericCollisionHandler : WeaponCollisionHandler, LateInitializable
     private void OnStartAction(string action)
     {
         hitEntities = new List<Entity>();
-        hitEntities.Add(MyWeapon.GetWielder());
+        hitEntities.Add(WielderSupplier.GetWielder());
     }
 
     public override void HandleCollision(Collider2D col)
@@ -58,7 +59,7 @@ public class GenericCollisionHandler : WeaponCollisionHandler, LateInitializable
 
                 foreach (GameEvent ge in effectiveEvents)
                 {
-                    ge.Sender = MyWeapon.GetWielder();
+                    ge.Sender = WielderSupplier.GetWielder();
                     e.HandleEvent(GameEvent.CopyEvent(ge));
                     hitEntities.Add(e);
                     HitEntity(e);

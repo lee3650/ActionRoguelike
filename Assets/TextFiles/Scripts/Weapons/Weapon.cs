@@ -12,8 +12,6 @@ public abstract class Weapon : MonoBehaviour
         return AttackRange; 
     }
     
-    protected Targetable MyWielder;
-
     protected bool canPickUp = true;
 
     private AttackStage curStage = AttackStage.Idle;
@@ -23,10 +21,8 @@ public abstract class Weapon : MonoBehaviour
         return transform; 
     }
 
-    public virtual void SetWielder(Targetable newWielder)
+    public virtual void OnPickup()
     {
-        print("Set wielder: " + newWielder);
-        MyWielder = newWielder;
         canPickUp = false;
     }
 
@@ -38,11 +34,6 @@ public abstract class Weapon : MonoBehaviour
     public virtual Vector2 GetRelativePosition()
     {
         return RelativePosition;
-    }
-
-    public virtual Targetable GetWielder()
-    {
-        return MyWielder;
     }
 
     public bool CanPickUp()

@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class RangedCollisionHandler : WeaponCollisionHandler, Dependency<AttackModifierList>
 {
-    [SerializeField] Weapon MyWeapon;
+    [SerializeField] WielderSupplier WielderSupplier;
     [SerializeField] GameEvent[] EventTemplates;
 
-    private AttackModifierList AttackModifierList;
+    [SerializeField] private AttackModifierList AttackModifierList;
+
     public void InjectDependency(AttackModifierList aml)
     {
         AttackModifierList = aml; 
@@ -19,7 +20,7 @@ public class RangedCollisionHandler : WeaponCollisionHandler, Dependency<AttackM
         {
             List<GameEvent> effectiveEvents = new List<GameEvent>();
             effectiveEvents.AddRange(EventTemplates);
-            if (EventTemplates == null)
+            if (AttackModifierList == null)
             {
                 throw new System.Exception("Attack modifiers was not injected!");
             }
@@ -28,7 +29,7 @@ public class RangedCollisionHandler : WeaponCollisionHandler, Dependency<AttackM
 
             foreach (GameEvent ge in effectiveEvents)
             {
-                ge.Sender = MyWeapon.GetWielder();
+                ge.Sender = WielderSupplier.GetWielder();
                 e.HandleEvent(GameEvent.CopyEvent(ge));
             }
         }

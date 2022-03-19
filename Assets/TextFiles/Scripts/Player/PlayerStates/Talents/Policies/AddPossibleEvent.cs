@@ -6,7 +6,7 @@ public class AddPossibleEvent : TalentPolicy, Dependency<AttackModifierList>
 {
     [SerializeField] PossibleGameEvent MyEvent;
     
-    private AttackModifierList AttackModifierList;
+    [SerializeField] private AttackModifierList AttackModifierList;
 
     public void MultiplyEventChances(float amt)
     {
@@ -30,7 +30,10 @@ public class AddPossibleEvent : TalentPolicy, Dependency<AttackModifierList>
 
     public void InjectDependency(AttackModifierList aml)
     {
-        AttackModifierList = aml; 
+        if (AttackModifierList == null)
+        {
+            AttackModifierList = aml; 
+        }
     }
 
     public override void ApplyPolicy()

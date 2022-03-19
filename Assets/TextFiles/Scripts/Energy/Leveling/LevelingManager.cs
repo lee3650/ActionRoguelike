@@ -44,10 +44,7 @@ public class LevelingManager : MonoBehaviour
     {
         foreach (TalentPolicy f in furlough)
         {
-            if (f != t)
-            {
-                UpgradeOptions.Add(f);
-            }
+            UpgradeOptions.Add(f);
         }
 
         furlough = new List<TalentPolicy>();

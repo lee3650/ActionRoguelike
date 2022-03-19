@@ -4,8 +4,6 @@ using UnityEngine;
 
 public abstract class AbstractWeaponManager : MonoBehaviour
 {
-    [SerializeField] GameObject Wielder;
-
     protected Weapon CurrentWeapon;
 
     public abstract void StartAction(string s);
@@ -23,7 +21,7 @@ public abstract class AbstractWeaponManager : MonoBehaviour
     public void SelectWeapon(Weapon newWeapon)
     {
         CurrentWeapon?.Deselect();
-        newWeapon.SetWielder(Wielder?.GetComponent<Targetable>());
+        newWeapon.OnPickup();
         newWeapon.Select();
         CurrentWeapon = newWeapon;
     }
