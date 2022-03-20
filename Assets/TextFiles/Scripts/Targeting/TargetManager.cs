@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq; 
 
 public class TargetManager : MonoBehaviour, Initializable
 {
@@ -12,7 +13,7 @@ public class TargetManager : MonoBehaviour, Initializable
     public static void ResetState()
     {
         TargetsByFaction = new Dictionary<Factions, List<Targetable>>();
-        allFactions = null; 
+        allFactions = null;
     }
 
     public void Init()
@@ -27,7 +28,7 @@ public class TargetManager : MonoBehaviour, Initializable
         }
     }
 
-    public static Targetable GetNearestTarget(Vector2 position, Factions curFaction)
+    public static List<Targetable> GetNearestTargets(Vector2 pos, Factions curFaction)
     {
         //oh right, we can make like an 'warring manager' or whatever, right, to track which factions are aggroed
         List<Targetable> candidates = new List<Targetable>();
@@ -43,7 +44,7 @@ public class TargetManager : MonoBehaviour, Initializable
 
         if (candidates.Count == 0)
         {
-            return null; 
+            return null;
         }
 
         for (int i = candidates.Count - 1; i >= 0; i--)
@@ -54,24 +55,19 @@ public class TargetManager : MonoBehaviour, Initializable
             }
         }
 
-        if (candidates.Count == 0)
-        {
-            return null;
-        }
+        candidates.OrderBy(t => Vector2.Distance(t.GetMyPosition(), pos));
 
-        Targetable nearest = candidates[0];
-        float minDistance = Vector2.Distance(position, nearest.GetMyPosition());
-        for (int i = 0; i < candidates.Count; i++)
-        {
-            float newDist = Vector2.Distance(position, candidates[i].GetMyPosition());
-            if (newDist < minDistance)
-            {
-                nearest = candidates[i];
-                minDistance = newDist; 
-            }
-        }
+        return candidates;
+    }
 
-        return nearest; 
+    public static Targetable GetNearestTarget(Vector2 position, Factions curFaction)
+    {
+        List<Targetable> targets = GetNearestTargets(position, curFaction);
+        if (targets.Count == 0)
+        {
+            return null; 
+        }
+        return targets[0];
     }
 
     public static void RemoveTarget(Targetable t)

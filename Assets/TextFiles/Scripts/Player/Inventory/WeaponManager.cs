@@ -31,9 +31,10 @@ public class WeaponManager : AbstractWeaponManager
 
         switch (action)
         {
-            case "throw":
+            case ActionStrings.SuperThrow:
+            case ActionStrings.ThrowAction:
                 CurrentWeapon = null;
-                break; 
+                break;
         }
     }
 

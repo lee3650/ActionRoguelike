@@ -37,7 +37,7 @@ public class SendCollision : MonoBehaviour
 
         RaycastHit2D[] hits = Physics2D.BoxCastAll(transform.position, myCol.bounds.size, transform.localEulerAngles.z, delta.normalized, delta.magnitude, mask);
 
-        Debug.DrawLine(lastPos, transform.position, Color.red, 10f);
+        //Debug.DrawLine(lastPos, transform.position, Color.red, 10f);
 
         foreach (RaycastHit2D hit in hits)
         {

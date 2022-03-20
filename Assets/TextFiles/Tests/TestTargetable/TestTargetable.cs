@@ -33,4 +33,12 @@ public class TestTargetable : Targetable
     {
         return myPosition; 
     }
+
+    public Transform transform
+    {
+        get
+        {
+            return null; 
+        }
+    }
 }

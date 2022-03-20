@@ -35,6 +35,7 @@ public class GenericWeapon : Weapon
 
     public override void Deselect()
     {
+        print("deselected weapon!");
         foreach (SpriteRenderer sr in Images)
         {
             sr.enabled = false;

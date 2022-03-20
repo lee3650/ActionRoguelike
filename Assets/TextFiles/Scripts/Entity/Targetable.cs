@@ -7,4 +7,7 @@ public interface Targetable : Entity
     Factions GetMyFaction();
     Vector2 GetMyPosition();
     bool IsAlive();
+
+    Transform transform {
+        get; }
 }

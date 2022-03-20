@@ -33,6 +33,7 @@ public class ApplyKnockback : MonoBehaviour, Dependency<TakeKnockback>, Dependen
                 Active = true;
                 break;
             case ActionStrings.ThrowAction:
+            case ActionStrings.SuperThrow:
                 Active = false;
                 break; 
         }

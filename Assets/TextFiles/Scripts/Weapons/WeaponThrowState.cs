@@ -100,7 +100,6 @@ public class WeaponThrowState : State, Dependency<Transform>, Dependency<Directi
         rb.isKinematic = true; 
         rb.velocity = Vector2.zero;
         rb.angularVelocity = 0f;
-        Vector3 priorScale = transform.lossyScale;
 
         GameObject fakeParent = Instantiate(Resources.Load<GameObject>("empty"));
 
@@ -113,12 +112,6 @@ public class WeaponThrowState : State, Dependency<Transform>, Dependency<Directi
         myWeapon.AllowPickup();
 
         StateController.EnterState(NextState);
-
-        Vector3 postScale = transform.lossyScale;
-
-        //Vector2 differential = new Vector2(postScale.x / priorScale.x, postScale.y / priorScale.y);
-
-        print(string.Format("post scale: {0}, pre scale: {1}", postScale, priorScale));
     }
 
     public override void UpdateState()

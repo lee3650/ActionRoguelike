@@ -2,11 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SuperThrowAnticipation : AbstractAnticipation, Talent, Dependency<HandAndArmGetter>, Dependency<ReversedTracker>, Dependency<ManaManager>
+public class SuperThrowAnticipation : AbstractAnticipation, Talent, Dependency<HandAndArmGetter>, Dependency<ReversedTracker>, Dependency<ManaManager>, Dependency<PlayerRoomSetter>, Dependency<WeaponManager>
 {
     public void InjectDependency(HandAndArmGetter hm)
     {
         HandAndArm = hm;
+    }
+
+    WeaponManager wm;
+
+    public void InjectDependency(WeaponManager wm)
+    {
+        this.wm = wm; 
+    }
+
+    private PlayerRoomSetter prs;
+
+    public void InjectDependency(PlayerRoomSetter prs)
+    {
+        this.prs = prs;
     }
 
     public void InjectDependency(ReversedTracker rt)
@@ -18,7 +32,7 @@ public class SuperThrowAnticipation : AbstractAnticipation, Talent, Dependency<H
 
     public bool CanUseTalent()
     {
-        return manaManager.ChargesRemaining(1);
+        return manaManager.ChargesRemaining(1) && !prs.RoomClear && wm.DoesCurrentWeaponAllowAction(ActionStrings.SuperThrow);
     }
 
     public void InjectDependency(ManaManager mm)
@@ -29,6 +43,7 @@ public class SuperThrowAnticipation : AbstractAnticipation, Talent, Dependency<H
     public override void EnterState()
     {
         SetupState();
+        manaManager.UseCharge();
     }
 
     public override void UpdateState()

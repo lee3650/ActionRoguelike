@@ -2,13 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ModifyStatsList : TalentPolicy
+public class ModifyStatsList : TalentPolicy, Dependency<StatsList>
 {
+    [SerializeField] bool InjectStats;
     [SerializeField] StatsList StatsList;
     [SerializeField] string stat;
     [SerializeField] float modifier;
     [Tooltip("Multiply or add?")]
     [SerializeField] bool Multiply;
+
+    public void InjectDependency(StatsList st)
+    {
+        if (InjectStats)
+        {
+            StatsList = st; 
+        }
+    }
 
     public override void ApplyPolicy()
     {

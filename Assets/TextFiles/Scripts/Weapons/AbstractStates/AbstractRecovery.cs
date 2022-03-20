@@ -12,12 +12,12 @@ public abstract class AbstractRecovery : State
     [SerializeField] protected ReversedTracker ReversedTracker;
     protected float timer = 0f;
 
-    private float startRotation = 0f;
-    private float startHandRotation = 0f;
+    protected float startRotation = 0f;
+    protected float startHandRotation = 0f;
 
-    int dir;
-    int w_dir;
-    float end;
+    protected int dir;
+    protected int w_dir;
+    protected float end;
 
     protected void SetupState()
     {

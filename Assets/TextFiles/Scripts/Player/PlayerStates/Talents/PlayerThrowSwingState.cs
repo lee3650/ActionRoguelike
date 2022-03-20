@@ -26,6 +26,7 @@ public class PlayerThrowSwingState : AbstractSwing
         {
             holdingWeapon = false;
             WeaponManager.StartAction(ActionStrings.ThrowAction);
+            //don't I have a knockback controller?
             MovementController.AddForce(throwKB, -new Vector2(Mathf.Cos(PlayerInput.GetDirectionToFace() * Mathf.Deg2Rad), Mathf.Sin(PlayerInput.GetDirectionToFace() * Mathf.Deg2Rad)).normalized);
             PickUpWeapon.RemoveSelectedWeapon();
         }

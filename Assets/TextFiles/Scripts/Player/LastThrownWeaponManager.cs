@@ -37,7 +37,7 @@ public class LastThrownWeaponManager : MonoBehaviour, LateInitializable
 
     private void StartedAction(string obj)
     {
-        if (obj.Equals(ActionStrings.ThrowAction))
+        if (obj.Equals(ActionStrings.ThrowAction) || obj.Equals(ActionStrings.SuperThrow))
         {
             thrownWeapons.Add(WeaponManager.GetCurrentWeapon());
         }
