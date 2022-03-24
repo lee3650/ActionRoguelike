@@ -7,7 +7,7 @@ public class FollowRigidbody : MonoBehaviour
     [SerializeField] Rigidbody2D follow;
     [SerializeField] Rigidbody2D rb;
     
-    private void FixedUpdate()
+    private void Update()
     {
         rb.position = follow.position;  
     }

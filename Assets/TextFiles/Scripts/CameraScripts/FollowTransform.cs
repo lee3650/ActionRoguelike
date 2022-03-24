@@ -7,6 +7,7 @@ public class FollowTransform : MonoBehaviour
     [SerializeField] Transform Transform;
     [SerializeField] Vector3 Offset;
     [SerializeField] float Sensitivity;
+    [SerializeField] bool useRegularUpdate = false; 
 
     float shakeLength = 0f;
     float shakeMagnitude = 0f;
@@ -27,11 +28,23 @@ public class FollowTransform : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Time.realtimeSinceStartup - shakeStart > shakeLength)
+        if (!useRegularUpdate)
         {
-            shakeMagnitude = 0f; 
-        }
 
-        TrackPoint();
+            if (Time.realtimeSinceStartup - shakeStart > shakeLength)
+            {
+                shakeMagnitude = 0f;
+            }
+
+            TrackPoint();
+        }
+    }
+
+    private void Update()
+    {
+        if (useRegularUpdate)
+        {
+            TrackPoint();
+        }
     }
 }

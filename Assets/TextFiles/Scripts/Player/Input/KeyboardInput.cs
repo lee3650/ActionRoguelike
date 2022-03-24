@@ -59,6 +59,7 @@ public class KeyboardInput : PlayerInput, Initializable
 
     public override float GetDirectionToFace()
     {
+        print("world mouse pos: " + GetWorldMousePos());
         Vector2 delta = GetWorldMousePos() - (Vector2)transform.position; 
         return GetRotationFromDirection(delta);
     }
@@ -80,7 +81,18 @@ public class KeyboardInput : PlayerInput, Initializable
 
     private Vector2 GetWorldMousePos()
     {
+        //return Camera.main.ScreenPointToRay(
         return Camera.main.ScreenToWorldPoint(Input.mousePosition); 
+        //return GetWorldPositionOnPlane(Input.mousePosition, 0f);
+    }
+
+    private  Vector3 GetWorldPositionOnPlane(Vector3 screenPosition, float z)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(screenPosition);
+        Plane xy = new Plane(Vector3.forward, new Vector3(0, 0, z));
+        float distance;
+        xy.Raycast(ray, out distance);
+        return ray.GetPoint(distance);
     }
 
     public override bool Attack()
