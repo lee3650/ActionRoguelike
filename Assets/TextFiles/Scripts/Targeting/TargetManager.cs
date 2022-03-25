@@ -44,7 +44,7 @@ public class TargetManager : MonoBehaviour, Initializable
 
         if (candidates.Count == 0)
         {
-            return null;
+            return new List<Targetable>();
         }
 
         for (int i = candidates.Count - 1; i >= 0; i--)
@@ -55,9 +55,25 @@ public class TargetManager : MonoBehaviour, Initializable
             }
         }
 
-        candidates.OrderBy(t => Vector2.Distance(t.GetMyPosition(), pos));
+        candidates.Sort(new TargetCompareClass(pos));
 
         return candidates;
+    }
+
+    private class TargetCompareClass : IComparer<Targetable>
+    {
+        private Vector2 pos;
+
+        public TargetCompareClass(Vector2 p) 
+        {
+            pos = p; 
+        }
+
+        public int Compare(Targetable a, Targetable b)
+        {
+            float dif = Vector2.Distance(a.GetMyPosition(), pos) - Vector2.Distance(b.GetMyPosition(), pos);
+            return (int)(Mathf.Sign(dif) * Mathf.CeilToInt(Mathf.Abs(dif)));
+        }
     }
 
     public static Targetable GetNearestTarget(Vector2 position, Factions curFaction)

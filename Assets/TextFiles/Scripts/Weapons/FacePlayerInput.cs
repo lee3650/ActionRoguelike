@@ -11,6 +11,11 @@ public class FacePlayerInput : MonoBehaviour
     [SerializeField] Rigidbody2D playerRb;
     private float timer = 0f;
     
+    public void SetWiggle(bool wiggle)
+    {
+        alsoWiggle = wiggle; 
+    }
+
     public void FaceInput()
     {
         float adjustment = 0; 

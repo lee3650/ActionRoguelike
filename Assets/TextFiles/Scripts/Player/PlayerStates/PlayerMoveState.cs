@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class PlayerMoveState : State
 {
-    [SerializeField] MovementController MovementController;
     [SerializeField] PlayerInput PlayerInput;
     [SerializeField] PlayerAttackState PlayerAttackState;
     [SerializeField] PlayerDodgeState PlayerDodgeState;
     [SerializeField] PickUpWeapon PickUpWeapon;
     [SerializeField] ActiveTalentManager TalentManager;
     [SerializeField] PlayerPickupState PlayerPickupState;
+    [SerializeField] MovementUtility MovementUtility;
 
     public override void EnterState()
     {
-
+        MovementUtility.StartRotation();
     }
 
     public override void UpdateState()
     {
-        MovementController.MoveInDirection(PlayerInput.GetDirectionalInput());
+        MovementUtility.MoveTowardInput();
 
         if (PlayerInput.SelectionDelta() != 0)
         {

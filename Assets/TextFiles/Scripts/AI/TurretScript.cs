@@ -42,7 +42,7 @@ public class TurretScript : MonoBehaviour, Dependency<StatsList>
         {
             return; 
         }
-        rb.rotation = KeyboardInput.GetRotationFromDirection(target.GetMyPosition() - (Vector2)transform.position);
+        rb.rotation = UtilityFunctions.GetRotationFromDirection(target.GetMyPosition() - (Vector2)transform.position);
     }
 
     private void Update()
@@ -59,7 +59,7 @@ public class TurretScript : MonoBehaviour, Dependency<StatsList>
             {
                 prevDelta = newDelta; 
             }
-            rb.rotation = KeyboardInput.GetRotationFromDirection(prevDelta);
+            rb.rotation = UtilityFunctions.GetRotationFromDirection(prevDelta);
         }
 
         FaceNearestTarget(myTarget);

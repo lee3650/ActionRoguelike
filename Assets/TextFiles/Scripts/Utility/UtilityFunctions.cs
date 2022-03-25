@@ -9,6 +9,20 @@ public class UtilityFunctions : MonoBehaviour
         return UtilityFunctions.LerpAngleDirection(start, dir * dist + start, t, dir);
     }
 
+    public static Vector2 GetDirectionFromRotation(float dir)
+    {
+        return new Vector2(Mathf.Cos(dir * Mathf.Deg2Rad), Mathf.Sin(dir * Mathf.Deg2Rad));
+    }
+    
+    public static Vector2Int RoundVectorToInt(Vector2 vector)
+    {
+        return new Vector2Int(Mathf.RoundToInt(vector.x), Mathf.RoundToInt(vector.y));
+    }
+
+    public static float GetRotationFromDirection(Vector2 dir)
+    {
+        return Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x);
+    }
     /// <summary>
     /// Direction = -1, 1, or 0. 0 is equivalent to Mathf.LerpAngle. 
     /// </summary>

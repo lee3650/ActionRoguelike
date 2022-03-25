@@ -13,12 +13,12 @@ public class FaceTarget : MonoBehaviour
         if (CurrentTarget.HasTarget)
         {
             Vector2 delta = CurrentTarget.GetTargetPosition() - (Vector2)transform.position;
-            float dir = KeyboardInput.GetRotationFromDirection(delta.normalized);
+            float dir = UtilityFunctions.GetRotationFromDirection(delta.normalized);
             MovementController.PhysicallyRotateInDirection(dir);
 
         } else
         {
-            float dir = KeyboardInput.GetRotationFromDirection(rb.velocity.normalized);
+            float dir = UtilityFunctions.GetRotationFromDirection(rb.velocity.normalized);
             MovementController.PhysicallyRotateInDirection(dir);
         }
     }

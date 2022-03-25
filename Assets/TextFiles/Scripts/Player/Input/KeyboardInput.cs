@@ -27,11 +27,6 @@ public class KeyboardInput : PlayerInput, Initializable
         return TalentBinds[index].ToString();
     }
 
-    public static float GetRotationFromDirection(Vector2 dir)
-    {
-        return Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x); 
-    }
-
     public override int GetTalentToActivate()
     {
         for (int i = 0; i < LastTalentPresses.Length; i++)
@@ -61,7 +56,7 @@ public class KeyboardInput : PlayerInput, Initializable
     {
         print("world mouse pos: " + GetWorldMousePos());
         Vector2 delta = GetWorldMousePos() - (Vector2)transform.position; 
-        return GetRotationFromDirection(delta);
+        return UtilityFunctions.GetRotationFromDirection(delta);
     }
 
     public override Vector2 GetDirectionalInput()

@@ -6,7 +6,7 @@ public class ActiveTalentManager : MonoBehaviour, Initializable
 {
     public const int MaxActiveTalents = 6;
 
-    [SerializeField] State[] ActiveTalents = new State[MaxActiveTalents - 1];
+    [SerializeField] State[] ActiveTalents = new State[MaxActiveTalents];
 
     private int highestTalent = 0;
 
@@ -18,7 +18,6 @@ public class ActiveTalentManager : MonoBehaviour, Initializable
             if (ActiveTalents[i - 1] != null)
             {
                 highestTalent = i;
-                break;  
             }
         }
     }

@@ -61,6 +61,8 @@ public class TestTargetManager
             TargetManager.AddTargetable(tt);
         }
 
+        Debug.Log(string.Format("nearest tt to 10,10 pos: {0}", TargetManager.GetNearestTarget(new Vector2(10, 10), Factions.Player).GetMyPosition()));
+
         Assert.AreEqual(testTargetables[4], TargetManager.GetNearestTarget(new Vector2(10, 10), Factions.Player));
         Assert.AreEqual(testTargetables[0], TargetManager.GetNearestTarget(new Vector2(0, 0), Factions.Player));
     }
