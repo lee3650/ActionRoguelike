@@ -6,19 +6,22 @@ public class FacePlayerInput : MonoBehaviour
 {
     [SerializeField] PlayerInput PlayerInput;
     [SerializeField] MovementController MovementController;
-    [SerializeField] bool alsoWiggle;
-    [SerializeField] float wiggleAmount, wiggleFreq;
-    [SerializeField] Rigidbody2D playerRb;
+
     private float timer = 0f;
     
     public void SetWiggle(bool wiggle)
     {
-        alsoWiggle = wiggle; 
+        //alsoWiggle = wiggle; 
+        if (wiggle == false)
+        {
+            MovementController.SetRotation(PlayerInput.GetDirectionToFace()); 
+        }
     }
 
     public void FaceInput()
     {
         float adjustment = 0; 
+        /*
         if (alsoWiggle && playerRb.velocity.magnitude > 1f)
         {
             timer += Time.fixedDeltaTime;
@@ -30,6 +33,7 @@ public class FacePlayerInput : MonoBehaviour
             }
             //adjustment = wiggleAmount * Mathf.Sin(2 * Mathf.PI * timer * wiggleFreq);
         }
+         */
 
         MovementController.PhysicallyRotateInDirection(PlayerInput.GetDirectionToFace() + adjustment);
     }

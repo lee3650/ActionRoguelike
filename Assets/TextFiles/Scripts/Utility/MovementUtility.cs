@@ -21,6 +21,15 @@ public class MovementUtility : MonoBehaviour
         FacePlayerInput.SetWiggle(false);
     }
 
+    public void ModifyMoveSpeed(float amt)
+    {
+        MovementController.ModifyMoveSpeed(amt);
+    }
+    public void ResetMoveSpeed()
+    {
+        MovementController.ResetMoveSpeed();
+    }
+
     public PlayerInput GetPlayerInput()
     {
         return PlayerInput;
@@ -31,6 +40,11 @@ public class MovementUtility : MonoBehaviour
         useRotation = true;
         WeaponManager.PlayFaceInput();
         FacePlayerInput.SetWiggle(true);
+    }
+
+    public void AddForce(Vector2 dir, float amt)
+    {
+        MovementController.AddForce(amt, dir);
     }
 
     public void MoveTowardInput()

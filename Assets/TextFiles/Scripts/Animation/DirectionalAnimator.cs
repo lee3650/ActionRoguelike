@@ -7,8 +7,9 @@ public class DirectionalAnimator : MonoBehaviour
     [SerializeField] Animator Animator; 
     [SerializeField] AnimationClip[] RunAnimations;
     [SerializeField] AnimationClip[] IdleAnimations;
-    [SerializeField] float DirectionalThreshold = 0.5f; 
+    [SerializeField] AnimationClip[] RollAnimations;
     [SerializeField] float IdleThreshold = 0.5f;
+    const float DirectionalThreshold = 0.5f;
 
     [Tooltip("Directions to order animations")]
     [SerializeField]
@@ -20,16 +21,13 @@ public class DirectionalAnimator : MonoBehaviour
         new Vector2Int(0, -1),
     };
 
-    private int IndexOf(Vector2Int dir) 
+    public void AnimateRoll(Vector2 dir)
     {
-        for (int i = 0; i < Directions.Length; i++)
-        {
-            if (dir == Directions[i] || Vector2.Dot(Directions[i], dir) >= DirectionalThreshold)
-            {
-                return i;
-            }
-        }
-        return 0; //?
+        Vector2Int round = UtilityFunctions.RoundVectorToInt(dir);
+
+        AnimationClip[] clips = RollAnimations;
+
+        Animator.Play(clips[UtilityFunctions.ClosestVector(round, Directions, DirectionalThreshold)].name);
     }
 
     public void AnimateRunDirection(float dir, float velocity)
@@ -44,6 +42,6 @@ public class DirectionalAnimator : MonoBehaviour
             clips = IdleAnimations;
         } 
 
-        Animator.Play(clips[IndexOf(round)].name);
+        Animator.Play(clips[UtilityFunctions.ClosestVector(round, Directions, DirectionalThreshold)].name);
     }
 }

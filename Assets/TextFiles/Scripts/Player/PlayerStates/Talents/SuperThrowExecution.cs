@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SuperThrowExecution : AbstractSwing, Dependency<HandAndArmGetter>, Dependency<ReversedTracker>, Dependency<WeaponManager>, Dependency<MovementController>, Dependency<PlayerInput>, Dependency<PickUpWeapon>
+public class SuperThrowExecution : AbstractSwing, Dependency<HandAndArmGetter>, Dependency<ReversedTracker>, Dependency<WeaponManager>, Dependency<MovementUtility>, Dependency<PickUpWeapon>
 {
     private bool holdingWeapon = true;
     private WeaponManager wm;
-    private MovementController MovementController;
+    private MovementUtility MovementUtility;
+    private PickUpWeapon PickUpWeapon;
+
     private PlayerInput PlayerInput;
-    private PickUpWeapon PickUpWeapon; 
+
     [SerializeField] float throwKb; 
 
     public void InjectDependency(HandAndArmGetter hm)
@@ -16,19 +18,15 @@ public class SuperThrowExecution : AbstractSwing, Dependency<HandAndArmGetter>, 
         HandAndArm = hm;
     }
 
-    public void InjectDependency(MovementController mc)
+    public void InjectDependency(MovementUtility mc)
     {
-        MovementController = mc; 
+        MovementUtility = mc;
+        PlayerInput = mc.GetPlayerInput();
     }
 
     public void InjectDependency(PickUpWeapon puw)
     {
         PickUpWeapon = puw;
-    }
-
-    public void InjectDependency(PlayerInput pi)
-    {
-        PlayerInput = pi; 
     }
 
     public void InjectDependency(ReversedTracker rt)
@@ -50,13 +48,13 @@ public class SuperThrowExecution : AbstractSwing, Dependency<HandAndArmGetter>, 
     public override void UpdateState()
     {
         PartialUpdate();
-        MovementController.MoveInDirection(PlayerInput.GetDirectionalInput());
+        MovementUtility.MoveTowardInput();
         if (timer > 0.5f * SwingLength && holdingWeapon)
         {
             holdingWeapon = false;
             wm.StartAction(ActionStrings.SuperThrow);
-            //don't I have a knockback controller? lol
-            MovementController.AddForce(throwKb, -new Vector2(Mathf.Cos(PlayerInput.GetDirectionToFace() * Mathf.Deg2Rad), Mathf.Sin(PlayerInput.GetDirectionToFace() * Mathf.Deg2Rad)).normalized);
+
+            MovementUtility.AddForce(-new Vector2(Mathf.Cos(PlayerInput.GetDirectionToFace() * Mathf.Deg2Rad), Mathf.Sin(PlayerInput.GetDirectionToFace() * Mathf.Deg2Rad)).normalized, throwKb);
             PickUpWeapon.RemoveSelectedWeapon();
         }
     }

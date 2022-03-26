@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class PlayerThrowRecoveryState : AbstractRecovery
 {
-    [SerializeField] WeaponManager WeaponManager;
-    [SerializeField] MovementController MovementController;
-    [SerializeField] PlayerInput PlayerInput;
+    [SerializeField] MovementUtility MovementUtility;
 
     public override void EnterState()
     {
@@ -15,13 +13,13 @@ public class PlayerThrowRecoveryState : AbstractRecovery
 
     public override void UpdateState()
     {
-        MovementController.MoveInDirection(PlayerInput.GetDirectionalInput());
+        MovementUtility.MoveTowardInput();
         PartialUpdate();
     }
 
     public override void ExitState()
     {
         PartialExitState();
-        WeaponManager.PlayFaceInput();
+        MovementUtility.StartRotation();
     }
 }

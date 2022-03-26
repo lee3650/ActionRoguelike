@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerHealState : State, Talent, Dependency<PlayerInput>, Dependency<MovementController>, Dependency<PlayerMoveState>, Dependency<HealthManager>, Dependency<ManaManager>, Dependency<ActiveTalentManager>, Dependency<PlayerRoomSetter>
+public class PlayerHealState : State, Talent, Dependency<MovementUtility>, Dependency<HealthManager>, Dependency<ManaManager>, Dependency<ActiveTalentManager>, Dependency<PlayerRoomSetter>
 {
     [SerializeField] float HealAmt;
     [SerializeField] float HealLength;
@@ -12,13 +12,19 @@ public class PlayerHealState : State, Talent, Dependency<PlayerInput>, Dependenc
     private HealthManager hm; 
     private PlayerMoveState moveState;
     private PlayerInput PlayerInput;
-    private MovementController MovementController;
     private ActiveTalentManager ActiveTalentManager;
     private PlayerRoomSetter PlayerRoomSetter;
+    private MovementUtility MovementUtility;
 
     public bool CanUseTalent()
     {
         return ManaManager.ChargesRemaining(1) && hm.GetHealthPercentage() < 0.995f && !PlayerRoomSetter.RoomClear;
+    }
+
+    public void InjectDependency(MovementUtility mu)
+    {
+        MovementUtility = mu;
+        PlayerInput = mu.GetPlayerInput();
     }
 
     public void InjectDependency(PlayerRoomSetter prs)
@@ -29,11 +35,6 @@ public class PlayerHealState : State, Talent, Dependency<PlayerInput>, Dependenc
     public void InjectDependency(ActiveTalentManager atm)
     {
         ActiveTalentManager = atm; 
-    }
-
-    public void InjectDependency(MovementController mm)
-    {
-        MovementController = mm; 
     }
 
     public void InjectDependency(ManaManager mm)
@@ -49,11 +50,6 @@ public class PlayerHealState : State, Talent, Dependency<PlayerInput>, Dependenc
     public void InjectDependency(PlayerMoveState ms)
     {
         moveState = ms; 
-    }
-
-    public void InjectDependency(PlayerInput pi)
-    {
-        PlayerInput = pi; 
     }
 
     float timer = 0f; 
@@ -79,7 +75,7 @@ public class PlayerHealState : State, Talent, Dependency<PlayerInput>, Dependenc
     {
         timer = 0f;
         hm.DamageTaken += DamageTaken;
-        MovementController.ModifyMoveSpeed(SpeedModifier);
+        MovementUtility.ModifyMoveSpeed(SpeedModifier);
         talentIndex = ActiveTalentManager.GetTalentIndex(this);
     }
 
@@ -94,7 +90,7 @@ public class PlayerHealState : State, Talent, Dependency<PlayerInput>, Dependenc
 
         ManaManager.LerpCharge(HealLength, Time.fixedDeltaTime);
 
-        MovementController.MoveInDirection(PlayerInput.GetDirectionalInput());
+        MovementUtility.MoveTowardInput();
 
         if (PlayerInput.GetTalentToActivate() != talentIndex)
         {
@@ -111,7 +107,7 @@ public class PlayerHealState : State, Talent, Dependency<PlayerInput>, Dependenc
 
     public override void ExitState()
     {
-        MovementController.ResetMoveSpeed();
+        MovementUtility.ResetMoveSpeed();
         hm.DamageTaken -= DamageTaken;
     }
 }

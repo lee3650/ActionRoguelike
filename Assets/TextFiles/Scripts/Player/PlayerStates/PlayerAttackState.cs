@@ -6,18 +6,20 @@ public class PlayerAttackState : State
 {
     [SerializeField] WeaponManager WeaponManager;
     [SerializeField] PlayerMoveState PlayerMoveState;
-    [SerializeField] MovementController MovementController;
-    [SerializeField] PlayerInput PlayerInput;
+    [SerializeField] MovementUtility MovementUtility;
 
     public override void EnterState()
     {
-        WeaponManager.PauseFaceInput();
+        MovementUtility.StopRotation();
+        //WeaponManager.PauseFaceInput();
         WeaponManager.StartAction(ActionStrings.AttackAction);
     }
 
     public override void UpdateState()
     {
-        MovementController.MoveInDirection(PlayerInput.GetDirectionalInput());
+        //MovementController.MoveInDirection(PlayerInput.GetDirectionalInput());
+
+        MovementUtility.MoveTowardInput();
 
         if (WeaponManager.ActionFinished())
         {

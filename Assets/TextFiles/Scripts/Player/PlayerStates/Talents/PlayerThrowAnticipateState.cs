@@ -5,8 +5,7 @@ using UnityEngine;
 public class PlayerThrowAnticipateState : AbstractAnticipation, Talent
 {
     [SerializeField] WeaponManager WeaponManager;
-    [SerializeField] MovementController MovementController;
-    [SerializeField] PlayerInput PlayerInput;
+    [SerializeField] MovementUtility MovementUtility;
 
     public bool CanUseTalent()
     {
@@ -21,7 +20,7 @@ public class PlayerThrowAnticipateState : AbstractAnticipation, Talent
 
     public override void UpdateState()
     {
-        MovementController.MoveInDirection(PlayerInput.GetDirectionalInput());
+        MovementUtility.MoveTowardInput();
         PartialUpdate();
     }
 

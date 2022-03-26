@@ -16,6 +16,11 @@ public class MovementController : MonoBehaviour, Initializable
         effectiveSpeed = baseMoveSpeed; 
     }
 
+    public void SetRotation(float dir)
+    {
+        rb.rotation = dir; 
+    }
+
     public void ModifyMoveSpeed(float modification)
     {
         effectiveSpeed *= modification;

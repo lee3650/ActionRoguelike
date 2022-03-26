@@ -19,6 +19,18 @@ public class UtilityFunctions : MonoBehaviour
         return new Vector2Int(Mathf.RoundToInt(vector.x), Mathf.RoundToInt(vector.y));
     }
 
+    public static int ClosestVector(Vector2 dir, Vector2Int[] Directions, float DirectionalThreshold)
+    {
+        for (int i = 0; i < Directions.Length; i++)
+        {
+            if (dir == Directions[i] || Vector2.Dot(Directions[i], dir) >= DirectionalThreshold)
+            {
+                return i;
+            }
+        }
+        return 0; //?
+    }
+
     public static float GetRotationFromDirection(Vector2 dir)
     {
         return Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x);

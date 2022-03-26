@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerRecallState : State, Talent, Dependency<MovementController>, Dependency<PlayerInput>, Dependency<LastThrownWeaponManager>, Dependency<ManaManager>, Dependency<PlayerMoveState>
+public class PlayerRecallState : State, Talent, Dependency<MovementUtility>, Dependency<LastThrownWeaponManager>, Dependency<ManaManager>, Dependency<PlayerMoveState>
 {
     private LastThrownWeaponManager lastThrownWeapon; 
-    private MovementController MovementController;
-    private PlayerInput PlayerInput;
     private ManaManager ManaManager;
+
+    private MovementUtility MovementUtility;
 
     private PlayerMoveState PlayerMoveState;
 
@@ -34,16 +34,11 @@ public class PlayerRecallState : State, Talent, Dependency<MovementController>, 
         lastThrownWeapon = ltw;
     }
 
-    public void InjectDependency(MovementController mc)
+    public void InjectDependency(MovementUtility mc)
     {
-        MovementController = mc; 
+        MovementUtility = mc;  
     }
     
-    public void InjectDependency(PlayerInput pi)
-    {
-        PlayerInput = pi; 
-    }
-
     public void InjectDependency(ManaManager mm)
     {
         ManaManager = mm; 
@@ -79,7 +74,7 @@ public class PlayerRecallState : State, Talent, Dependency<MovementController>, 
 
     public override void UpdateState()
     {
-        MovementController.MoveInDirection(PlayerInput.GetDirectionalInput());
+        MovementUtility.MoveTowardInput();
     }
 
     public override void ExitState()

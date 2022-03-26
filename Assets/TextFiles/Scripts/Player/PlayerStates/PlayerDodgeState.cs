@@ -5,8 +5,10 @@ using UnityEngine;
 public class PlayerDodgeState : State
 {
     [SerializeField] MovementController MovementController;
+    [SerializeField] DirectionalAnimator DirectionalAnimator;
     [SerializeField] PlayerMoveState PlayerMoveState;
     [SerializeField] PlayerInput Input;
+    [SerializeField] HandAndArmGetter HandAndArmGetter;
     [SerializeField] float DodgeSpeed;
     [SerializeField] float DodgeLength;
     [SerializeField] float RecoverySpeed;
@@ -39,6 +41,9 @@ public class PlayerDodgeState : State
         MovementController.AddForce(DodgeSpeed, dodgeDir);
         rotateDir = UtilityFunctions.GetRotationFromDirection(dodgeDir);
         dodgeTimer = DodgeLength + RecoveryLength; 
+        
+        DirectionalAnimator.AnimateRoll(dodgeDir);
+        HandAndArmGetter.HideHands();
     }
 
     public override void UpdateState()
@@ -64,5 +69,6 @@ public class PlayerDodgeState : State
     public override void ExitState()
     {
         lastDodgeTime = Time.realtimeSinceStartup;
+        HandAndArmGetter.ShowHands();
     }
 }

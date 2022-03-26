@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SuperThrowRecovery : AbstractRecovery, Dependency<LastThrownWeaponManager>, Dependency<HandAndArmGetter>, 
-    Dependency<ReversedTracker>, Dependency<PlayerMoveState>, Dependency<MovementController>, Dependency<PlayerInput>
+    Dependency<ReversedTracker>, Dependency<PlayerMoveState>, Dependency<MovementUtility>
 {
     private LastThrownWeaponManager thrownWeapon; 
     private PlayerMoveState PlayerMoveState;
 
-    private MovementController MovementController;
-    private PlayerInput input;
-
+    private MovementUtility MovementUtility;
     private Weapon lastWeapon;
 
     public void InjectDependency(LastThrownWeaponManager lt)
@@ -18,14 +16,9 @@ public class SuperThrowRecovery : AbstractRecovery, Dependency<LastThrownWeaponM
         thrownWeapon = lt; 
     }
 
-    public void InjectDependency(MovementController lt)
+    public void InjectDependency(MovementUtility lt)
     {
-        MovementController = lt;
-    }
-
-    public void InjectDependency(PlayerInput lt)
-    {
-        input = lt;
+        MovementUtility = lt;
     }
 
     public void InjectDependency(HandAndArmGetter lt)
@@ -60,7 +53,7 @@ public class SuperThrowRecovery : AbstractRecovery, Dependency<LastThrownWeaponM
     {
         timer += Time.fixedDeltaTime;
 
-        MovementController.MoveInDirection(input.GetDirectionalInput());
+        MovementUtility.MoveTowardInput(); 
 
         if (timer < RecoveryLength)
         {

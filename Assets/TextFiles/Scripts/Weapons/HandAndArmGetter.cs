@@ -6,8 +6,26 @@ public class HandAndArmGetter : MonoBehaviour, Initializable
 {
     [SerializeField] private Transform Hand;
     [SerializeField] private Transform Arm;
+    [SerializeField] private Transform LeftHand;
 
-    private Vector2 handStartPos; 
+    private Vector2 handStartPos;
+
+    public void HideHands()
+    {
+        Hand.gameObject.SetActive(false);
+        if (LeftHand != null)
+        {
+            LeftHand.gameObject.SetActive(false);
+        }
+    }
+    public void ShowHands()
+    {
+        Hand.gameObject.SetActive(true);
+        if (LeftHand != null)
+        {
+            LeftHand.gameObject.SetActive(true);
+        }
+    }
 
     public void SetHandRotation(float rot)
     {

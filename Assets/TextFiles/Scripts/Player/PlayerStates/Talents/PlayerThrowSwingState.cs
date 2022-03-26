@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerThrowSwingState : AbstractSwing
 {
-    [SerializeField] MovementController MovementController;
+    [SerializeField] MovementUtility MovementUtility;
     [SerializeField] PlayerInput PlayerInput;
     [SerializeField] WeaponManager WeaponManager;
     [SerializeField] PickUpWeapon PickUpWeapon;
@@ -20,14 +20,14 @@ public class PlayerThrowSwingState : AbstractSwing
 
     public override void UpdateState()
     {
-        MovementController.MoveInDirection(PlayerInput.GetDirectionalInput());
+        MovementUtility.MoveTowardInput();
         PartialUpdate();
         if (timer > 0.5f * SwingLength && holdingWeapon)
         {
             holdingWeapon = false;
             WeaponManager.StartAction(ActionStrings.ThrowAction);
             //don't I have a knockback controller?
-            MovementController.AddForce(throwKB, -new Vector2(Mathf.Cos(PlayerInput.GetDirectionToFace() * Mathf.Deg2Rad), Mathf.Sin(PlayerInput.GetDirectionToFace() * Mathf.Deg2Rad)).normalized);
+            MovementUtility.AddForce(-new Vector2(Mathf.Cos(PlayerInput.GetDirectionToFace() * Mathf.Deg2Rad), Mathf.Sin(PlayerInput.GetDirectionToFace() * Mathf.Deg2Rad)).normalized, throwKB);
             PickUpWeapon.RemoveSelectedWeapon();
         }
     }
