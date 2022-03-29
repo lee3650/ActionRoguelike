@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerHealState : State, Talent, Dependency<MovementUtility>, Dependency<HealthManager>, Dependency<ManaManager>, Dependency<ActiveTalentManager>, Dependency<PlayerRoomSetter>
+public class PlayerHealState : State, Talent, Dependency<MovementUtility>, Dependency<HealthManager>, Dependency<ManaManager>, Dependency<ActiveTalentManager>, Dependency<PlayerRoomSetter>, Dependency<PlayerMoveState>
 {
     [SerializeField] float HealAmt;
     [SerializeField] float HealLength;

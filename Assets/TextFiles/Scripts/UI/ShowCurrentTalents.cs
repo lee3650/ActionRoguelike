@@ -2,15 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShowCurrentTalents : MonoBehaviour
+public class ShowCurrentTalents : MonoBehaviour, Initializable
 {
+    [SerializeField] PlayerGetter PlayerGetter; 
     [SerializeField] InjectionSet InjectionSet;
     [SerializeField] RebindUpgrade RebindUpgrade;
-    [SerializeField] TalentManager TalentManager;
     [SerializeField] Transform UpgradesParent;
     [SerializeField] GameObject TalentPanel;
+    private TalentManager TalentManager;
 
     private List<RebindUpgrade> previousUpgrades = new List<RebindUpgrade>();
+
+    public void Init()
+    {
+        PlayerGetter.PlayerReady += PlayerReady;
+    }
+
+    private void PlayerReady(Transform obj)
+    {
+        TalentManager = obj.GetComponent<TalentManager>();
+    }
 
     public void ShowTalents()
     {

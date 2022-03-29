@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShakeScreenOnKill : HitNotifier, LateInitializable
+public class ShakeScreenOnKill : HitNotifier, LateInitializable, Dependency<TimeScaleManager>, Dependency<FollowTransform>
 {
-    [SerializeField] FollowTransform Camera;
-    [SerializeField] TimeScaleManager TimeScaleManager;
+    private FollowTransform Camera;
+    private TimeScaleManager TimeScaleManager;
     [SerializeField] float shakeLength;
     [SerializeField] float shakeAmt;
     [SerializeField] float stopLength;
@@ -15,6 +15,16 @@ public class ShakeScreenOnKill : HitNotifier, LateInitializable
     [SerializeField] bool stopOnDamage;
 
     [SerializeField] HealthManager hm;
+
+    public void InjectDependency(TimeScaleManager tms)
+    {
+        TimeScaleManager = tms;
+    }
+
+    public void InjectDependency(FollowTransform ft)
+    {
+        Camera = ft; 
+    }
 
     public void LateInit()
     {

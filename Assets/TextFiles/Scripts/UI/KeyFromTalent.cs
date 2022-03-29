@@ -2,10 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KeyFromTalent : MonoBehaviour
+public class KeyFromTalent : MonoBehaviour, Initializable
 {
-    [SerializeField] ActiveTalentManager ActiveTalentManager;
-    [SerializeField] PlayerInput PlayerInput;
+    [SerializeField] PlayerGetter PlayerGetter; 
+    ActiveTalentManager ActiveTalentManager;
+    PlayerInput PlayerInput;
+
+    public void Init()
+    {
+        PlayerGetter.PlayerReady += PlayerReady;
+    }
+
+    private void PlayerReady(Transform obj)
+    {
+        ActiveTalentManager = obj.GetComponent<ActiveTalentManager>();
+        PlayerInput = obj.GetComponent<PlayerInput>();
+    }
 
     public string GetKeyForActiveTalent(State t)
     {

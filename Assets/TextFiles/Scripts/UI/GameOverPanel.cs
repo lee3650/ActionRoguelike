@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameOverPanel : MonoBehaviour, LateInitializable
+public class GameOverPanel : MonoBehaviour, Initializable
 {
-    [SerializeField] HealthManager player;
+    [SerializeField] PlayerGetter PlayerGetter;
     [SerializeField] GameObject EndPanel;
     [SerializeField] float panelDelay = 0.5f;
 
-    public void LateInit()
+    public void Init()
     {
-        player.OnDeath += OnDeath;
+        PlayerGetter.PlayerReady += PlayerReady;
+    }
+
+    private void PlayerReady(Transform obj)
+    {
+        obj.GetComponent<HealthManager>().OnDeath += OnDeath;
     }
 
     private void OnDeath()

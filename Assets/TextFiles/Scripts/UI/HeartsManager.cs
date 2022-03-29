@@ -3,18 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI; 
 
-public class HeartsManager : MonoBehaviour, LateInitializable
+public class HeartsManager : MonoBehaviour, Initializable
 {
-    [SerializeField] HealthManager HealthManager;
+    [SerializeField] PlayerGetter PlayerGetter;
     [SerializeField] Transform HeartParent;
     [SerializeField] GameObject FullHeart;
     [SerializeField] GameObject HalfHeart;
     [SerializeField] int HealthPerHeart = 2;
 
+    HealthManager HealthManager;
     private List<GameObject> oldHearts = new List<GameObject>();
 
-    public void LateInit()
+    public void Init()
     {
+        PlayerGetter.PlayerReady += PlayerReady;
+    }
+
+    private void PlayerReady(Transform obj)
+    {
+        HealthManager = obj.GetComponent<HealthManager>();
         HealthManager.HealthChanged += HealthChanged;
         HealthChanged();
     }

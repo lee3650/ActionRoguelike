@@ -2,14 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelingManager : MonoBehaviour
+public class LevelingManager : MonoBehaviour, Initializable
 {
     [SerializeField] List<TalentPolicy> UpgradeOptions;
-    [SerializeField] TalentManager TalentManager;
+    [SerializeField] PlayerGetter PlayerGetter;
+    private TalentManager TalentManager;
 
     private List<TalentPolicy> furlough = new List<TalentPolicy>();
 
     private const int talentsToShow = 3;
+
+    public void Init()
+    {
+        PlayerGetter.PlayerReady += PlayerReady;
+    }
+
+    private void PlayerReady(Transform obj)
+    {
+        TalentManager = obj.GetComponent<TalentManager>();
+    }
 
     public List<TalentPolicy> GetUpgradeOptions()
     {

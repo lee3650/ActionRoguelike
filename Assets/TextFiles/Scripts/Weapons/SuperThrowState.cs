@@ -10,7 +10,7 @@ public class SuperThrowState : State, Dependency<StatsList>
     [SerializeField] WielderSupplier WielderSupplier;
     [SerializeField] float spinSpeed;
     [SerializeField] State DefaultState;
-    [SerializeField] Weapon MyWeapon;
+    [SerializeField] GenericWeapon MyWeapon;
 
     private StatsList PlayerStats;
 
@@ -140,5 +140,6 @@ public class SuperThrowState : State, Dependency<StatsList>
         rb.velocity = Vector2.zero;
         rb.angularVelocity = 0f; 
         Collider.StopColliding();
+        MyWeapon.FinishedAttack();
     }
 }
