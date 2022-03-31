@@ -7,5 +7,6 @@ public enum PlayerClass
     Base,
     Healer,
     Thrower,
+    Mage, 
     Summoner, 
 }

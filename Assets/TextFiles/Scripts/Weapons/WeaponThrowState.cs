@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WeaponThrowState : State, Dependency<Transform>, Dependency<DirectionSupplier>
 {
-    [SerializeField] Weapon myWeapon;
+    [SerializeField] GenericWeapon myWeapon;
     [SerializeField] private SendCollision Collider;
     [SerializeField] Rigidbody2D rb;
     [SerializeField] float throwSpeed;
@@ -108,6 +108,8 @@ public class WeaponThrowState : State, Dependency<Transform>, Dependency<Directi
         transform.SetParent(fakeParent.transform);
 
         fakeParent.transform.SetParent(obj);
+
+        myWeapon.FinishedAttack();
 
         myWeapon.AllowPickup();
 

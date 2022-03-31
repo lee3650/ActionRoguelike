@@ -5,7 +5,7 @@ using UnityEngine;
 public class WeaponRecallState : State, Dependency<Rigidbody2D>
 {
     [SerializeField] Rigidbody2D rb;
-    [SerializeField] Weapon myWeapon;
+    [SerializeField] GenericWeapon myWeapon;
     [SerializeField] SendCollision SendCollision;
     [SerializeField] PickupLength PickupLength;
     [SerializeField] private float recallSpeed = 20f;
@@ -28,6 +28,7 @@ public class WeaponRecallState : State, Dependency<Rigidbody2D>
 
     public void OnPickup()
     {
+        myWeapon.FinishedAttack();
         StateController.EnterState(DefaultState);
     }
 
