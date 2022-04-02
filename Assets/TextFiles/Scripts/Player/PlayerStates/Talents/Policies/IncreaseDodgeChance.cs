@@ -11,4 +11,10 @@ public class IncreaseDodgeChance : TalentPolicy
     {
         modifier.ModifyDodgeChance(increaseAmt);
     }
+
+    public override void UndoPolicy()
+    {
+        modifier.ModifyDodgeChance(-increaseAmt);
+        RemoveTalentAndUndoUpgrades();
+    }
 }

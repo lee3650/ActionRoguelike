@@ -20,6 +20,11 @@ public class PlayerRecallState : State, Talent, Dependency<MovementUtility>, Dep
         damageEnabled = true; 
     }
 
+    public void DisableDamage()
+    {
+        damageEnabled = false; 
+    }
+
     public bool CanUseTalent()
     {
         return ManaManager.ChargesRemaining(1);

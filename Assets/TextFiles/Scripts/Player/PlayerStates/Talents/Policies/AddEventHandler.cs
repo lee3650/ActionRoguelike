@@ -22,4 +22,10 @@ public class AddEventHandler : TalentPolicy, Dependency<GenericTarget>, Initiali
     {
         MyTarget.AddEventModifier(myModifier);
     }
+
+    public override void UndoPolicy()
+    {
+        MyTarget.RemoveEventModifier(myModifier);
+        RemoveTalentAndUndoUpgrades();
+    }
 }

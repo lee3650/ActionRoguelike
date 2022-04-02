@@ -15,4 +15,10 @@ public class AddHealAbility : TalentPolicy, Dependency<ActiveTalentManager>
     {
         ActiveTalentManager.AddTalent(HealState);
     }
+
+    public override void UndoPolicy()
+    {
+        ActiveTalentManager.RemoveTalent(HealState);
+        RemoveTalentAndUndoUpgrades();
+    }
 }

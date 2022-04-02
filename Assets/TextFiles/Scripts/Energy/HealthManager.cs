@@ -50,6 +50,16 @@ public class HealthManager : MonoBehaviour, Initializable
         }
     }
 
+    public void DecreaseMaxHealth(float amt)
+    {
+        MaxHealth -= amt;
+        if (currentHealth > MaxHealth)
+        {
+            currentHealth = MaxHealth;
+        }
+        TakeDamage(0); 
+    }
+
     public void IncreaseMaxHealth(float amt)
     {
         MaxHealth += amt;

@@ -31,4 +31,10 @@ public class AddActiveTalent : TalentPolicy, Dependency<ActiveTalentManager>, De
             PlayerStats.AddToStat(stat, amt);
         }
     }
+
+    public override void UndoPolicy()
+    {
+        ActiveTalentManager.RemoveTalent(State);
+        RemoveTalentAndUndoUpgrades();
+    }
 }

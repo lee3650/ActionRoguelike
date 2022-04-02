@@ -11,6 +11,11 @@ public class AttackModifierList : MonoBehaviour
         return modifiers; 
     }
 
+    public void RemoveAttackModifier(GameEvent e)
+    {
+        modifiers.Remove(e);
+    }
+
     public void AddAttackModifier(GameEvent e)
     {
         modifiers.Add(e);

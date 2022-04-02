@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class TalentPolicy : MonoBehaviour
+public abstract class TalentPolicy : MonoBehaviour, Dependency<TalentManager>
 {
     [SerializeField] string title;
     [SerializeField] string description;
@@ -11,7 +11,15 @@ public abstract class TalentPolicy : MonoBehaviour
     [SerializeField] bool isUpgrade = false;
     [SerializeField] private bool isActiveTalent;
     [SerializeField] List<TalentPolicy> Upgrades;
-    [SerializeField] bool RandomizeUpgrades; 
+    [SerializeField] bool RandomizeUpgrades;
+
+    protected List<TalentPolicy> AppliedUpgrades = new List<TalentPolicy>();
+    protected TalentManager TM;
+
+    public void InjectDependency(TalentManager tm)
+    {
+        TM = tm; 
+    }
 
     public bool IsActiveTalent
     {
@@ -58,6 +66,17 @@ public abstract class TalentPolicy : MonoBehaviour
 
     public abstract void ApplyPolicy();
 
+    public abstract void UndoPolicy();
+
+    protected void RemoveTalentAndUndoUpgrades()
+    {
+        TM.RemoveTalent(this);
+        foreach (TalentPolicy tp in AppliedUpgrades)
+        {
+            tp.UndoPolicy();
+        }
+    }
+
     public TalentPolicy GetNextUpgrade()
     {
         if (RandomizeUpgrades)
@@ -71,6 +90,7 @@ public abstract class TalentPolicy : MonoBehaviour
 
     public void AppliedNextUpgrade()
     {
+        AppliedUpgrades.Add(Upgrades[0]);
         Upgrades.RemoveAt(0);
         if (Upgrades.Count == 0)
         {

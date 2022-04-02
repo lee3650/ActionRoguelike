@@ -29,4 +29,16 @@ public class ModifyStatsList : TalentPolicy, Dependency<StatsList>
             StatsList.AddToStat(stat, modifier);
         }
     }
+
+    public override void UndoPolicy()
+    {
+        if (Multiply)
+        {
+            StatsList.MultiplyStat(stat, 1 / modifier);
+        } else
+        {
+            StatsList.AddToStat(stat, -modifier);
+        }
+        RemoveTalentAndUndoUpgrades();
+    }
 }

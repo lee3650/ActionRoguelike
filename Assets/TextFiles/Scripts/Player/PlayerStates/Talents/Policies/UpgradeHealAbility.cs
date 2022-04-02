@@ -16,4 +16,12 @@ public class UpgradeHealAbility : TalentPolicy
         PlayerHealState.ModifyHealAmt(AmtModifier);
         PlayerHealState.ModifyMoveSpeedInHeal(MoveMultiplier);
     }
+
+    public override void UndoPolicy()
+    {
+        PlayerHealState.ModifyHealLength(1 / LengthMultiplier);
+        PlayerHealState.ModifyHealAmt(-LengthMultiplier);
+        PlayerHealState.ModifyMoveSpeedInHeal(1 / MoveMultiplier);
+        RemoveTalentAndUndoUpgrades();
+    }
 }

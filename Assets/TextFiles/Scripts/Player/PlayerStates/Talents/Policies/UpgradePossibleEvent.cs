@@ -17,4 +17,14 @@ public class UpgradePossibleEvent : TalentPolicy
         AddPossibleEvent.AddSpreads(AddSpreads);
         AddPossibleEvent.AddRecurs(AddRecurs);
     }
+
+    public override void UndoPolicy()
+    {
+        AddPossibleEvent.MultiplyEventChances(1/oddsMultiplier);
+        AddPossibleEvent.MultiplyEventDamage(1/damageMultiplier);
+        AddPossibleEvent.AddSpreads(-AddSpreads);
+        AddPossibleEvent.AddRecurs(-AddRecurs);
+
+        RemoveTalentAndUndoUpgrades();
+    }
 }

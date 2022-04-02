@@ -8,6 +8,12 @@ public class AddPossibleEvent : TalentPolicy, Dependency<AttackModifierList>
     
     [SerializeField] private AttackModifierList AttackModifierList;
 
+    public override void UndoPolicy()
+    {
+        AttackModifierList.RemoveAttackModifier(MyEvent);
+        RemoveTalentAndUndoUpgrades();
+    }
+
     public void MultiplyEventChances(float amt)
     {
         MyEvent.Odds *= amt; 

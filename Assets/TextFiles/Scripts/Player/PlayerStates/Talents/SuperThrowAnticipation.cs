@@ -32,7 +32,7 @@ public class SuperThrowAnticipation : AbstractAnticipation, Talent, Dependency<H
 
     public bool CanUseTalent()
     {
-        return manaManager.ChargesRemaining(1) && !prs.RoomClear && wm.DoesCurrentWeaponAllowAction(ActionStrings.SuperThrow);
+        return manaManager.ChargesRemaining(1) && wm.DoesCurrentWeaponAllowAction(ActionStrings.SuperThrow);
     }
 
     public void InjectDependency(ManaManager mm)

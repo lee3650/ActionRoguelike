@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SuperThrowState : State, Dependency<StatsList>
+public class SuperThrowState : State, Dependency<StatsList>, Dependency<DirectionSupplier>, Dependency<TakeKnockback>
 {
     [SerializeField] SendCollision Collider;
     [SerializeField] Rigidbody2D rb;
@@ -11,6 +11,9 @@ public class SuperThrowState : State, Dependency<StatsList>
     [SerializeField] float spinSpeed;
     [SerializeField] State DefaultState;
     [SerializeField] GenericWeapon MyWeapon;
+    [SerializeField] GenericCollisionHandler GenericCollisionHandler;
+
+    private DirectionSupplier ds;
 
     private StatsList PlayerStats;
 
@@ -18,14 +21,26 @@ public class SuperThrowState : State, Dependency<StatsList>
 
     private List<Targetable> targetList;
 
-    private bool wayBack = false; 
+    private bool wayBack = false;
+    private bool inState = false;
+    private TakeKnockback TK; 
+
+    public void InjectDependency(TakeKnockback tk)
+    {
+        TK = tk; 
+    }
 
     public void InjectDependency(StatsList stats)
     {
         PlayerStats = stats; 
     }
 
-    Vector2 lastPos;
+    public void InjectDependency(DirectionSupplier dir)
+    {
+        ds = dir; 
+    }
+
+    //Vector2 lastPos;
 
     public override void EnterState()
     {
@@ -35,14 +50,19 @@ public class SuperThrowState : State, Dependency<StatsList>
 
         rb.angularVelocity = spinSpeed;
 
-        lastPos = rb.position; 
+        //lastPos = rb.position; 
 
         wayBack = false;
 
         Collider.StartColliding();
 
-        targetList = TargetManager.GetNearestTargets(transform.position, Factions.Player);
+        targetList = new List<Targetable>();
 
+        inState = true; 
+
+        //targetList = TargetManager.GetNearestTargets(transform.position, Factions.Player);
+
+        /*
         if (targetList.Count > bounces)
         {
             for (int i = targetList.Count - 1; i >= bounces; i--)
@@ -50,6 +70,9 @@ public class SuperThrowState : State, Dependency<StatsList>
                 targetList.RemoveAt(i);
             }
         }
+         */
+
+        rb.velocity = ds.GetDir() * throwSpeed; 
 
         targetList.Add(WielderSupplier.GetWielder());
 
@@ -57,80 +80,84 @@ public class SuperThrowState : State, Dependency<StatsList>
         print("targets: " + targetList);
     }
 
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (inState && !col.TryGetComponent<Entity>(out Entity e) && !col.TryGetComponent<Weapon>(out Weapon w) && !wayBack)
+        {
+            //Process: take the difference between the normal and the velocity
+            //and rotate the normal by that amount. 
+
+            Vector2 closestPoint = col.ClosestPoint(transform.position);
+            Vector2 normal = (Vector2)transform.position - closestPoint;
+            
+            if (Vector2.Dot(normal, rb.velocity) > 0) 
+            {
+                //if they're going in the same direction, then we should ignore this collision
+                //because the weapon is traveling away from the wall
+                print("The weapon was traveling away from the collision when it hit!");
+                return; 
+            }
+
+            normal.Normalize();
+
+            Debug.DrawLine(closestPoint, normal + closestPoint, Color.red, 10f);
+
+            Debug.DrawLine(transform.position, (Vector2)transform.position + rb.velocity.normalized, Color.blue, 10f);
+
+            Vector2 projection = Vector3.Project(rb.velocity.normalized, -normal);
+
+            Vector2 dif = rb.velocity.normalized - projection;
+            Vector2 newDir = dif + normal;
+
+            Debug.DrawLine(closestPoint, closestPoint + projection, Color.green, 10f);
+
+            Debug.DrawLine(closestPoint, closestPoint + projection, Color.green, 10f);
+
+            if (col.bounds.Contains(transform.position))
+            {
+                //then we need to invert the direction, since the normal is going to be backwards. 
+                newDir = -newDir;
+            }
+
+            rb.velocity = newDir.normalized * throwSpeed;
+
+            bounces--; 
+            if (bounces <= 0)
+            {
+                wayBack = true;
+                MyWeapon.AllowPickup();
+            }
+
+            GenericCollisionHandler.ResetHitEntities();
+        }
+    }
+
     public void PickedUp()
     {
+        TK.ApplyKnockback(1500, rb.velocity.normalized);
         StateController.EnterState(DefaultState);
     }
 
     public override void UpdateState()
     {
-        if (targetList.Count == 0)
-        {
-            //StateController.EnterState(DefaultState);
-            if (!wayBack)
-            {
-                wayBack = true;
-                MyWeapon.AllowPickup();
-            }
-            return;
-        }
-        if (targetList.Count == 1 && !wayBack)
-        {
-            wayBack = true;
-            MyWeapon.AllowPickup();
-        }
-
         Vector2 newPos;
 
-        Vector2 targetVel = Vector2.zero;
-        if (targetList[0].transform.TryGetComponent<Rigidbody2D>(out Rigidbody2D target))
+        if (wayBack)
         {
-            targetVel = target.velocity;
-        }
-
-        print("current target: " + targetList[0]);
-        print("target velocity: " + targetVel);
-        print("current target position: " + targetList[0].GetMyPosition());
-
-        float timeToArrive = Vector2.Distance(targetList[0].GetMyPosition(), rb.position) / throwSpeed;
-        newPos = targetList[0].GetMyPosition() + (targetVel * timeToArrive);
-        rb.velocity = ((newPos - rb.position).normalized * throwSpeed);
-        if (Vector2.Distance(rb.position, targetList[0].GetMyPosition()) < 0.2f)
-        {
-            targetList.RemoveAt(0);
-            print("removed from distance!");
-        } else
-        {
-            //project the target onto the line of our last movement
-            Vector2 moveDir = rb.position - lastPos; 
-            Vector2 proj = Vector3.Project(targetList[0].GetMyPosition() - lastPos, moveDir);
-
-            print("movement direction: " + moveDir);
-
-            print("projected point: " + proj);
-            //blue = movement line
-            Debug.DrawLine(lastPos, rb.position, Color.blue, 10f);
-            //yellow = projection of target pos onto movement line
-            proj += lastPos;
-            
-            print("adjust proj point: " + proj);
-            Debug.DrawLine(proj, targetList[0].GetMyPosition(), Color.yellow, 10f);
-
-            //if the point is inside the two lines, check the distance
-            float ab = Vector2.Dot(moveDir, moveDir);
-            float ac = Vector2.Dot(moveDir, (proj - lastPos));
-            if (ac > 0 && ac < ab)
+            Vector2 targetVel = Vector2.zero;
+            if (targetList[0].transform.TryGetComponent<Rigidbody2D>(out Rigidbody2D target))
             {
-                //I feel like we should add something to proj - we should add lastPos to it, right? 
-                //inside the two lines. This should not be common. 
-                if (Vector2.Distance(proj, targetList[0].GetMyPosition()) < 0.2f) {
-                    targetList.RemoveAt(0);
-                    print("removed from projection!");
-                }
+                targetVel = target.velocity;
             }
-        }
 
-        lastPos = rb.position; 
+            print("current target: " + targetList[0]);
+            print("target velocity: " + targetVel);
+            print("current target position: " + targetList[0].GetMyPosition());
+
+            float timeToArrive = Vector2.Distance(targetList[0].GetMyPosition(), rb.position) / throwSpeed;
+            newPos = targetList[0].GetMyPosition() + (targetVel * timeToArrive);
+            rb.velocity = ((newPos - rb.position).normalized * throwSpeed);
+        }
     }
 
     public override void ExitState()
@@ -141,5 +168,6 @@ public class SuperThrowState : State, Dependency<StatsList>
         rb.angularVelocity = 0f; 
         Collider.StopColliding();
         MyWeapon.FinishedAttack();
+        inState = false; 
     }
 }

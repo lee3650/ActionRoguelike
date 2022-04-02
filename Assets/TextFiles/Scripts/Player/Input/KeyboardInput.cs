@@ -54,7 +54,6 @@ public class KeyboardInput : PlayerInput, Initializable
 
     public override float GetDirectionToFace()
     {
-        print("world mouse pos: " + GetWorldMousePos());
         Vector2 delta = GetWorldMousePos() - (Vector2)transform.position; 
         return UtilityFunctions.GetRotationFromDirection(delta);
     }

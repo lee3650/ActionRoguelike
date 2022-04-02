@@ -5,7 +5,9 @@ using UnityEngine;
 public class TurretPolicy : TalentPolicy, Dependency<InjectionSet>
 {
     [SerializeField] GameObject TurretPrefab;
-    [SerializeField] InjectionSet MySet; 
+    [SerializeField] InjectionSet MySet;
+
+    private GameObject spawnedTurret; 
 
     InjectionSet parentSet;
 
@@ -16,8 +18,14 @@ public class TurretPolicy : TalentPolicy, Dependency<InjectionSet>
 
     public override void ApplyPolicy()
     {
-        GameObject turret = Instantiate(TurretPrefab, transform.position, Quaternion.identity);
-        parentSet.InjectDependencies(turret.transform);
-        MySet.InjectDependencies(turret.transform);
+        spawnedTurret = Instantiate(TurretPrefab, transform.position, Quaternion.identity);
+        parentSet.InjectDependencies(spawnedTurret.transform);
+        MySet.InjectDependencies(spawnedTurret.transform);
+    }
+
+    public override void UndoPolicy()
+    {
+        Destroy(spawnedTurret);
+        RemoveTalentAndUndoUpgrades();
     }
 }

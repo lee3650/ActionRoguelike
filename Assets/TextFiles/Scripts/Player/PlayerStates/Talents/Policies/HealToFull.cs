@@ -6,6 +6,8 @@ public class HealToFull : TalentPolicy, Initializable, Dependency<HealthManager>
 {
     HealthManager hm;
 
+    private float healAmt; 
+
     public void InjectDependency(HealthManager h)
     {
         hm = h;
@@ -18,6 +20,14 @@ public class HealToFull : TalentPolicy, Initializable, Dependency<HealthManager>
 
     public override void ApplyPolicy()
     {
-        hm.Heal(10000f);
+        float max = hm.GetCurHealth() / (hm.GetHealthPercentage());
+        healAmt = max - hm.GetCurHealth();
+        hm.Heal(healAmt + 1);
+    }
+
+    public override void UndoPolicy()
+    {
+        hm.TakeDamage(healAmt);
+        RemoveTalentAndUndoUpgrades();
     }
 }

@@ -16,4 +16,10 @@ public class MaxHealthUp : TalentPolicy, Dependency<HealthManager>
     {
         hm.IncreaseMaxHealth(healthIncrease);
     }
+
+    public override void UndoPolicy()
+    {
+        hm.DecreaseMaxHealth(healthIncrease);
+        RemoveTalentAndUndoUpgrades();
+    }
 }

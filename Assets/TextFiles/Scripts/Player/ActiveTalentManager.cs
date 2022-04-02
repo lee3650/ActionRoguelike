@@ -45,6 +45,20 @@ public class ActiveTalentManager : MonoBehaviour, Initializable
         }
     }
 
+    public void RemoveTalent(State talent)
+    {
+        int ind = GetTalentIndex(talent);
+        if (ind >= 0)
+        {
+            //everything right of ind we shift left by 1
+            for (int i = ind; i < highestTalent - 1; i++)
+            {
+                ActiveTalents[i] = ActiveTalents[i + 1];
+            }
+            highestTalent--;
+        }
+    }
+
     public int GetNumberOfActiveTalents()
     {
         return highestTalent;

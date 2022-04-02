@@ -33,6 +33,25 @@ public class TestTalentManager
     }
 
     [Test]
+    public void TestActiveTalentManagerRemoveTalent()
+    {
+        tm.Init();
+
+        for (int i = 0; i < 4; i++)
+        {
+            tm.AddTalent(talents[i]);
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            Assert.AreEqual(4 - i, tm.GetNumberOfActiveTalents());
+            tm.RemoveTalent(talents[i]);
+        }
+
+        Assert.AreEqual(0, tm.GetNumberOfActiveTalents()); 
+    }
+
+    [Test]
     public void TestTalentManagerSetsHighestTalent()
     {
         tm.SetTalentSlot(3, talents[0]);

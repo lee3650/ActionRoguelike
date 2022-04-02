@@ -50,4 +50,10 @@ public class TalentManager : MonoBehaviour
 
         CurrentTalents.Add(t);
     }
+
+    public void RemoveTalent(TalentPolicy t)
+    {
+        t.transform.parent = null;
+        CurrentTalents.Remove(t);
+    }
 }

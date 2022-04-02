@@ -6,8 +6,6 @@ public class FacePlayerInput : MonoBehaviour
 {
     [SerializeField] PlayerInput PlayerInput;
     [SerializeField] MovementController MovementController;
-
-    private float timer = 0f;
     
     public void SetWiggle(bool wiggle)
     {

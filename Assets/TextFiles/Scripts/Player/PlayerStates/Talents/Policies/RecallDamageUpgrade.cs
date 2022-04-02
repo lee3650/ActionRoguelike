@@ -9,4 +9,10 @@ public class RecallDamageUpgrade : TalentPolicy
     {
         PlayerRecallState.EnableDamage();
     }
+
+    public override void UndoPolicy()
+    {
+        PlayerRecallState.DisableDamage();
+        RemoveTalentAndUndoUpgrades();
+    }
 }
