@@ -14,4 +14,5 @@ public abstract class PlayerInput : MonoBehaviour
     public abstract bool PickUpItems();
     public abstract int SelectionDelta();
     public abstract string GetTalentKey(int index);
+    public abstract bool ToggleInventory();
 }

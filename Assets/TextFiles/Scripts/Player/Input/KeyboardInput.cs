@@ -12,6 +12,8 @@ public class KeyboardInput : PlayerInput, Initializable
     private float lastPositiveScroll;
     private float lastNegativeScroll;
 
+    private float lastInventoryPress; 
+
     private float horInput;
     private float vertInput;
 
@@ -105,6 +107,11 @@ public class KeyboardInput : PlayerInput, Initializable
         return Input.GetKey(KeyCode.E);
     }
 
+    public override bool ToggleInventory()
+    {
+        return Time.realtimeSinceStartup - lastInventoryPress < Time.fixedDeltaTime;
+    }
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -122,6 +129,11 @@ public class KeyboardInput : PlayerInput, Initializable
         else if (Input.mouseScrollDelta.y < 0)
         {
             lastNegativeScroll = Time.realtimeSinceStartup; 
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            lastInventoryPress = Time.realtimeSinceStartup; 
         }
 
         int left = Input.GetKey(KeyCode.A) ? -1 : 0;

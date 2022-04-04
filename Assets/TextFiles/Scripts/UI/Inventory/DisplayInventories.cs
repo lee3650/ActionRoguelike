@@ -6,14 +6,21 @@ public class DisplayInventories : MonoBehaviour
 {
     [SerializeField] List<ItemCollection> ItemCollections;
     [SerializeField] SelectedItemDisplay SelectedItemDisplay;
+    [SerializeField] GameObject inventoryParent; 
 
     public void ShowItems(ItemSupplier[] itemSuppliers)
     {
+        inventoryParent.SetActive(true);
         foreach (ItemSupplier i in itemSuppliers)
         {
             ItemCollection col = GetCollectionOfType(i.ItemType);
             col.ShowItems(i, ItemSelected);
         }
+    }
+
+    public void Hide()
+    {
+        inventoryParent.SetActive(false);
     }
 
     private ItemCollection GetCollectionOfType(ItemType type)

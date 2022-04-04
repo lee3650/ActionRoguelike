@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ManaOnHit : MonoBehaviour, LateInitializable, Dependency<ManaManager>, Enableable
+public class ManaOnHit : MonoBehaviour, LateInitializable, Dependency<ManaManager>, Enableable, StatSupplier
 {
     [SerializeField] GenericCollisionHandler CollisionHandler;
     [SerializeField] ManaManager manaManager;
@@ -31,5 +31,10 @@ public class ManaOnHit : MonoBehaviour, LateInitializable, Dependency<ManaManage
         {
             manaManager.AddMana(ManaAmt);
         }
+    }
+
+    public (string, string)[] GetStats()
+    {
+        return new (string, string)[] { ("Mana From Hit", ManaAmt + "") };
     }
 }

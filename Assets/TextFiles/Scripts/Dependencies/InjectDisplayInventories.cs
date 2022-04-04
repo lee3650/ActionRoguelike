@@ -2,9 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemAction
+public class InjectDisplayInventories : DependencyInjector<DisplayInventories>
 {
-    Drop,
-    Equip,
-    Dequip
 }

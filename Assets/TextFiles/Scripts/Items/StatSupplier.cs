@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemAction
+public interface StatSupplier
 {
-    Drop,
-    Equip,
-    Dequip
+    public (string, string)[] GetStats();
 }

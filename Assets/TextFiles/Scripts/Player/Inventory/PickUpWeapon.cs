@@ -64,6 +64,11 @@ public class PickUpWeapon : MonoBehaviour, LateInitializable
         w.transform.localPosition = w.GetRelativePosition();
     }
 
+    public List<Weapon> GetInventory()
+    {
+        return Inventory; 
+    }
+
     /// <summary>
     /// Test method. Not for production use. 
     /// </summary>

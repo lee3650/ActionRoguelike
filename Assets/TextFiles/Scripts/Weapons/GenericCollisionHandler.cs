@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GenericCollisionHandler : WeaponCollisionHandler, LateInitializable, Dependency<AttackModifierList>
+public class GenericCollisionHandler : WeaponCollisionHandler, LateInitializable, Dependency<AttackModifierList>, StatSupplier
 {
     [SerializeField] GenericWeapon MyWeapon;
     [SerializeField] WielderSupplier WielderSupplier;
@@ -66,5 +66,24 @@ public class GenericCollisionHandler : WeaponCollisionHandler, LateInitializable
                 }
             }
         } 
+    }
+
+    //So, yeah this is a bit of a mixing of responsibilities but not doing this would come at the price of encapsulation 
+    private float GetTotalDamage()
+    {
+        float result = 0;
+        foreach (GameEvent e in MyEventTemplates)
+        {
+            if (e.Type != SignalType.Knockback)
+            {
+                result += e.Magnitude;
+            }
+        }
+        return result; 
+    }
+    
+    public (string, string)[] GetStats()
+    {
+        return new (string, string)[] { ("Damage", GetTotalDamage() + "") };
     }
 }

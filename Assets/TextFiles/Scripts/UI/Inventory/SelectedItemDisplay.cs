@@ -31,18 +31,19 @@ public class SelectedItemDisplay : MonoBehaviour
         
         if (currentItem != null)
         {
-            currentItem.ItemActionsChanged -= RefreshActions;
+            currentItem.ItemModified -= RefreshItem;
         }
 
         currentSupplier = source;
 
         currentItem = i;
-        currentItem.ItemActionsChanged += RefreshActions; 
+        currentItem.ItemModified += RefreshItem; 
 
         foreach (ItemAction action in i.ValidActions)
         {
             ItemActionButton iab = Instantiate(ItemActionButtonPrefab, ItemGroup);
             iab.Initialize(action, this);
+            previousButtons.Add(iab);
         }
 
         SetupDescriptions();
@@ -59,7 +60,7 @@ public class SelectedItemDisplay : MonoBehaviour
         DescriptionText.text = currentItem.GetDescription();
     }
 
-    private void RefreshActions()
+    private void RefreshItem()
     {
         ShowSelectedItem(currentItem, currentSupplier);
     }

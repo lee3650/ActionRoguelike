@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemAction
+public enum GearType
 {
-    Drop,
-    Equip,
-    Dequip
+    Amulet,
+    Ring,
+    Armor,
 }

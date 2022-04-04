@@ -8,7 +8,6 @@ public interface ItemSupplier
     public ItemType ItemType
     {
         get;
-        set;
     }
 
     public void PerformActionOnItem(Item i, ItemAction a);

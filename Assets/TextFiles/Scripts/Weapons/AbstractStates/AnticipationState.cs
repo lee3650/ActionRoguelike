@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnticipationState : AbstractAnticipation, Dependency<HandAndArmGetter>, Dependency<ReversedTracker>
+public class AnticipationState : AbstractAnticipation, Dependency<HandAndArmGetter>, Dependency<ReversedTracker>, StatSupplier
 {
     [SerializeField] Weapon MyWeapon;
 
@@ -30,5 +30,10 @@ public class AnticipationState : AbstractAnticipation, Dependency<HandAndArmGett
     public override void ExitState()
     {
 
+    }
+
+    public (string, string)[] GetStats()
+    {
+        return new (string, string)[] { ("Anticipation Length", AnticipationLength + "") };
     }
 }

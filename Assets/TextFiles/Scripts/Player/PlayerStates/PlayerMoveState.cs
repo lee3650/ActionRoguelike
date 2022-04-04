@@ -11,6 +11,7 @@ public class PlayerMoveState : State
     [SerializeField] ActiveTalentManager TalentManager;
     [SerializeField] PlayerPickupState PlayerPickupState;
     [SerializeField] MovementUtility MovementUtility;
+    [SerializeField] InventoryState InventoryState;
 
     public override void EnterState()
     {
@@ -24,6 +25,12 @@ public class PlayerMoveState : State
         if (PlayerInput.SelectionDelta() != 0)
         {
             PickUpWeapon.ChangeSelection(PlayerInput.SelectionDelta());
+        }
+
+        if (PlayerInput.ToggleInventory())
+        {
+            StateController.EnterState(InventoryState);
+            return; 
         }
 
         int tal = PlayerInput.GetTalentToActivate();

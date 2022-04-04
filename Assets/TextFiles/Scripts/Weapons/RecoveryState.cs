@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RecoveryState : AbstractRecovery, Dependency<HandAndArmGetter>, Dependency<ReversedTracker>
+public class RecoveryState : AbstractRecovery, Dependency<HandAndArmGetter>, Dependency<ReversedTracker>, StatSupplier
 {
     [SerializeField] MeleeWeapon MyWeapon;
 
@@ -30,5 +30,10 @@ public class RecoveryState : AbstractRecovery, Dependency<HandAndArmGetter>, Dep
     {
         PartialExitState();
         MyWeapon.FinishedAttack();
+    }
+
+    public (string, string)[] GetStats()
+    {
+        return new (string, string)[] { ("Recovery Length", RecoveryLength + "") };
     }
 }
