@@ -7,10 +7,11 @@ using UnityEngine.UI;
 
 public class ItemDisplayer : MonoBehaviour, IPointerClickHandler
 {
-    [SerializeField] Image image; 
+    [SerializeField] Image image;
+    [SerializeField] Sprite defaultSprite;
     private Item MyItem;
 
-    private Action<Item> ItemSelected;
+    private Action<Item> ItemSelected = null;
 
     public void Initialize(Item item, Action<Item> itemSelected)
     {
@@ -19,8 +20,18 @@ public class ItemDisplayer : MonoBehaviour, IPointerClickHandler
         image.sprite = item.GetSprite();
     }
 
+    public void ResetDisplay()
+    {
+        image.sprite = defaultSprite;
+        ItemSelected = null;
+        MyItem = null; 
+    }
+
     public void OnPointerClick(PointerEventData data)
     {
-        ItemSelected(MyItem);
+        if (ItemSelected != null)
+        {
+            ItemSelected(MyItem);
+        }
     }
 }

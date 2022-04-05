@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InventoryShower : MonoBehaviour, Initializable, Dependency<DisplayInventories>
 {
+    [SerializeField] GearManager gearManager;
     DisplayInventories display; 
     ItemSupplier[] mySuppliers;
 
@@ -19,7 +20,7 @@ public class InventoryShower : MonoBehaviour, Initializable, Dependency<DisplayI
 
     public void ShowInventory()
     {
-        display.ShowItems(mySuppliers);
+        display.ShowItems(mySuppliers, gearManager);
     }
 
     public void HideInventory()

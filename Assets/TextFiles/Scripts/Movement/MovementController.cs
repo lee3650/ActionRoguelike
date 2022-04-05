@@ -2,18 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovementController : MonoBehaviour, Initializable
+public class MovementController : MonoBehaviour, LateInitializable, StatListener
 {
     [SerializeField] Rigidbody2D rb;
     //later we can do a move speed supplier in order to have stats and effects change this 
-    [SerializeField] float baseMoveSpeed;
+    private float baseMoveSpeed;
     [SerializeField] float RotateSpeed = 10f;
+    [SerializeField] StatsList StatsList;
 
-    float effectiveSpeed; 
+    float effectiveSpeed;
 
-    public void Init() 
+    const string speedStat = "speed";
+
+    public void LateInit() 
     {
-        effectiveSpeed = baseMoveSpeed; 
+        baseMoveSpeed = StatsList.GetStat(speedStat);
+        effectiveSpeed = baseMoveSpeed;
+        StatsList.RegisterListener(speedStat, this);
+    }
+
+    public void StatChanged(string stat, float newVal)
+    {
+        effectiveSpeed = newVal;
+        baseMoveSpeed = newVal;
     }
 
     public void SetRotation(float dir)
