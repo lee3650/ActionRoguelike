@@ -4,6 +4,8 @@ using UnityEngine;
 
 public enum ItemType
 {
-    Gear,
-    Weapon
+    Ring,
+    Weapon,
+    Amulet,
+    Armor
 }

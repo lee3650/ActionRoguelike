@@ -9,10 +9,11 @@ public class Gear : MonoBehaviour, Initializable, StatSupplier, LateInitializabl
     [SerializeField] Item Item;
     [SerializeField] List<ItemAction> EquippedActions;
     [SerializeField] List<ItemAction> DequippedActions;
+    [SerializeField] Collider2D col; 
     private TalentPolicy ActualPolicy = null;
     private bool allowsPickup = true;
 
-    public GearType GearType;
+    public ItemType ItemType;
 
     private bool equipped = false;
 
@@ -48,8 +49,9 @@ public class Gear : MonoBehaviour, Initializable, StatSupplier, LateInitializabl
 
     public void OnPickup(Transform t)
     {
-        SpriteRenderer.enabled = false; 
         allowsPickup = false;
+        SpriteRenderer.enabled = false;
+        col.enabled = false; 
         transform.SetParent(t);
         transform.localPosition = Vector3.zero; 
     }

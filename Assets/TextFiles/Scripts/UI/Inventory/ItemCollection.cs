@@ -7,12 +7,17 @@ public class ItemCollection : MonoBehaviour
 {
     [SerializeField] ItemDisplayer ItemDisplayerPrefab;
     [SerializeField] Transform ItemGroup; 
-    public ItemType MyItemType;
+    [SerializeField] List<ItemType> MyItemTypes = new List<ItemType>();
     private ItemSupplier ItemSupplier;
 
     private System.Action<Item, ItemSupplier> ItemSelected = delegate { };
 
     private List<ItemDisplayer> shownItems = new List<ItemDisplayer>();
+
+    public bool HoldsItemType(ItemType t)
+    {
+        return MyItemTypes.Contains(t);
+    }
 
     private void DestroyOldDisplay()
     {

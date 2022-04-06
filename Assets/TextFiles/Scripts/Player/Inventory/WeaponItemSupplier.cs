@@ -6,11 +6,11 @@ public class WeaponItemSupplier : MonoBehaviour, ItemSupplier
 {
     [SerializeField] PickUpWeapon Inventory; 
 
-    public ItemType ItemType
+    public List<ItemType> ItemTypes
     {
         get
         {
-            return ItemType.Weapon; 
+            return new List<ItemType>() { ItemType.Weapon };
         }
     }
 

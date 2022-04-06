@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class EquippedGearDisplayer : MonoBehaviour
 {
-    [SerializeField] GearType[] GearTypes;
+    [SerializeField] ItemType[] GearTypes;
     [SerializeField] ItemDisplayer[] CorrespondingDisplayers;
 
-    private GearManager currentGm = null;
+    private AbstractGearManager currentGm = null;
 
     private System.Action<Item, ItemSupplier> selectedItemAction = delegate { };
 
-    public void DisplayGear(GearManager gm, System.Action<Item, ItemSupplier> action)
+    public void DisplayGear(AbstractGearManager gm, System.Action<Item, ItemSupplier> action)
     {
         selectedItemAction = action; 
         if (currentGm != null)
@@ -21,9 +21,9 @@ public class EquippedGearDisplayer : MonoBehaviour
         currentGm = gm;
         currentGm.GearEquipped += ShowGearInSlot;
 
-        foreach (GearType t in System.Enum.GetValues(typeof(GearType)))
+        foreach (ItemType t in System.Enum.GetValues(typeof(ItemType)))
         {
-            ShowGearInSlot(t, gm.GetEquippedGear(t));
+            ShowGearInSlot(t, gm.GetEquippedItem(t));
         }
     }
 
@@ -32,21 +32,30 @@ public class EquippedGearDisplayer : MonoBehaviour
         selectedItemAction(item, currentGm);
     }
 
-    private ItemDisplayer GetItemDisplayer(GearType g)
+    private ItemDisplayer TryGetItemDisplayer(ItemType t)
     {
         for (int i = 0; i < GearTypes.Length; i++)
         {
-            if (GearTypes[i] == g)
+            if (GearTypes[i] == t)
             {
                 return CorrespondingDisplayers[i];
             }
         }
-        throw new System.Exception("Could not find item displayer for gear type " + g);
+        return null;
     }
 
-    private void ShowGearInSlot(GearType arg1, Gear arg2)
+    private void ShowGearInSlot(ItemType arg1, GameObject arg2)
     {
-        ItemDisplayer i = GetItemDisplayer(arg1);
+        ItemDisplayer i = TryGetItemDisplayer(arg1);
+
+        if (arg2 != null && i == null)
+        {
+            throw new System.Exception("Could not find an item dislayer for item type " + arg1);
+        }
+        else if (arg2 == null && i == null)
+        {
+            return; 
+        }
 
         if (arg2 != null)
         {

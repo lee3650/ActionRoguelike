@@ -5,7 +5,8 @@ using UnityEngine;
 public interface ItemSupplier
 {
     public List<Item> GetItems();
-    public ItemType ItemType
+
+    public List<ItemType> ItemTypes
     {
         get;
     }

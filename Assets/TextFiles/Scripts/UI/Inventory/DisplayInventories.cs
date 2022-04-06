@@ -14,7 +14,7 @@ public class DisplayInventories : MonoBehaviour
         inventoryParent.SetActive(true);
         foreach (ItemSupplier i in itemSuppliers)
         {
-            ItemCollection col = GetCollectionOfType(i.ItemType);
+            ItemCollection col = GetCollectionOfType(i.ItemTypes);
             col.ShowItems(i, ItemSelected);
         }
         EquippedGearDisplayer.DisplayGear(gear, ItemSelected);
@@ -25,16 +25,24 @@ public class DisplayInventories : MonoBehaviour
         inventoryParent.SetActive(false);
     }
 
-    private ItemCollection GetCollectionOfType(ItemType type)
+    private ItemCollection GetCollectionOfType(List<ItemType> types)
     {
         foreach (ItemCollection i in ItemCollections)
         {
-            if (i.MyItemType == type)
+            bool held = true; 
+            foreach (ItemType type in types)
             {
-                return i;
+                if (!i.HoldsItemType(type))
+                {
+                    held = false;
+                }
+            }
+            if (held)
+            {
+                return i; 
             }
         }
-        throw new System.Exception("There was no collection of the type " + type);
+        throw new System.Exception("There was no collection of the type " + types.ToString());
     }
 
     private void ItemSelected(Item i, ItemSupplier supplier)

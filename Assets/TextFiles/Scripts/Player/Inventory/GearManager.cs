@@ -3,33 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using System; 
 
-public class GearManager : MonoBehaviour, ItemSupplier, Initializable
+public class GearManager : AbstractGearManager, Initializable
 {
     [SerializeField] TalentManager TalentManager;
 
     private List<Gear> HeldGear = new List<Gear>();
     private List<Item> CorrespondingItems = new List<Item>();
 
-    private Dictionary<GearType, Gear> EquippedGear = new Dictionary<GearType, Gear>();
-
-    public event Action<GearType, Gear> GearEquipped = delegate { };
-
-    public void Init()
+    public override List<ItemType> ItemTypes
     {
-        foreach (GearType t in Enum.GetValues(typeof(GearType)))
+        get
         {
-            EquippedGear[t] = null; 
+            return new List<ItemType>() { ItemType.Amulet, ItemType.Armor, ItemType.Ring };
         }
     }
 
-    public bool HasEquippedGear(GearType t)
+    public override List<Item> GetItems()
     {
-        return EquippedGear[t] != null; 
+        return CorrespondingItems; 
     }
 
-    public Gear GetEquippedGear(GearType t)
+    protected override void PartialPerformAction(Item item, ItemAction action)
     {
-        return EquippedGear[t];
+        Gear g = item.GetComponent<Gear>();
+
+        switch (action)
+        {
+            case ItemAction.Equip:
+                TalentManager.ApplyTalent(g.GetPolicy());
+                break;
+            case ItemAction.Dequip:
+                g.GetPolicy().UndoPolicy();
+                break;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -43,47 +49,5 @@ public class GearManager : MonoBehaviour, ItemSupplier, Initializable
             HeldGear.Add(g);
             CorrespondingItems.Add(g.GetComponent<Item>());
         }
-    }
-
-    public void PerformActionOnItem(Item item, ItemAction action)
-    {
-        Gear g = item.GetComponent<Gear>();
-
-        switch (action)
-        {
-            case ItemAction.Equip:
-                Debug.Assert(g != null);
-
-                if (EquippedGear[g.GearType] != null)
-                {
-                    PerformActionOnItem(EquippedGear[g.GearType].GetComponent<Item>(), ItemAction.Dequip);
-                }
-
-                EquippedGear[g.GearType] = g;
-                GearEquipped(g.GearType, g);
-                g.Equipped = true;
-                TalentManager.ApplyTalent(g.GetPolicy());
-                break;
-            case ItemAction.Dequip:
-                EquippedGear[g.GearType] = null;
-                g.GetPolicy().UndoPolicy();
-                GearEquipped(g.GearType, null);
-                g.Equipped = false;
-                break; 
-
-        }
-    }
-
-    public ItemType ItemType
-    {
-        get
-        {
-            return ItemType.Gear; 
-        }
-    }
-
-    public List<Item> GetItems()
-    {
-        return CorrespondingItems; 
     }
 }
