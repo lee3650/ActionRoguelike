@@ -6,6 +6,8 @@ public class EquippedGearDisplayer : MonoBehaviour
 {
     [SerializeField] ItemType[] GearTypes;
     [SerializeField] ItemDisplayer[] CorrespondingDisplayers;
+    [Tooltip("If true, even when showing a null item, the action to call will be set")]
+    [SerializeField] bool alwaysSetAction = false; 
 
     private AbstractGearManager currentGm = null;
 
@@ -64,6 +66,10 @@ public class EquippedGearDisplayer : MonoBehaviour
         else
         {
             i.ResetDisplay();
+            if (alwaysSetAction)
+            {
+                i.SetItemSelected(ItemSelected); 
+            }
         }
     }
 }

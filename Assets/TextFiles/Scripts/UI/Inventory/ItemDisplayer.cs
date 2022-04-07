@@ -13,6 +13,11 @@ public class ItemDisplayer : MonoBehaviour, IPointerClickHandler
 
     private Action<Item> ItemSelected = null;
 
+    public void SetItemSelected(Action<Item> itemSelected)
+    {
+        ItemSelected = itemSelected; 
+    }
+
     public void Initialize(Item item, Action<Item> itemSelected)
     {
         ItemSelected = itemSelected;

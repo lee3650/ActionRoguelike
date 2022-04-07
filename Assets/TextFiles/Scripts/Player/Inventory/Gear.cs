@@ -13,8 +13,6 @@ public class Gear : MonoBehaviour, Initializable, StatSupplier, LateInitializabl
     private TalentPolicy ActualPolicy = null;
     private bool allowsPickup = true;
 
-    public ItemType ItemType;
-
     private bool equipped = false;
 
     public bool Equipped

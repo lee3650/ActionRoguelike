@@ -10,6 +10,8 @@ public abstract class Item : MonoBehaviour
     [SerializeField] bool overrideTitle;
     [SerializeField] protected string title;
 
+    public ItemType ItemType; 
+
     public List<ItemAction> ValidActions;
 
     public event Action ItemModified = delegate { }; 

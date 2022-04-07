@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System; 
 
-public abstract class AbstractGearManager : MonoBehaviour, ItemSupplier
+public abstract class AbstractGearManager : MonoBehaviour, ItemSupplier, Initializable
 {
     public event Action<ItemType, GameObject> GearEquipped = delegate { };
     protected Dictionary<ItemType, GameObject> EquippedItems = new Dictionary<ItemType, GameObject>();
@@ -18,6 +18,7 @@ public abstract class AbstractGearManager : MonoBehaviour, ItemSupplier
 
     public GameObject GetEquippedItem(ItemType i)
     {
+        print("key: " + i); 
         return EquippedItems[i];
     }
 
@@ -35,37 +36,31 @@ public abstract class AbstractGearManager : MonoBehaviour, ItemSupplier
 
     protected abstract void PartialPerformAction(Item item, ItemAction action);
 
-    private void DequipItem(Gear item)
+    private void DequipItem(Item item)
     {
         EquippedItems[item.ItemType] = null;
-        item.Equipped = false;
         GearEquipped(item.ItemType, null);
-        PartialPerformAction(item.GetComponent<Item>(), ItemAction.Dequip);
+        PartialPerformAction(item, ItemAction.Dequip);
     }
 
     public void PerformActionOnItem(Item item, ItemAction action)
     {
-        Gear g = item.GetComponent<Gear>();
-
         switch (action)
         {
             case ItemAction.Equip:
-                Debug.Assert(g != null);
-
-                if (EquippedItems[g.ItemType] != null)
+                if (EquippedItems[item.ItemType] != null)
                 {
-                    DequipItem(g);
+                    DequipItem(item);
                 }
 
-                EquippedItems[g.ItemType] = item.gameObject;
-                g.Equipped = true;
-                GearEquipped(g.ItemType, item.gameObject);
+                EquippedItems[item.ItemType] = item.gameObject;
+                GearEquipped(item.ItemType, item.gameObject);
 
-                //we have to call this individually in all the methods if they call each other
+                //we have to call this INDIVIDUALLY in all the methods since they call each other
                 PartialPerformAction(item, action);
                 break;
             case ItemAction.Dequip:
-                DequipItem(g); 
+                DequipItem(item); 
                 break;
         }
     }

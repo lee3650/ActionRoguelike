@@ -30,9 +30,11 @@ public class GearManager : AbstractGearManager, Initializable
         switch (action)
         {
             case ItemAction.Equip:
+                g.Equipped = true;
                 TalentManager.ApplyTalent(g.GetPolicy());
                 break;
             case ItemAction.Dequip:
+                g.Equipped = false; 
                 g.GetPolicy().UndoPolicy();
                 break;
         }

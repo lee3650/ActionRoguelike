@@ -9,6 +9,7 @@ public class SelectedItemDisplay : MonoBehaviour
     [SerializeField] Transform ItemGroup;
     [SerializeField] TextMeshProUGUI TitleText;
     [SerializeField] TextMeshProUGUI DescriptionText;
+    [SerializeField] bool ShowActions = true; 
 
     private List<ItemActionButton> previousButtons = new List<ItemActionButton>();
 
@@ -37,13 +38,16 @@ public class SelectedItemDisplay : MonoBehaviour
         currentSupplier = source;
 
         currentItem = i;
-        currentItem.ItemModified += RefreshItem; 
+        currentItem.ItemModified += RefreshItem;
 
-        foreach (ItemAction action in i.ValidActions)
+        if (ShowActions)
         {
-            ItemActionButton iab = Instantiate(ItemActionButtonPrefab, ItemGroup);
-            iab.Initialize(action, this);
-            previousButtons.Add(iab);
+            foreach (ItemAction action in i.ValidActions)
+            {
+                ItemActionButton iab = Instantiate(ItemActionButtonPrefab, ItemGroup);
+                iab.Initialize(action, this);
+                previousButtons.Add(iab);
+            }
         }
 
         SetupDescriptions();
