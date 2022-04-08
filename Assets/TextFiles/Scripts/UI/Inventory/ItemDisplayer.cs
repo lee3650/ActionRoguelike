@@ -25,6 +25,11 @@ public class ItemDisplayer : MonoBehaviour, IPointerClickHandler
         image.sprite = item.GetSprite();
     }
 
+    public bool HasItem()
+    {
+        return MyItem != null; 
+    }
+
     public void ResetDisplay()
     {
         image.sprite = defaultSprite;

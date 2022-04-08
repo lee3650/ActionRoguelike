@@ -35,6 +35,19 @@ public class PlayerGetter : MonoBehaviour, LateInitializable
         PlayerInjectionSet.InjectDependencies(player); 
         OrderedInit.PerformInitialization(player);
 
+        //okay, now we give items
+        foreach (ItemType t in Enum.GetValues(typeof(ItemType)))
+        {
+            GameObject item = SelectInventory.GetStartingItem(t);
+            if (item != null)
+            {
+                Instantiate(item, player.transform.position, Quaternion.identity);
+            } else
+            {
+                print("There was no starting item of type " + t);
+            }
+        }
+
         PlayerReady(player);
     }
 }

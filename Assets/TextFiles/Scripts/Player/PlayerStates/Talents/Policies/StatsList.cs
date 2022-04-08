@@ -22,12 +22,15 @@ public class StatsList : MonoBehaviour, Initializable
     private void InvokeStatChanged(string stat)
     {
         float newVal = StatValues[stat];
-        foreach (StatListener sl in StatListeners[stat])
+        if (StatListeners.ContainsKey(stat))
         {
-            sl.StatChanged(stat, newVal);
+            foreach (StatListener sl in StatListeners[stat])
+            {
+                sl.StatChanged(stat, newVal);
+            }
         }
     }
-
+    
     public void RegisterListener(string stat, StatListener listener)
     {
         if (!StatListeners.ContainsKey(stat))

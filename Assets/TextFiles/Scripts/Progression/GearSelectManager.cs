@@ -10,6 +10,7 @@ public class GearSelectManager : MonoBehaviour, LateInitializable
     [SerializeField] SelectedItemDisplay SelectedItemDisplay;
     [SerializeField] ItemCollection ItemCollection;
     [SerializeField] ConcreteSupplier[] CorrespondingItemSuppliers;
+    [SerializeField] HandleItemActionSupplier ItemActionSupplier;
 
     public void LateInit()
     {
@@ -19,20 +20,19 @@ public class GearSelectManager : MonoBehaviour, LateInitializable
 
     private void SlotSelected(Item i, ItemSupplier s)
     {
-        SelectionParent.SetActive(true);
-
-        //s = just the gear manager, so kinda irrelevant. 
-        if (s.ItemTypes.Count > 1)
-        {
-            throw new System.Exception("Item suppliers on the selection manager should have only 1 item type!"); 
-        }
-
-        ItemCollection.ShowItems(GetItemSupplier(s.ItemTypes[0]), ItemSelected);
-
         if (i != null)
         {
+            ItemCollection.ShowItems(GetItemSupplier(i.ItemType), ItemSelected);
+            SelectionParent.SetActive(true);
             ItemSelected(i, s); 
         }
+    }
+
+    public void SlotSelected(ItemType type)
+    {
+        print("showing items " + type); 
+        ItemCollection.ShowItems(GetItemSupplier(type), ItemSelected);
+        SelectionParent.SetActive(true);
     }
 
     private ItemSupplier GetItemSupplier(ItemType type)
@@ -50,6 +50,6 @@ public class GearSelectManager : MonoBehaviour, LateInitializable
 
     private void ItemSelected(Item item, ItemSupplier supplier)
     {
-        SelectedItemDisplay.ShowSelectedItem(item, supplier); 
+        SelectedItemDisplay.ShowSelectedItem(item, ProgressionGearManager); 
     }
 }

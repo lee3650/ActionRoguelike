@@ -11,7 +11,17 @@ public class ProgressionGearManager : AbstractGearManager
 
     protected override void PartialPerformAction(Item item, ItemAction action)
     {
-        throw new System.NotImplementedException();
+        switch (action)
+        {
+            case ItemAction.Equip:
+                SelectInventory.SetStartingItem(item.ItemType, item.gameObject);
+                print("setting starting item for " + item); 
+                break;
+            case ItemAction.Dequip:
+                SelectInventory.SetStartingItem(item.ItemType, null);
+                print("unsetting starting item for " + item);
+                break;
+        }
     }
 
     public override List<ItemType> ItemTypes
