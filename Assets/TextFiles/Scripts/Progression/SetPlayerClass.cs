@@ -7,11 +7,18 @@ using System;
 
 public class SetPlayerClass : MonoBehaviour, Initializable
 {
-    [SerializeField] TMP_Dropdown ClassOptions; 
+    [SerializeField] TMP_Dropdown ClassOptions;
+    [SerializeField] UnlockedClassManager UnlockedClassManager;
     
     public void Init()
     {
-        ClassOptions.options = ListToDropdown.GetOptionsFromList(Enum.GetValues(typeof(PlayerClass)));
+        UnlockedClassManager.UpdatedUnlockedClasses += UpdatedUnlockedClasses;
+        UpdatedUnlockedClasses(); 
+    }
+
+    private void UpdatedUnlockedClasses()
+    {
+        ClassOptions.options = ListToDropdown.GetOptionsFromList(UnlockedClassManager.GetUnlockedClasses());
     }
 
     public void DropdownChanged()

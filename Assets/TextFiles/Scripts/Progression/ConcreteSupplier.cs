@@ -5,16 +5,12 @@ using UnityEngine;
 public class ConcreteSupplier : MonoBehaviour, ItemSupplier
 {
     [SerializeField] ItemType ItemType;
-    [SerializeField] List<Item> items; 
+    [SerializeField] List<Item> items;
+    [SerializeField] UnlockedItemManager UnlockedItemManager;
 
     public List<Item> GetItems()
     {
-        return items; 
-    }
-
-    public void AddItem(Item item)
-    {
-        items.Add(item);
+        return UnlockedItemManager.GetUnlockedItems(ItemType); 
     }
 
     public List<ItemType> ItemTypes

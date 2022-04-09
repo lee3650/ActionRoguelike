@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class LevelingManager : MonoBehaviour, Initializable
 {
-    [SerializeField] List<TalentPolicy> UpgradeOptions;
+    [SerializeField] List<TalentPolicy> FallbackOptions;
     [SerializeField] PlayerGetter PlayerGetter;
+
+    private List<TalentPolicy> UpgradeOptions = new List<TalentPolicy>(); 
+
     private TalentManager TalentManager;
 
     private List<TalentPolicy> furlough = new List<TalentPolicy>();
@@ -15,6 +18,13 @@ public class LevelingManager : MonoBehaviour, Initializable
     public void Init()
     {
         PlayerGetter.PlayerReady += PlayerReady;
+
+        List<TalentPolicy> talentSource = UnlockedTalentManager.UnlockedPolicies.Count > 0 ? UnlockedTalentManager.UnlockedPolicies : FallbackOptions;
+
+        for (int i = 0; i < talentSource.Count; i++)
+        {
+            UpgradeOptions.Add(Instantiate(talentSource[i], transform));
+        }
     }
 
     private void PlayerReady(Transform obj)
