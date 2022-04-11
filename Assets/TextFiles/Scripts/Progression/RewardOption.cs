@@ -13,6 +13,7 @@ public abstract class RewardOption : MonoBehaviour
     public RewardOption Prerequisite; 
     public bool CanUnlock()
     {
+        print(string.Format("Option : {2}, prereq: {0}, unlocked: {1}", Prerequisite, Prerequisite == null ? "n/a" : "" + Prerequisite.Unlocked, name));
         return Prerequisite == null || Prerequisite.Unlocked; 
     }
 

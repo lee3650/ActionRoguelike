@@ -8,6 +8,7 @@ public class RewardOptionDisplayer : MonoBehaviour
     [SerializeField] TextMeshProUGUI TitleText;
     [SerializeField] TextMeshProUGUI DescriptionText;
     [SerializeField] TextMeshProUGUI CostText;
+    [SerializeField] GameObject BuyButton;
 
     private RewardOption CurrentOption;
 
@@ -17,6 +18,11 @@ public class RewardOptionDisplayer : MonoBehaviour
         DescriptionText.text = option.GetDescription();
         CostText.text = string.Format("Buy for {0} woolongs", option.Cost);
         CurrentOption = option;
+        BuyButton.SetActive(true);
+        if (option.Unlocked)
+        {
+            BuyButton.SetActive(false);  
+        } 
         gameObject.SetActive(true); 
     }
 
@@ -26,7 +32,11 @@ public class RewardOptionDisplayer : MonoBehaviour
         {
             CurrentOption.Unlocked = true;
             CurrentOption.UnlockReward();
-            MetaCurrencyManager.Balance -= CurrentOption.Cost;
+            MetaCurrencyManager.SpendBalance(CurrentOption.Cost);
+            BuyButton.SetActive(false); 
+        } else
+        {
+            print(string.Format("Failed because can unlock is {0}, balance is {1} and cost is {2}", CurrentOption.CanUnlock(), MetaCurrencyManager.Balance, CurrentOption.Cost));
         }
     }
 }

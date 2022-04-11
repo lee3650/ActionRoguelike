@@ -15,6 +15,11 @@ public class UnlockedItemManager : MonoBehaviour, Initializable
         }
     }
 
+    public void UnlockItem(Item i)
+    {
+        UnlockedItems.Add(i); 
+    }
+
     public List<Item> GetUnlockedItems(ItemType type)
     {
         List<Item> result = new List<Item>();

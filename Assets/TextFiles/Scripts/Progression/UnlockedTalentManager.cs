@@ -8,6 +8,11 @@ public class UnlockedTalentManager : MonoBehaviour, Initializable
     
     public static List<TalentPolicy> UnlockedPolicies = new List<TalentPolicy>();
 
+    public void UnlockTalent(TalentPolicy p)
+    {
+        UnlockedPolicies.Add(p); 
+    }
+
     public void Init()
     {
         UnlockedPolicies.AddRange(DefaultPolicies); 

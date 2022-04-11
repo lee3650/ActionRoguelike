@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class TalentReward : RewardOption
 {
-    [SerializeField] TalentPolicy MyPolicy; 
+    [SerializeField] TalentPolicy MyPolicy;
+    [SerializeField] UnlockedTalentManager UnlockedTalentManager;
 
     public override void UnlockReward()
     {
-        throw new System.NotImplementedException();
+        UnlockedTalentManager.UnlockTalent(MyPolicy);
     }
 
     public override string GetTitle()

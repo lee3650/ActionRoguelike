@@ -12,8 +12,6 @@ public class DrawLine : MonoBehaviour, LateInitializable
     {
         myButton = GetComponent<RewardButton>();
 
-        print("my position: " + transform.position + " and I am " + name + " and my local position " + transform.localPosition + " and my anchored position " + GetComponent<RectTransform>().anchoredPosition);
-
         if (myButton.Parent != null)
         {
             RectTransform myRect = GetComponent<RectTransform>();
