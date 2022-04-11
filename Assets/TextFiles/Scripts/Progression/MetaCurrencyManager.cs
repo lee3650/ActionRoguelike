@@ -17,6 +17,10 @@ public class MetaCurrencyManager : MonoBehaviour, Initializable
 
     public void Init()
     {
-        Balance = startingBalance; 
+        if (Balance == 0)
+        {
+            Balance = startingBalance;
+        }
+
     }
 }

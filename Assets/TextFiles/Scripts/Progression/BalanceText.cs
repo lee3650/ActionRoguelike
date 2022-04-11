@@ -10,7 +10,13 @@ public class BalanceText : MonoBehaviour, LateInitializable
     public void LateInit()
     {
         MetaCurrencyManager.BalanceChanged += BalanceChanged;
-        BalanceChanged(MetaCurrencyManager.Balance); 
+        BalanceChanged(MetaCurrencyManager.Balance);
+        print("intializing balance: " + MetaCurrencyManager.Balance); 
+    }
+
+    private void OnDestroy()
+    {
+        MetaCurrencyManager.BalanceChanged -= BalanceChanged;
     }
 
     private void BalanceChanged(int obj)

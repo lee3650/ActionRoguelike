@@ -34,4 +34,9 @@ public class GameOverPanel : MonoBehaviour, Initializable
     {
         SceneManager.LoadScene("SampleScene");
     }
+
+    public void BackToLoadout()
+    {
+        SceneManager.LoadScene("ProgressionScene");
+    }
 }

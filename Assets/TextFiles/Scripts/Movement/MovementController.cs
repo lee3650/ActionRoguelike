@@ -44,6 +44,7 @@ public class MovementController : MonoBehaviour, LateInitializable, StatListener
 
     public void MoveInDirection(Vector2 dir)
     {
+        //rb.velocity = dir * effectiveSpeed; 
         rb.AddForce(dir * effectiveSpeed);
     }
 
