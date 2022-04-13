@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerDodgeState : State
 {
-    [SerializeField] MovementController MovementController;
+    [SerializeField] MovementUtility MovementController;
     [SerializeField] DirectionalAnimator DirectionalAnimator;
     [SerializeField] PlayerMoveState PlayerMoveState;
     [SerializeField] PlayerInput Input;
@@ -18,8 +18,6 @@ public class PlayerDodgeState : State
     private float dodgeTimer = 0f; 
 
     private float lastDodgeTime = 0;
-
-    private float rotateDir = 0;
 
     private Vector2 dodgeDir; 
 
@@ -38,8 +36,7 @@ public class PlayerDodgeState : State
             rounded = new Vector2(Mathf.RoundToInt(rounded.x), Mathf.RoundToInt(rounded.y));
             dodgeDir = rounded.normalized;
         }
-        MovementController.AddForce(DodgeSpeed, dodgeDir);
-        rotateDir = UtilityFunctions.GetRotationFromDirection(dodgeDir);
+        MovementController.MoveInDirection(dodgeDir, DodgeSpeed);
         dodgeTimer = DodgeLength + RecoveryLength; 
         
         DirectionalAnimator.AnimateRoll(dodgeDir);
@@ -52,13 +49,11 @@ public class PlayerDodgeState : State
 
         if (dodgeTimer > RecoveryLength)
         {
-            MovementController.AddForce(DodgeSpeed, dodgeDir);
+            MovementController.MoveInDirection(dodgeDir, DodgeSpeed);
         } else
         {
-            MovementController.AddForce(RecoverySpeed, dodgeDir);
+            MovementController.MoveInDirection(dodgeDir, RecoverySpeed);
         }
-
-        //MovementController.RotateInDirection(rotateDir);
 
         if (dodgeTimer <= 0)
         {

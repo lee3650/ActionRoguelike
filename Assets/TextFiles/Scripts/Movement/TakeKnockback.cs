@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TakeKnockback : MonoBehaviour
 {
-    [SerializeField] MovementController MovementController;
+    [SerializeField] AbstractMovementController MovementController;
 
     public void ApplyKnockback(float amt, Vector2 dir)
     {

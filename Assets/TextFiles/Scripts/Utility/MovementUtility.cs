@@ -7,7 +7,7 @@ public class MovementUtility : MonoBehaviour
     [SerializeField] FacePlayerInput FacePlayerInput;
     [SerializeField] WeaponManager WeaponManager;
     [SerializeField] PlayerInput PlayerInput;
-    [SerializeField] MovementController MovementController;
+    [SerializeField] PlayerMovementController MovementController;
     [SerializeField] DirectionalAnimator DirectionalAnimator;
 
     private bool useRotation;
@@ -25,6 +25,12 @@ public class MovementUtility : MonoBehaviour
     {
         MovementController.ModifyMoveSpeed(amt);
     }
+
+    public void MoveInDirection(Vector2 dir, float vel)
+    {
+        MovementController.MoveInDirection(dir, vel);
+    }
+
     public void ResetMoveSpeed()
     {
         MovementController.ResetMoveSpeed();

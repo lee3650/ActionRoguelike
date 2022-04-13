@@ -2,28 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovementController : MonoBehaviour, LateInitializable, StatListener
+public class MovementController : AbstractMovementController, LateInitializable, StatListener
 {
     [SerializeField] Rigidbody2D rb;
     //later we can do a move speed supplier in order to have stats and effects change this 
-    private float baseMoveSpeed;
     [SerializeField] float RotateSpeed = 10f;
     [SerializeField] StatsList StatsList;
-
-    float effectiveSpeed;
-
-    const string speedStat = "speed";
 
     public void LateInit() 
     {
         baseMoveSpeed = StatsList.GetStat(speedStat);
-        effectiveSpeed = baseMoveSpeed;
+        effectiveMoveSpeed = baseMoveSpeed;
         StatsList.RegisterListener(speedStat, this);
     }
 
     public void StatChanged(string stat, float newVal)
     {
-        effectiveSpeed = newVal;
+        effectiveMoveSpeed = newVal;
         baseMoveSpeed = newVal;
     }
 
@@ -32,23 +27,13 @@ public class MovementController : MonoBehaviour, LateInitializable, StatListener
         rb.rotation = dir; 
     }
 
-    public void ModifyMoveSpeed(float modification)
-    {
-        effectiveSpeed *= modification;
-    }
-
-    public void ResetMoveSpeed()
-    {
-        effectiveSpeed = baseMoveSpeed; 
-    }
-
-    public void MoveInDirection(Vector2 dir)
+    public override void MoveInDirection(Vector2 dir)
     {
         //rb.velocity = dir * effectiveSpeed; 
-        rb.AddForce(dir * effectiveSpeed);
+        rb.AddForce(dir * effectiveMoveSpeed);
     }
 
-    public void AddForce(float force, Vector2 dir)
+    public override void AddForce(float force, Vector2 dir)
     {
         rb.AddForce(force * dir);
     }

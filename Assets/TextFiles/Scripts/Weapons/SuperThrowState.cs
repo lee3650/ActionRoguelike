@@ -12,6 +12,7 @@ public class SuperThrowState : State, Dependency<StatsList>, Dependency<Directio
     [SerializeField] State DefaultState;
     [SerializeField] GenericWeapon MyWeapon;
     [SerializeField] GenericCollisionHandler GenericCollisionHandler;
+    [SerializeField] float kbAmt; 
 
     private DirectionSupplier ds;
 
@@ -134,7 +135,7 @@ public class SuperThrowState : State, Dependency<StatsList>, Dependency<Directio
 
     public void PickedUp()
     {
-        TK.ApplyKnockback(1500, rb.velocity.normalized);
+        TK.ApplyKnockback(kbAmt, rb.velocity.normalized);
         StateController.EnterState(DefaultState);
     }
 

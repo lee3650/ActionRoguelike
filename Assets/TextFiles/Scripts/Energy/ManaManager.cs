@@ -3,17 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using System; 
 
-public class ManaManager : MonoBehaviour, Initializable
+public class ManaManager : MonoBehaviour, Initializable, StatListener, LateInitializable
 {
-    [SerializeField] float maxMana = 30;
+    [SerializeField] StatsList stats;
     [SerializeField] float curMana = 0f;
     [SerializeField] float ChargeAmt = 10;
 
+    float maxMana;
+
     public event Action ManaChanged = delegate { };
+
+    const string maxManaStat = "maxMana"; 
 
     public void Init()
     {
         curMana = 0f; 
+    }
+
+    public void LateInit()
+    {
+        stats.RegisterListener(maxManaStat, this);
+        maxMana = stats.GetStat(maxManaStat); 
+    }
+
+    public void StatChanged(string s, float v)
+    {
+        maxMana = v; 
     }
 
     public void LerpCharge(float length, float delta)
