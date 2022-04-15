@@ -6,7 +6,8 @@ public class PlayerMovementController : AbstractMovementController, LateInitiali
 {
     [SerializeField] StatsList StatsList;
     [SerializeField] Rigidbody2D rb;
-    [SerializeField] float sensitivity = 0.9f; 
+    [SerializeField] float sensitivity = 0.9f;
+    [SerializeField] float initialSens = 0.5f; 
     [SerializeField] float decay = 0.95f;
 
     private Vector2 lastDir = new Vector2();
@@ -46,8 +47,13 @@ public class PlayerMovementController : AbstractMovementController, LateInitiali
         {
             if (dir != new Vector2(0, 0)) // && lastDir != new Vector2(0, 0)
             {
-                dir = Vector2.Lerp(lastDir, dir, sensitivity);
-            }
+                float sens = sensitivity; 
+                if (lastDir == new Vector2(0, 0))
+                {
+                    sens = initialSens;
+                } 
+                dir = Vector2.Lerp(lastDir, dir, sens);
+            } 
             rb.velocity = (dir * effectiveMoveSpeed) + momentum;
             lastDir = dir;
         }

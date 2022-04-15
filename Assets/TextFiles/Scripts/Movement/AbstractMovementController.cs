@@ -5,7 +5,6 @@ using UnityEngine;
 public abstract class AbstractMovementController : MonoBehaviour
 {
     public const string speedStat = "speed";
-
     public abstract void MoveInDirection(Vector2 dir);
     public abstract void AddForce(float force, Vector2 dir);
 
