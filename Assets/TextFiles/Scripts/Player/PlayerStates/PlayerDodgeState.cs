@@ -9,6 +9,7 @@ public class PlayerDodgeState : State
     [SerializeField] PlayerMoveState PlayerMoveState;
     [SerializeField] PlayerInput Input;
     [SerializeField] HandAndArmGetter HandAndArmGetter;
+    [SerializeField] MakeInvulnerable MakeInvulnerable;
     [SerializeField] float DodgeSpeed;
     [SerializeField] float DodgeLength;
     [SerializeField] float RecoverySpeed;
@@ -26,6 +27,8 @@ public class PlayerDodgeState : State
         return Time.realtimeSinceStartup - lastDodgeTime > DodgeCooldown; 
     }
 
+    private bool invuln = false; 
+
     public override void EnterState()
     {
         dodgeDir = Input.GetDirectionalInput();
@@ -41,6 +44,8 @@ public class PlayerDodgeState : State
         
         DirectionalAnimator.AnimateRoll(dodgeDir);
         HandAndArmGetter.HideHands();
+        MakeInvulnerable.SetInvulnerable(false);
+        invuln = true; 
     }
 
     public override void UpdateState()
@@ -53,6 +58,11 @@ public class PlayerDodgeState : State
         } else
         {
             MovementController.MoveInDirection(dodgeDir, RecoverySpeed);
+            if (invuln)
+            {
+                invuln = false;
+                MakeInvulnerable.ResetInvulnerable();
+            }
         }
 
         if (dodgeTimer <= 0)

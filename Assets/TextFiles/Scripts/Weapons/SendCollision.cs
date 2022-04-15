@@ -2,15 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SendCollision : MonoBehaviour
+public class SendCollision : MonoBehaviour, LateInitializable
 {
     [SerializeField] WeaponCollisionHandler CollisionHandler;
     [SerializeField] Collider2D myCol;
-    [SerializeField] string[] BlacklistLayers; 
+    [SerializeField] WeaponFaction WeaponFaction;
 
     private Vector2 lastPos = Vector2.zero;
 
-    private bool colliding = false; 
+    private bool colliding = false;
+
+    private LayerMask mask; 
+
+    public void LateInit()
+    {
+        mask = WeaponLayerMask.GetLayerMask(WeaponFaction.GetFaction());
+    }
 
     public void StartColliding()
     {
@@ -33,7 +40,6 @@ public class SendCollision : MonoBehaviour
         Vector2 delta = lastPos - (Vector2)transform.position;
 
         //technically this depends on faction... hm... we should probably inject it then 
-        LayerMask mask = ~LayerMask.GetMask(BlacklistLayers);
 
         RaycastHit2D[] hits = Physics2D.BoxCastAll(transform.position, myCol.bounds.size, transform.localEulerAngles.z, delta.normalized, delta.magnitude, mask);
 
