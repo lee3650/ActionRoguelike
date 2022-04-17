@@ -31,11 +31,13 @@ public class AnimatedSwing : State, Initializable
         Collider.StartColliding();
         TrailRenderer.emitting = true;
         actualColThreshold = ColliderThreshold * SwingLength;
+        print("entered execution!");
+        timer = 0f; 
     }
 
     public override void UpdateState()
     {
-        timer += Time.deltaTime; 
+        timer += Time.fixedDeltaTime; 
         if (timer >= actualColThreshold)
         {
             if (!stoppedCollision)
@@ -54,5 +56,6 @@ public class AnimatedSwing : State, Initializable
     {
         TrailRenderer.emitting = false;
         Collider.StopColliding();
+        print("Exited execution!");
     }
 }

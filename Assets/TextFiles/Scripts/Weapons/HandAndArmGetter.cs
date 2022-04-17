@@ -82,6 +82,22 @@ public class HandAndArmGetter : MonoBehaviour, Initializable
         return Hand.localEulerAngles.z;
     }
 
+    public void ResetPositions(bool reversed)
+    {
+        float armRot = 0f;
+        float handRot = 0f;
+
+        if (reversed)
+        {
+            armRot = 180f;
+            handRot = -180f; 
+        }
+
+        SetArmRotation(armRot);
+        SetHandRotation(handRot);
+        ResetHandPosition();
+    }
+
     public void SetHandAndArm(Transform hand, Transform arm)
     {
         Arm = arm;

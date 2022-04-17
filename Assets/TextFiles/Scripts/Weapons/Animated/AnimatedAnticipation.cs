@@ -5,7 +5,7 @@ using UnityEngine;
 public class AnimatedAnticipation : State, Dependency<ReversedTracker>, Initializable
 {
     Weapon MyWeapon;
-    
+
     [SerializeField] Animator Animator;
     [SerializeField] State NextState;
 
@@ -30,14 +30,18 @@ public class AnimatedAnticipation : State, Dependency<ReversedTracker>, Initiali
 
     public override void EnterState()
     {
+        Animator.enabled = true;
+
+        print("Entered animated anticipation!");
+
         MyWeapon.SetAttackStage(AttackStage.Anticipation);
 
         if (ReversedTracker.Reversed)
         {
-            Animator.Play(ReversedAttack);
+            Animator.Play(ReversedAttack, -1, 0f);
         } else
         {
-            Animator.Play(RegularAttack);
+            Animator.Play(RegularAttack, -1, 0f);
         }
 
         timer = 0f;
@@ -45,7 +49,7 @@ public class AnimatedAnticipation : State, Dependency<ReversedTracker>, Initiali
 
     public override void UpdateState()
     {
-        timer += Time.deltaTime; 
+        timer += Time.fixedDeltaTime; 
         if (timer >= AnticipationLength)
         {
             StateController.EnterState(NextState);
@@ -54,6 +58,6 @@ public class AnimatedAnticipation : State, Dependency<ReversedTracker>, Initiali
 
     public override void ExitState()
     {
-
+        print("Exited animated anticipation!");
     }
 }

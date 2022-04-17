@@ -26,7 +26,6 @@ public class RandomMovementState : State
         if (CurrentTarget.HasTarget)
         {
             MovementController.MoveInDirection(curDir);
-            print("moving in direction randomly! " + curDir);
         } else
         {
             StateController.EnterState(DefaultState);

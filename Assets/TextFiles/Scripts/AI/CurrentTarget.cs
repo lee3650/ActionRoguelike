@@ -43,8 +43,6 @@ public class CurrentTarget : MonoBehaviour, LateInitializable
             {
                 Targetable candidate = TargetManager.GetNearestTarget(transform.position, MyTargetable.GetMyFaction());
 
-                print("found target: " + candidate);
-
                 if (candidate != ClosestTarget)
                 {
                     ClosestTarget = candidate; 
