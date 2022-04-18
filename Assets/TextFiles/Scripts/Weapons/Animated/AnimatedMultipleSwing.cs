@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimatedMultipleSwing : State
+public class AnimatedMultipleSwing : State, Initializable
 {
     Weapon MyWeapon;
 
@@ -20,6 +20,7 @@ public class AnimatedMultipleSwing : State
     public void Init()
     {
         MyWeapon = GetComponent<Weapon>();
+        print("set my weapon:" + MyWeapon);
     }
 
     private int currentLength;
@@ -28,17 +29,15 @@ public class AnimatedMultipleSwing : State
     public override void EnterState()
     {
         currentLength = 0;
-        inRecovery = false; 
-        MyWeapon.SetAttackStage(AttackStage.Execution);
-        Collider.StartColliding();
-        TrailRenderer.emitting = true;
-        print("entered execution!");
+        inRecovery = false;
+        
+        SetupAttackState();
+        
         timer = 0f;
     }
 
     private void SetupAttackState()
     {
-        //setup swing "state"
         MyWeapon.SetAttackStage(AttackStage.Execution);
         Collider.StartColliding();
         TrailRenderer.emitting = true;
