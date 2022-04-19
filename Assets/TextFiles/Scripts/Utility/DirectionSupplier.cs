@@ -6,6 +6,6 @@ public class DirectionSupplier : MonoBehaviour
 {
     public Vector2 GetDir()
     {
-        return transform.right; 
+        return transform.right.normalized; 
     }
 }

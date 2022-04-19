@@ -12,6 +12,7 @@ public class WeaponLayerMask
 
     public readonly static string DodgeLayer = "Dodge";
     public readonly static string DefaultPlayerLayer = "Player";
+    public readonly static string PlayerAttackLayer = "PlayerAttack";
 
     public static LayerMask GetLayerMask(Factions f)
     {

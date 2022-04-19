@@ -5,17 +5,41 @@ using UnityEngine;
 public class FollowTarget : MonoBehaviour, Dependency<CurrentTarget>
 {
     [SerializeField] Rigidbody2D rb;
-    [SerializeField] float velocity; 
+    [SerializeField] float velocity;
+    [SerializeField] float updateTime = 0.1f;
+    [SerializeField] float BounceLength = 1.5f;
 
-    private Targetable target; 
+    private float ogUpdateTime = 0f;
+
+    private Targetable target;
+
+    private float timer = 0f;
 
     public void InjectDependency(CurrentTarget t)
     {
+        ogUpdateTime = updateTime;
+        timer = 0f; 
         target = t.ClosestTarget;
+    }
+
+    public void BounceBack(bool keepfollowing)
+    {
+        ogUpdateTime = BounceLength;
+        if (!keepfollowing)
+        {
+            ogUpdateTime = 1000f;
+        }
+        rb.velocity = -1.25f * rb.velocity; 
     }
 
     private void FixedUpdate()
     {
-        rb.velocity = (target.GetMyPosition() - (Vector2)transform.position).normalized * velocity;
+        timer += Time.fixedDeltaTime;
+        if (timer > ogUpdateTime)
+        {
+            timer = 0f;
+            ogUpdateTime = updateTime;
+            rb.velocity = (target.GetMyPosition() - (Vector2)transform.position).normalized * velocity;
+        }
     }
 }

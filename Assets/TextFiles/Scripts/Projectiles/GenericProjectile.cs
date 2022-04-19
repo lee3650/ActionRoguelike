@@ -6,7 +6,8 @@ public class GenericProjectile : Projectile, Dependency<WeaponCollisionHandler>
 {
     [SerializeField] Rigidbody2D rb;
     [SerializeField] float speed;
-    [SerializeField] Collider2D col; 
+    [SerializeField] Collider2D col;
+    [SerializeField] bool DestroyOnImpact = false;
 
     private WeaponCollisionHandler colHandler; 
 
@@ -46,6 +47,11 @@ public class GenericProjectile : Projectile, Dependency<WeaponCollisionHandler>
         rb.velocity = Vector2.zero;
 
         rb.isKinematic = true; 
+
+        if (DestroyOnImpact)
+        {
+            gameObject.SetActive(false);
+        }
 
         //duplication with weapon throw state
         GameObject fakeParent = Instantiate(Resources.Load<GameObject>("empty"));
