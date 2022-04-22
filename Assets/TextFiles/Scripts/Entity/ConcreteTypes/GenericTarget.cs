@@ -40,13 +40,18 @@ public class GenericTarget : MonoBehaviour, Targetable, Initializable
 
     public void HandleEvent(GameEvent e)
     {
-        if (e is PossibleGameEvent)
+        if (e.HasStat(GameEvent.OddsKey))
         {
-            if (!UtilityRandom.PercentChance((e as PossibleGameEvent).Odds))
+            print("Game Event " + e.Type + " had stat odds key; odds were " + e.GetStatAsFloat(GameEvent.OddsKey, 100));
+            if (!UtilityRandom.PercentChance(e.GetStatAsFloat(GameEvent.OddsKey, 100)))
             {
                 return; 
             }
-            e = GameEvent.ConvertToGameEvent(e as PossibleGameEvent);
+            e.RemoveStat(GameEvent.OddsKey);
+        }
+        else
+        {
+            print("Game Event " + e.Type + " did not have stats odds key");
         }
 
         List<GameEvent> eventList = new List<GameEvent>();

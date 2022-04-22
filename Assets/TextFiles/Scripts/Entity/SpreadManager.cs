@@ -14,9 +14,12 @@ public class SpreadManager : MonoBehaviour, Initializable
     public void Init()
     {
         Targets = new Dictionary<Factions, List<SpreadTarget>>();
-        Targets[Factions.Enemy] = new List<SpreadTarget>();
-        Targets[Factions.Player] = new List<SpreadTarget>();
-        //kind of annoying, but we have to extend that to add new faction types 
+
+        foreach (Factions f in System.Enum.GetValues(typeof(Factions)))
+        {
+            Targets[f] = new List<SpreadTarget>();
+        }
+
         instance = this; 
     }
 

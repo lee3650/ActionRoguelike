@@ -21,26 +21,25 @@ public class HandleRecurringEvents : MonoBehaviour, SubEntity, LateInitializable
 
     public void HandleEvent(GameEvent e)
     {
-        if (e.Recurs > 0)
+        if (e.HasStat(GameEvent.RepeatingKey))
         {
             if (GetRecurringEventOfSignal(e.Type) != null)
             {
-                return;
+                return; 
             }
-            else
-            {
-                RecurringEvents.Add(e);
-                StartCoroutine(RecurEvent(e));
-            }
+
+            RecurringEvents.Add(e);
+            e.RemoveStat(GameEvent.RepeatingKey);
+            StartCoroutine(RecurEvent(e));
         }
     }
 
     IEnumerator RecurEvent(GameEvent e)
     {
-        while (e.Recurs > 0 && HealthManager.IsAlive())
+        while (e.GetStatAsFloat(GameEvent.RecursKey, 0) > 0 && HealthManager.IsAlive())
         {
             yield return new WaitForSeconds(recurrenceTime);
-            e.Recurs--;
+            e.AddToStat(GameEvent.RecursKey, -1);
             MyTarget.HandleEvent(GameEvent.CopyEvent(e));
         }
         RecurringEvents.Remove(e);

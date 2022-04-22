@@ -6,5 +6,5 @@ public enum Factions
 {
     Player,
     Enemy,
-
+    Environment, 
 }

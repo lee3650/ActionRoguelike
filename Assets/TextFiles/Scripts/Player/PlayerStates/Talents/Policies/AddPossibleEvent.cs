@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AddPossibleEvent : TalentPolicy, Dependency<AttackModifierList>
 {
-    [SerializeField] PossibleGameEvent MyEvent;
+    [SerializeField] GameEvent MyEvent;
     
     [SerializeField] private AttackModifierList AttackModifierList;
 
@@ -14,9 +14,19 @@ public class AddPossibleEvent : TalentPolicy, Dependency<AttackModifierList>
         RemoveTalentAndUndoUpgrades();
     }
 
+    public void MultiplyStat(string stat, float val)
+    {
+        MyEvent.MultiplyStat(stat, val);
+    }
+
+    public void AddToStat(string key, float val)
+    {
+        MyEvent.AddToStat(key, val);
+    }
+
     public void MultiplyEventChances(float amt)
     {
-        MyEvent.Odds *= amt; 
+        MyEvent.MultiplyStat(GameEvent.OddsKey, amt); 
     }
 
     public void MultiplyEventDamage(float amt)
@@ -26,12 +36,12 @@ public class AddPossibleEvent : TalentPolicy, Dependency<AttackModifierList>
 
     public void AddRecurs(int add)
     {
-        MyEvent.Recurs += add; 
+        MyEvent.AddToStat(GameEvent.RecursKey, add); 
     }
 
     public void AddSpreads(int add)
     {
-        MyEvent.Spreads += add;
+        MyEvent.AddToStat(GameEvent.SpreadsKey, add);
     }
 
     public void InjectDependency(AttackModifierList aml)

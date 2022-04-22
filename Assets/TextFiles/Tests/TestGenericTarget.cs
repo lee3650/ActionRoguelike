@@ -21,7 +21,7 @@ public class TestGenericTarget
     {
         target.Init();
 
-        GameEvent newEvent = new GameEvent(SignalType.Physical, 0, null);
+        GameEvent newEvent = new GameEvent(SignalType.Physical, 0, null, new StatDictionary());
 
         target.HandleEvent(newEvent);
 
@@ -36,7 +36,7 @@ public class TestGenericTarget
 
         target.Init();
 
-        GameEvent newEvent = new GameEvent(SignalType.Physical, 0, null);
+        GameEvent newEvent = new GameEvent(SignalType.Physical, 0, null, new StatDictionary());
 
         target.HandleEvent(newEvent);
 

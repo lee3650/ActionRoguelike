@@ -8,6 +8,12 @@ public class DamageTaker : MonoBehaviour, SubEntity
 
     public void HandleEvent(GameEvent e)
     {
+        if (e.HasStat(GameEvent.RepeatingKey))
+        {
+            //don't apply the first hit from a repeating GameEvent
+            return; 
+        }
+
         switch (e.Type)
         {
             case SignalType.Physical:

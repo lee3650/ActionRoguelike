@@ -11,7 +11,6 @@ public abstract class State : MonoBehaviour, Dependency<StateController>
 
     public void InjectDependency(StateController controller)
     {
-        print("got state controller " + controller);
         StateController = controller; 
     }
 }

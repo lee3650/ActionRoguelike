@@ -8,7 +8,7 @@ public class SpreadEvents : MonoBehaviour, SubEntity
 
     public void HandleEvent(GameEvent e)
     {
-        if (e.Spreads > 0)
+        if (e.GetStatAsFloat(GameEvent.SpreadsKey, 0) > 0)
         {
             List<SpreadTarget> targets = SpreadManager.GetTargets(GenericTarget.GetMyFaction(), transform.position, e.Type);
             foreach (SpreadTarget t in targets)
@@ -16,8 +16,8 @@ public class SpreadEvents : MonoBehaviour, SubEntity
                 if (t.transform != transform)
                 {
                     t.ReceiveSpread(e);
-                    e.Spreads--;
-                    if (e.Spreads == 0)
+                    e.AddToStat(GameEvent.SpreadsKey, -1);
+                    if (e.GetStatAsFloat(GameEvent.SpreadsKey, 0) == 0)
                     {
                         return;
                     }

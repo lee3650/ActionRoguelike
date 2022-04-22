@@ -17,7 +17,7 @@ public class TestAttackModifierList
     [Test]
     public void TestAddModifier()
     {
-        list.AddAttackModifier(new GameEvent(SignalType.Fire, 10, null));
+        list.AddAttackModifier(new GameEvent(SignalType.Fire, 10, null, new StatDictionary()));
         Assert.AreEqual(1, list.GetAttackModifiers().Count);
         Assert.IsTrue(list.GetAttackModifiers()[0].Magnitude == 10 && list.GetAttackModifiers()[0].Type == SignalType.Fire);
     }
@@ -25,7 +25,7 @@ public class TestAttackModifierList
     [Test]
     public void TestRemoveModifier()
     {
-        GameEvent e = new GameEvent(SignalType.Fire, 10, null);
+        GameEvent e = new GameEvent(SignalType.Fire, 10, null, new StatDictionary());
 
         list.AddAttackModifier(e);
 

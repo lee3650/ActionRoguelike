@@ -5,26 +5,46 @@ using UnityEngine;
 public class UpgradePossibleEvent : TalentPolicy
 {
     [SerializeField] AddPossibleEvent AddPossibleEvent;
-    [SerializeField] float damageMultiplier = 1;
-    [SerializeField] float oddsMultiplier = 1;
-    [SerializeField] int AddSpreads = 0;
-    [SerializeField] int AddRecurs = 0;
+    [SerializeField] string key;
+    [SerializeField] float val;
+    [SerializeField] bool multiply; 
 
     public override void ApplyPolicy()
     {
-        AddPossibleEvent.MultiplyEventChances(oddsMultiplier);
-        AddPossibleEvent.MultiplyEventDamage(damageMultiplier);
-        AddPossibleEvent.AddSpreads(AddSpreads);
-        AddPossibleEvent.AddRecurs(AddRecurs);
+        if (key == "magnitude")
+        {
+            AddPossibleEvent.MultiplyEventDamage(val);
+            return;
+        }
+
+        if (multiply)
+        {
+            AddPossibleEvent.MultiplyStat(key, val);
+        }
+        else
+        {
+            AddPossibleEvent.AddToStat(key, val);
+        }
     }
 
     public override void UndoPolicy()
     {
-        AddPossibleEvent.MultiplyEventChances(1/oddsMultiplier);
-        AddPossibleEvent.MultiplyEventDamage(1/damageMultiplier);
-        AddPossibleEvent.AddSpreads(-AddSpreads);
-        AddPossibleEvent.AddRecurs(-AddRecurs);
+        if (key == "magnitude")
+        {
+            AddPossibleEvent.MultiplyEventDamage(1/val);
+            RemoveTalentAndUndoUpgrades();
+            return;
+        }
 
+        if (multiply)
+        {
+            AddPossibleEvent.MultiplyStat(key, (1 / val));
+        }
+        else
+        {
+            AddPossibleEvent.AddToStat(key, -val);
+        }
+        
         RemoveTalentAndUndoUpgrades();
     }
 }

@@ -7,7 +7,6 @@ public class ReflectOnHit : MonoBehaviour, SubEntity
     [SerializeField] Rigidbody2D rb; 
     public void HandleEvent(GameEvent e)
     {
-        
         //basically if the player sent it, then we should reflect. 
 
         if (e.Sender.GetMyFaction() == Factions.Player)
