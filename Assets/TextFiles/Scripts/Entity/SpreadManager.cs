@@ -9,7 +9,7 @@ public class SpreadManager : MonoBehaviour, Initializable
 
     private static SpreadManager instance;
 
-    const float spreadRange = 4f; 
+    const float spreadRange = 5f; 
 
     public void Init()
     {
@@ -28,10 +28,20 @@ public class SpreadManager : MonoBehaviour, Initializable
         Targets[target.GetMyFaction()].Add(target); 
     }
 
-    private List<SpreadTarget> GetNearbyTargets(Factions f, Vector2 pos, SignalType signal)
+    private List<SpreadTarget> GetNearbyTargets(Factions blacklist, Vector2 pos, SignalType signal)
     {
         List<SpreadTarget> result = new List<SpreadTarget>();
-        List<SpreadTarget> search = Targets[f];
+        List<SpreadTarget> search = new List<SpreadTarget>();
+
+        Factions[] factions = (Factions[])System.Enum.GetValues(typeof(Factions));
+
+        foreach (Factions f in factions)
+        {
+            if (f != blacklist)
+            {
+                search.AddRange(Targets[f]);
+            }
+        }
 
         search.OrderBy<SpreadTarget, float>(s => Vector2.Distance(s.GetPosition(), pos));
         //huh

@@ -5,9 +5,10 @@ using UnityEngine;
 public class HandleRecurringEvents : MonoBehaviour, SubEntity, LateInitializable
 {
     [SerializeField] HealthManager HealthManager;
-    [SerializeField] float recurrenceTime = 0.75f;
     [SerializeField] GenericTarget MyTarget;
     private List<GameEvent> RecurringEvents = new List<GameEvent>();
+
+    public const float RECUR_TIME = 0.75f;
 
     public void LateInit()
     {
@@ -38,7 +39,7 @@ public class HandleRecurringEvents : MonoBehaviour, SubEntity, LateInitializable
     {
         while (e.GetStatAsFloat(GameEvent.RecursKey, 0) > 0 && HealthManager.IsAlive())
         {
-            yield return new WaitForSeconds(recurrenceTime);
+            yield return new WaitForSeconds(RECUR_TIME);
             e.AddToStat(GameEvent.RecursKey, -1);
             MyTarget.HandleEvent(GameEvent.CopyEvent(e));
         }

@@ -6,8 +6,10 @@ public class SignalParticles : MonoBehaviour, SubEntity
 {
     [SerializeField] ParticleSystem System;
     [SerializeField] SignalType ActiveType;
-    [SerializeField] float lifespan = 0.8f;
-    [SerializeField] bool lifespanIsMagnitude; 
+    [SerializeField] bool lifespanIsMagnitude;
+
+    float lifespan = HandleRecurringEvents.RECUR_TIME + 0.1f;
+
     public void HandleEvent(GameEvent e)
     {
         if (e.Type == ActiveType)

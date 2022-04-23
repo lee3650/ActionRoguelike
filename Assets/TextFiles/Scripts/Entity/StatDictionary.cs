@@ -5,8 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class StatDictionary
 {
-    [SerializeField] private string[] DefaultKeys;
-    [SerializeField] private string[] DefaultValues;
+    [SerializeField] private string[] DefaultKeys = new string[0];
+    [SerializeField] private string[] DefaultValues = new string[0];
 
     private Dictionary<string, string> Stats = null;
 
