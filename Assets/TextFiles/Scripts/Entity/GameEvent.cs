@@ -68,4 +68,5 @@ public class GameEvent
     public static string RecursKey = "recurs";
     public static string SpreadsKey = "spreads";
     public static string RepeatingKey = "repeating"; //if a gameevent contains this key, it will be applied over time 
+    public static string OverrideDamageKey = "override damage"; //this damage will be assigned to enemies but not the player
 }

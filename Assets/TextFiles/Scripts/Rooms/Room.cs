@@ -7,13 +7,18 @@ public class Room : MonoBehaviour, LateInitializable
     [SerializeField] HealthManager[] Enemies;
     [SerializeField] Doormat[] Doormats;
     [SerializeField] Door[] Doors;
+    [SerializeField] RoomChild[] Children; 
 
     private PlayerRoomSetter setter;
     private bool entered = false;
+    private bool roomActive = false;
+
+    public event System.Action RoomEntered = delegate { };
 
     public void LateInit()
     {
         entered = false;
+        roomActive = false; 
 
         foreach (Doormat d in Doormats)
         {
@@ -24,6 +29,19 @@ public class Room : MonoBehaviour, LateInitializable
         {
             hm.OnDeath += OnDeath;
         }
+
+        foreach (RoomChild c in Children)
+        {
+            c.Parent = this; 
+        }
+    }
+
+    public bool RoomActive
+    {
+        get
+        {
+            return roomActive; 
+        }
     }
 
     private void OnDeath()
@@ -31,7 +49,8 @@ public class Room : MonoBehaviour, LateInitializable
         if (!AnyEnemiesLive())
         {
             ModifyAllDoors(true);
-            setter.RoomClear = true; 
+            setter.RoomClear = true;
+            roomActive = false; 
         }
     }
 
@@ -59,7 +78,9 @@ public class Room : MonoBehaviour, LateInitializable
         {
             print("doing stuff!");
             entered = true;
-            setter.RoomClear = false; 
+            setter.RoomClear = false;
+            roomActive = true;
+            RoomEntered();
 
             foreach (Doormat d in Doormats)
             {
