@@ -8,6 +8,7 @@ public class GameOverPanel : MonoBehaviour, Initializable
     [SerializeField] PlayerGetter PlayerGetter;
     [SerializeField] GameObject EndPanel;
     [SerializeField] float panelDelay = 0.5f;
+    [SerializeField] TimeScaleManager TimeScaleManager;
 
     public void Init()
     {
@@ -32,6 +33,7 @@ public class GameOverPanel : MonoBehaviour, Initializable
 
     public void Restart()
     {
+        TimeScaleManager.EndUntimedFreeze();
         SceneManager.LoadScene("SampleScene");
     }
 

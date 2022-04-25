@@ -31,6 +31,7 @@ public class TimeScaleManager : MonoBehaviour
 
     public void EndUntimedFreeze()
     {
+        StopAllCoroutines();
         inUntimedFreeze = false;
         Time.timeScale = 1f; 
     }

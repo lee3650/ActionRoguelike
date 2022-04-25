@@ -97,7 +97,7 @@ public class MakeInvulnerable : MonoBehaviour
     {
         if (inv)
         {
-            gameObject.layer = LayerMask.NameToLayer(WeaponLayerMask.DodgeLayer);
+            gameObject.layer = LayerMask.NameToLayer(WeaponLayerMask.PlayerInvLayer);
         }
         else
         {

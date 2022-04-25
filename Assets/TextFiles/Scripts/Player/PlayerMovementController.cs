@@ -7,10 +7,13 @@ public class PlayerMovementController : AbstractMovementController, LateInitiali
     [SerializeField] StatsList StatsList;
     [SerializeField] Rigidbody2D rb;
     [SerializeField] float sensitivity = 0.9f;
-    [SerializeField] float initialSens = 0.5f; 
+    [SerializeField] float initialSens = 0.5f;
+    [SerializeField] float endingSens = 0.75f; 
     [SerializeField] float decay = 0.95f;
 
     private Vector2 lastDir = new Vector2();
+
+    private Vector2 baseVelocity = new Vector2();
 
     private Vector2 momentum = new Vector2();
 
@@ -31,7 +34,7 @@ public class PlayerMovementController : AbstractMovementController, LateInitiali
 
     public override void AddForce(float force, Vector2 dir)
     {
-        momentum += force * dir;
+        momentum = force * dir;
         rb.velocity = momentum;
         lastForce = Time.realtimeSinceStartup; 
     }
@@ -54,9 +57,27 @@ public class PlayerMovementController : AbstractMovementController, LateInitiali
                 } 
                 dir = Vector2.Lerp(lastDir, dir, sens);
             } 
-            rb.velocity = (dir * effectiveMoveSpeed) + momentum;
+            else
+            {
+                //we're going from non-zero to zero 
+                if (lastDir != new Vector2(0, 0))
+                {
+                    dir = Vector2.Lerp(lastDir, dir, endingSens);
+                }
+            }
+            rb.velocity = (dir * effectiveMoveSpeed) + momentum + baseVelocity;
             lastDir = dir;
         }
+    }
+
+    public void AddToBaseVel(Vector2 add)
+    {
+        baseVelocity += add; 
+    }
+
+    public void ReduceBaseVel(Vector2 val)
+    {
+        baseVelocity -= val; 
     }
 
     void FixedUpdate()

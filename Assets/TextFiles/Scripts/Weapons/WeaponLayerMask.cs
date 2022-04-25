@@ -7,12 +7,13 @@ using UnityEngine;
 /// </summary>
 public class WeaponLayerMask
 {
-    private static string[] playerLayers = new string[] { "Player", "PlayerAttack", "Dodge" };
-    private static string[] enemyLayers = new string[] { "Enemy", "EnemyAttack", "Dodge" };
+    public const string DodgeLayer = "Dodge";
+    public const string DefaultPlayerLayer = "Player";
+    public const string PlayerAttackLayer = "PlayerAttack";
+    public const string PlayerInvLayer = "HitFrames";
 
-    public readonly static string DodgeLayer = "Dodge";
-    public readonly static string DefaultPlayerLayer = "Player";
-    public readonly static string PlayerAttackLayer = "PlayerAttack";
+    private static string[] playerLayers = new string[] { DefaultPlayerLayer, PlayerAttackLayer, DodgeLayer, PlayerInvLayer };
+    private static string[] enemyLayers = new string[] { "Enemy", "EnemyAttack", DodgeLayer, PlayerInvLayer };
 
     public static LayerMask GetLayerMask(Factions f)
     {
