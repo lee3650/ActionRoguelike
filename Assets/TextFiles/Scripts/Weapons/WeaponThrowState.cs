@@ -13,6 +13,7 @@ public class WeaponThrowState : State, Dependency<Transform>, Dependency<Directi
     [SerializeField] bool enableTrail;
     [SerializeField] GenericCollisionHandler CollisionHandler;
     [SerializeField] State NextState;
+    [SerializeField] TagBlacklist TagBlacklist;
     
     private Transform wielder;
 
@@ -67,6 +68,11 @@ public class WeaponThrowState : State, Dependency<Transform>, Dependency<Directi
         }
 
         if (collision.TryGetComponent<Projectile>(out Projectile p))
+        {
+            return; 
+        }
+
+        if (TagBlacklist.IsTagBlacklisted(collision.tag))
         {
             return; 
         }

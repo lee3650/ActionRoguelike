@@ -6,6 +6,7 @@ using System;
 public class GenericWeapon : Weapon
 {
     public event Action<string> OnStartAction = delegate { };
+    public event Action OnFinishedAction = delegate { };
 
     private bool finishedAction = true;
 
@@ -48,6 +49,7 @@ public class GenericWeapon : Weapon
     public void FinishedAttack()
     {
         finishedAction = true;
+        OnFinishedAction();
     }
 
     public override void StartAction(string action)

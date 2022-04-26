@@ -12,7 +12,8 @@ public class SuperThrowState : State, Dependency<StatsList>, Dependency<Directio
     [SerializeField] State DefaultState;
     [SerializeField] GenericWeapon MyWeapon;
     [SerializeField] GenericCollisionHandler GenericCollisionHandler;
-    [SerializeField] float kbAmt; 
+    [SerializeField] float kbAmt;
+    [SerializeField] TagBlacklist TagBlacklist;
 
     private DirectionSupplier ds;
 
@@ -83,7 +84,7 @@ public class SuperThrowState : State, Dependency<StatsList>, Dependency<Directio
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (inState && !col.TryGetComponent<Entity>(out Entity e) && !col.TryGetComponent<Weapon>(out Weapon w) && !wayBack)
+        if (inState && !col.TryGetComponent<Entity>(out Entity e) && !col.TryGetComponent<Weapon>(out Weapon w) && !wayBack && !TagBlacklist.IsTagBlacklisted(col.tag))
         {
             //Process: take the difference between the normal and the velocity
             //and rotate the normal by that amount. 

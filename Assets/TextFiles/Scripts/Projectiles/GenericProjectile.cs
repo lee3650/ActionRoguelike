@@ -8,6 +8,7 @@ public class GenericProjectile : Projectile, Dependency<WeaponCollisionHandler>
     [SerializeField] float speed;
     [SerializeField] Collider2D col;
     [SerializeField] bool DestroyOnImpact = false;
+    [SerializeField] TagBlacklist TagBlacklist;
 
     private WeaponCollisionHandler colHandler; 
 
@@ -23,6 +24,11 @@ public class GenericProjectile : Projectile, Dependency<WeaponCollisionHandler>
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (TagBlacklist.IsTagBlacklisted(collision.tag))
+        {
+            return; 
+        }
+
         //should we do the same thing where it goes through stuff it kills? 
         colHandler.HandleCollision(collision);
 
