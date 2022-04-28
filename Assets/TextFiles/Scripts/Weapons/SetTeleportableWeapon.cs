@@ -7,8 +7,6 @@ public class SetTeleportableWeapon : Teleportable, LateInitializable
     [SerializeField] GenericWeapon GenericWeapon;
     [SerializeField] List<string> enabledActions; 
 
-    private string currentAction = "";
-
     private bool teleportable = false; 
 
     public void LateInit()

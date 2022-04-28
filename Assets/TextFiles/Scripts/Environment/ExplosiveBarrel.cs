@@ -8,7 +8,7 @@ public class ExplosiveBarrel : MonoBehaviour, LateInitializable
     [SerializeField] HealthManager HealthManager;
     [SerializeField] float flashLength = 0.1f;
     [SerializeField] SpriteRenderer sr;
-    [SerializeField] GameObject collider;
+    [SerializeField] GameObject col;
 
     public void LateInit()
     {
@@ -43,7 +43,7 @@ public class ExplosiveBarrel : MonoBehaviour, LateInitializable
             }
         }
 
-        collider.SetActive(true);
+        col.SetActive(true);
 
         yield return null;
         yield return null;
