@@ -18,6 +18,25 @@ public class ColorMapper : MonoBehaviour, Initializable
 
     public GameObject GetPrefabFromColor(Color32 col)
     {
+        if (col.a == 0)
+        {
+            return null;
+        }
+
+        Prereq.Assert(ColorMap.ContainsKey(col), string.Format("Did not have a value for key {0}", col));
+
         return ColorMap[col].Prefab;
+    }
+
+    public bool GetTraversableFromColor(Color32 col)
+    {
+        if (col.a == 0)
+        {
+            return false; 
+        }
+
+        Prereq.Assert(ColorMap.ContainsKey(col), string.Format("Did not have a value for key {0}", col));
+
+        return ColorMap[col].Traversable;
     }
 }

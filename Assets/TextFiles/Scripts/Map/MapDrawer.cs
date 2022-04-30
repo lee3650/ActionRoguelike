@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MapDrawer : MonoBehaviour
 {
+    public const int TileSize = 2; 
+
     [SerializeField] ColorMapper ColorMapper;
     private List<GameObject> currentMap = new List<GameObject>();
 
@@ -16,8 +18,14 @@ public class MapDrawer : MonoBehaviour
         {
             for (int y = 0; y < ySize; y++)
             {
-                GameObject g = Instantiate(ColorMapper.GetPrefabFromColor(map[x, y]), (Vector2)(new Vector2Int(x, y) + origin), Quaternion.identity);
-                currentMap.Add(g);
+                GameObject pref = ColorMapper.GetPrefabFromColor(map[x, y]);
+                if (pref != null)
+                {
+                    Vector2 pos = (Vector2)(TileSize * new Vector2Int(x, y) + origin);
+                    Vector3 pos3 = new Vector3(pos.x, pos.y, pref.transform.position.z);
+                    GameObject g = Instantiate(pref, pos3, Quaternion.identity);
+                    currentMap.Add(g);
+                }
             }
         }
     }

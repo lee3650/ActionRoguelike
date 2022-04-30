@@ -4,16 +4,36 @@ using UnityEngine;
 
 public class Room : MonoBehaviour, LateInitializable
 {
-    [SerializeField] HealthManager[] Enemies;
-    [SerializeField] Doormat[] Doormats;
-    [SerializeField] Door[] Doors;
-    [SerializeField] RoomChild[] Children; 
+    [SerializeField] List<HealthManager> Enemies = new List<HealthManager>();
+    [SerializeField] List<Doormat> Doormats = new List<Doormat>();
+    [SerializeField] List<Door> Doors = new List<Door>();
+    [SerializeField] List<RoomChild> Children = new List<RoomChild>(); 
 
     private PlayerRoomSetter setter;
     private bool entered = false;
     private bool roomActive = false;
 
     public event System.Action RoomEntered = delegate { };
+
+    public void AddEnemy(HealthManager hm)
+    {
+        Enemies.Add(hm);
+    }
+
+    public void AddDoormat(Doormat d)
+    {
+        Doormats.Add(d);
+    }
+
+    public void AddDoor(Door d)
+    {
+        Doors.Add(d);
+    }
+
+    public void AddRoomChild(RoomChild r)
+    {
+        Children.Add(r);
+    }
 
     public void LateInit()
     {
@@ -87,7 +107,7 @@ public class Room : MonoBehaviour, LateInitializable
                 Destroy(d.gameObject);
             }
 
-            Doormats = new Doormat[0];
+            Doormats = new List<Doormat>();
 
             foreach (HealthManager hm in Enemies)
             {
