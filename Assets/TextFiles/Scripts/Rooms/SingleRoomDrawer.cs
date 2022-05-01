@@ -33,6 +33,10 @@ public class SingleRoomDrawer : MonoBehaviour, LateInitializable
         WriteRoomToMap(room, room_offset, currentRoom);
 
         MapDrawer.DrawSingleMap(room, room_offset);
+
+        //spawn enemies too 
+
+        currentRoom.LateInit();
     }
 
     public void WriteTextureToMap(Color32[,] tex, Vector2Int offset)
@@ -52,7 +56,14 @@ public class SingleRoomDrawer : MonoBehaviour, LateInitializable
         {
             for (int y = 0; y < tex.GetLength(1); y++)
             {
-                TraverseManager.SetRoom(MapDrawer.TileSize * x + offset.x, MapDrawer.TileSize * y + offset.y, r);
+                Vector2Int pos = new Vector2Int(MapDrawer.TileSize * x + offset.x, MapDrawer.TileSize * y + offset.y);
+                if (tex[x, y].a > 0)
+                {
+                    TraverseManager.SetRoom(pos.x, pos.y, r);
+                } else
+                {
+                    TraverseManager.SetRoom(pos.x, pos.y, null);
+                }
             }
         }
     }

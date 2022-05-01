@@ -26,10 +26,10 @@ public class TraverseManager : MonoBehaviour
 
     public static Room GetRoom(int wx, int wy)
     {
-        if (PointInBounds(wx, wy))
+        if (WorldPointInBounds(wx, wy))
         {
             int nx = TransformX(wx);
-            int ny = TransformX(wy);
+            int ny = TransformY(wy);
             return RoomMap[nx, ny];
         }
         return null; 
@@ -37,10 +37,11 @@ public class TraverseManager : MonoBehaviour
 
     public static void SetRoom(int wx, int wy, Room room)
     {
-        if (PointInBounds(wx, wy))
+        if (WorldPointInBounds(wx, wy))
         {
             int nx = TransformX(wx);
-            int ny = TransformX(wy);
+            int ny = TransformY(wy);
+
             RoomMap[nx, ny] = room; 
         }
     }
@@ -54,14 +55,20 @@ public class TraverseManager : MonoBehaviour
     {
         int nx = TransformX(x);
         int ny = TransformY(y);
-        return PointInBounds(x, y) && Traversable[nx, ny];
+        return LocalPointInBounds(nx, ny) && Traversable[nx, ny];
     }
 
-    public static bool PointInBounds(int x, int y)
+    public static bool WorldPointInBounds(int x, int y)
     {
         int nx = TransformX(x);
         int ny = TransformY(y);
-        return nx >= 0 && nx < xSize && ny >= 0 && ny < ySize;
+
+        return LocalPointInBounds(nx, ny);
+    }
+
+    public static bool LocalPointInBounds(int lx, int ly)
+    {
+        return lx >= 0 && lx < xSize && ly >= 0 && ly < ySize;
     }
 
     private static Vector2Int TransformToLocalCoords(int x, int y)
@@ -71,21 +78,57 @@ public class TraverseManager : MonoBehaviour
 
     private static int TransformX(int x)
     {
-        return (x / tileSize) - origin.x;
+        return (x - origin.x) / tileSize;
     }
 
     private static int TransformY(int y)
     {
-        return (y / tileSize) - origin.y;
+        return (y - origin.y) / tileSize;
     }
 
     public static void SetPoint(int wx, int wy, bool val)
     {
-        Prereq.Assert(PointInBounds(wx, wy), "Tried to set a point out of bounds: (" + wx + ", " + wy + ")");
-
         int nx = TransformX(wx);
         int ny = TransformY(wy);
+
+        Prereq.Assert(LocalPointInBounds(nx, ny), string.Format("Tried to set a point out of bounds: ({0}, {1}), with max x and y ({2}, {3})", wx, wy, xSize, ySize));
+
         Traversable[nx, ny] = val; 
+    }
+
+    public static void PrintMaps()
+    {
+        print("Printing traversal map!");
+
+        string map = "";
+
+        for (int x = 0; x < xSize; x++)
+        {
+            for (int y = 0; y < ySize; y++)
+            {
+                char val = Traversable[x, y] ? 'X' : ' ';
+                map += val; 
+            }
+            map += "\n";
+        }
+
+        print(map);
+
+        print("Printing room map!");
+
+        map = "";
+
+        for (int x = 0; x < xSize; x++)
+        {
+            for (int y = 0; y < ySize; y++)
+            {
+                char val = RoomMap[x, y] == null ? ' ' : 'R';
+                map += val;
+            }
+            map += "\n";
+        }
+     
+        print(map);
     }
 
     public static void ResetState()
