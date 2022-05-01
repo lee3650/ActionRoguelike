@@ -11,6 +11,7 @@ public class SingleRoomDrawer : MonoBehaviour, LateInitializable
     [SerializeField] Texture2D defaultDecorations;
     [SerializeField] Vector2Int room_offset;
     [SerializeField] ColorMapper ColorMapper;
+    [SerializeField] EnemyColorMapper EnemyMapper;
     [SerializeField] Room RoomPrefab; 
 
     public void LateInit()
@@ -34,9 +35,28 @@ public class SingleRoomDrawer : MonoBehaviour, LateInitializable
 
         MapDrawer.DrawSingleMap(room, room_offset);
 
-        //spawn enemies too 
+        Color32[,] wave = TextureReader.ReadTexture(defaultEnemies);
+
+        SpawnWave(wave, room_offset, currentRoom);
 
         currentRoom.LateInit();
+    }
+
+    public void SpawnWave(Color32[,] wave, Vector2Int offset, Room r)
+    {
+        for (int x = 0; x < wave.GetLength(0); x++)
+        {
+            for (int y = 0; y < wave.GetLength(1); y++)
+            {
+                GetHealthManager hm = EnemyMapper.GetEntryFromColor(wave[x, y]);
+                
+                if (hm != null)
+                {
+                    GetHealthManager enemy = Instantiate(hm, (Vector2)(offset + MapDrawer.TileSize * new Vector2Int(x, y)), Quaternion.identity);
+                    r.AddEnemy(enemy.HealthManager);
+                }
+            }
+        }
     }
 
     public void WriteTextureToMap(Color32[,] tex, Vector2Int offset)
