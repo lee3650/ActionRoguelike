@@ -5,6 +5,7 @@ using UnityEngine;
 public class LineOfSight : MonoBehaviour, LateInitializable
 {
     [SerializeField] string[] blacklistLayers = { "Trap", "TrapObject" };
+    [SerializeField] RoomChild RoomChild;
 
     private float unbrokenDistSqr;
     
@@ -23,6 +24,11 @@ public class LineOfSight : MonoBehaviour, LateInitializable
 
     void FixedUpdate()
     {
+        if (!RoomChild.RoomActive())
+        {
+            return;
+        }
+
         RaycastHit2D hit = GetHit();
         VisiblePoint = hit.point;
 

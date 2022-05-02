@@ -9,6 +9,8 @@ public class SingleRoomDrawer : MonoBehaviour, LateInitializable
     [SerializeField] Texture2D defaultRoom;
     [SerializeField] Texture2D defaultEnemies;
     [SerializeField] Texture2D defaultDecorations;
+    [SerializeField] Texture2D additiveEnv;
+    [SerializeField] Texture2D destructiveEnv;
     [SerializeField] Vector2Int room_offset;
     [SerializeField] ColorMapper ColorMapper;
     [SerializeField] EnemyColorMapper EnemyMapper;
@@ -33,6 +35,16 @@ public class SingleRoomDrawer : MonoBehaviour, LateInitializable
 
         WriteRoomToMap(room, room_offset, currentRoom);
 
+        if (destructiveEnv != null)
+        {
+            Color32[,] overwrite = TextureReader.ReadTexture(destructiveEnv);
+            OverwriteTiles(room, overwrite);
+            SpawnRoomChildren(overwrite, room_offset, currentRoom);
+        }
+
+        Color32[,] nondestr = TextureReader.ReadTexture(additiveEnv);
+        SpawnRoomChildren(nondestr, room_offset, currentRoom);
+
         MapDrawer.DrawSingleMap(room, room_offset);
 
         Color32[,] wave = TextureReader.ReadTexture(defaultEnemies);
@@ -40,6 +52,48 @@ public class SingleRoomDrawer : MonoBehaviour, LateInitializable
         SpawnWave(wave, room_offset, currentRoom);
 
         currentRoom.LateInit();
+    }
+
+    public void OverwriteTiles(Color32[,] room, Color32[,] overwrite)
+    {
+        for (int x = 0; x < room.GetLength(0); x++)
+        {
+            for (int y = 0; y < room.GetLength(1); y++)
+            {
+                if (overwrite[x, y].a != 0)
+                {
+                    room[x, y] = new Color32(0, 0, 0, 0);
+                }
+            }
+        }
+    }
+
+    public void SpawnRoomChildren(Color32[,] traps, Vector2Int offset, Room r)
+    {
+        for (int x = 0; x < traps.GetLength(0); x++)
+        {
+            for (int y = 0; y < traps.GetLength(1); y++)
+            {
+                if (traps[x, y].a > 0)
+                {
+                    GameObject child = ColorMapper.GetPrefabFromColor(traps[x, y]);
+
+                    if (child != null)
+                    {
+                        GameObject t = Instantiate(child, (Vector2)(offset + MapDrawer.TileSize * new Vector2Int(x, y)), Quaternion.identity);
+                        if (t.GetComponent<RoomChild>())
+                        {
+                            r.AddRoomChild(t.GetComponent<RoomChild>());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public Vector3 TranslateWorld(int x, int y, Vector2Int offset)
+    {
+        return (Vector2)(offset + MapDrawer.TileSize * new Vector2Int(x, y));
     }
 
     public void SpawnWave(Color32[,] wave, Vector2Int offset, Room r)
