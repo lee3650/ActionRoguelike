@@ -5,7 +5,7 @@ using UnityEngine;
 public class TraverseManager : MonoBehaviour
 {
     private static bool[,] Traversable;
-    private static Room[,] RoomMap; 
+    private static Room[,] RoomMap;
 
     private static int xSize, ySize;
 

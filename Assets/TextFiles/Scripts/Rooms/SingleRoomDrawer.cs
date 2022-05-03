@@ -6,11 +6,11 @@ public class SingleRoomDrawer : MonoBehaviour, LateInitializable
 {
     [SerializeField] MapDrawer MapDrawer;
     [SerializeField] bool drawDefaultRoom = false;
-    [SerializeField] Texture2D defaultRoom;
-    [SerializeField] Texture2D defaultEnemies;
+    [SerializeField] Sprite defaultRoom;
+    [SerializeField] Sprite defaultEnemies;
     [SerializeField] Texture2D defaultDecorations;
     [SerializeField] Texture2D additiveEnv;
-    [SerializeField] Texture2D destructiveEnv;
+    [SerializeField] Sprite destructiveEnv;
     [SerializeField] Vector2Int room_offset;
     [SerializeField] ColorMapper ColorMapper;
     [SerializeField] EnemyColorMapper EnemyMapper;
@@ -25,7 +25,7 @@ public class SingleRoomDrawer : MonoBehaviour, LateInitializable
 
         print("~~~~~~~~~~~~~~drawing map!~~~~~~~~~~~~~~");
 
-        Color32[,] room = TextureReader.ReadTexture(defaultRoom);
+        Color32[,] room = TextureReader.ReadSprite(defaultRoom);
 
         TraverseManager.Initialize(room.GetLength(0), room.GetLength(1), room_offset, MapDrawer.TileSize);
 
@@ -37,19 +37,54 @@ public class SingleRoomDrawer : MonoBehaviour, LateInitializable
 
         if (destructiveEnv != null)
         {
-            Color32[,] overwrite = TextureReader.ReadTexture(destructiveEnv);
+            Color32[,] overwrite = TextureReader.ReadSprite(destructiveEnv);
             OverwriteTiles(room, overwrite);
             SpawnRoomChildren(overwrite, room_offset, currentRoom);
         }
 
-        Color32[,] nondestr = TextureReader.ReadTexture(additiveEnv);
-        SpawnRoomChildren(nondestr, room_offset, currentRoom);
+        if (additiveEnv != null)
+        {
+            Color32[,] nondestr = TextureReader.ReadTexture(additiveEnv);
+            SpawnRoomChildren(nondestr, room_offset, currentRoom);
+        }
 
         MapDrawer.DrawSingleMap(room, room_offset);
 
-        Color32[,] wave = TextureReader.ReadTexture(defaultEnemies);
+        Color32[,] wave = TextureReader.ReadSprite(defaultEnemies);
 
         SpawnWave(wave, room_offset, currentRoom);
+
+        currentRoom.LateInit();
+    }
+
+    public void DrawRoom(RoomData roomdata)
+    {
+        Color32[,] room = TextureReader.ReadSprite(roomdata.Room);
+
+        WriteTextureToMap(room, roomdata.Offset);
+
+        Room currentRoom = Instantiate<Room>(RoomPrefab);
+
+        WriteRoomToMap(room, roomdata.Offset, currentRoom);
+
+        if (roomdata.DestructiveEnv != null)
+        {
+            Color32[,] overwrite = TextureReader.ReadSprite(roomdata.DestructiveEnv);
+            OverwriteTiles(room, overwrite);
+            SpawnRoomChildren(overwrite, roomdata.Offset, currentRoom);
+        }
+
+        if (roomdata.AdditiveEnv != null)
+        {
+            Color32[,] nondestr = TextureReader.ReadSprite(roomdata.AdditiveEnv);
+            SpawnRoomChildren(nondestr, roomdata.Offset, currentRoom);
+        }
+
+        MapDrawer.DrawSingleMap(room, roomdata.Offset);
+
+        Color32[,] wave = TextureReader.ReadSprite(roomdata.Wave);
+
+        SpawnWave(wave, roomdata.Offset, currentRoom);
 
         currentRoom.LateInit();
     }
