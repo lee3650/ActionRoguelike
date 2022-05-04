@@ -82,9 +82,11 @@ public class SingleRoomDrawer : MonoBehaviour, LateInitializable
 
         MapDrawer.DrawSingleMap(room, roomdata.Offset);
 
-        Color32[,] wave = TextureReader.ReadSprite(roomdata.Wave);
-
-        SpawnWave(wave, roomdata.Offset, currentRoom);
+        if (roomdata.Wave != null)
+        {
+            Color32[,] wave = TextureReader.ReadSprite(roomdata.Wave);
+            SpawnWave(wave, roomdata.Offset, currentRoom);
+        }
 
         currentRoom.LateInit();
     }

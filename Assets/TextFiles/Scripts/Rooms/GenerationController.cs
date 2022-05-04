@@ -15,10 +15,12 @@ public class GenerationController : MonoBehaviour, LateInitializable
     public void Generate()
     {
         List<RoomData> datas = RoomDataSupplier.ChooseRooms();
-        (Vector2Int, Vector2Int) sizeoffset = CalculateSizeAndOffset(datas);
+        (Vector2Int size, Vector2Int offset) sizeoffset = CalculateSizeAndOffset(datas);
 
-        Vector2Int size = sizeoffset.Item1;
-        Vector2Int offset = sizeoffset.Item2;
+        Vector2Int size = sizeoffset.size;
+        Vector2Int offset = sizeoffset.offset;
+
+        print("found size and offset: " + size + ", " + offset);
 
         TraverseManager.Initialize(size.x, size.y, offset, MapDrawer.TileSize);
 
@@ -38,25 +40,28 @@ public class GenerationController : MonoBehaviour, LateInitializable
 
         foreach (RoomData d in roomDatas)
         {
-            if (d.Offset.x + d.XSize > xmax)
+            int xcand = d.Offset.x + (d.XSize * MapDrawer.TileSize);
+            if (xcand > xmax)
             {
-                xmax = d.Offset.x + d.XSize;
-            }
-            if (d.Offset.y + d.YSize > ymax)
-            {
-                ymax = d.Offset.y + d.YSize;
+                xmax = xcand;
             }
 
-            if (d.Offset.x + d.XSize < xmin)
+            int ycand = d.Offset.y + (MapDrawer.TileSize * d.YSize);
+            if (ycand > ymax)
             {
-                xmin = d.Offset.x + d.XSize;
+                ymax = ycand;
             }
-            if (d.Offset.y + d.YSize < ymin)
+
+            if (d.Offset.x < xmin)
             {
-                ymin = d.Offset.y + d.YSize;
+                xmin = d.Offset.x;
+            }
+            if (d.Offset.y < ymin)
+            {
+                ymin = d.Offset.y;
             }
         }
 
-        return (new Vector2Int(xmax - xmin, ymax - ymin), new Vector2Int());
+        return (new Vector2Int((xmax - xmin) / MapDrawer.TileSize, (ymax - ymin) / MapDrawer.TileSize), new Vector2Int(xmin, ymin));
     }
 }

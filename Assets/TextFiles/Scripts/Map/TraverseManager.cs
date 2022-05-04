@@ -91,7 +91,7 @@ public class TraverseManager : MonoBehaviour
         int nx = TransformX(wx);
         int ny = TransformY(wy);
 
-        Prereq.Assert(LocalPointInBounds(nx, ny), string.Format("Tried to set a point out of bounds: ({0}, {1}), with max x and y ({2}, {3})", wx, wy, xSize, ySize));
+        Prereq.Assert(LocalPointInBounds(nx, ny), string.Format("Tried to set a point out of bounds: ({0}, {1}), with max x and y ({2}, {3}) and origin {4}", wx, wy, xSize, ySize, origin));
 
         Traversable[nx, ny] = val; 
     }

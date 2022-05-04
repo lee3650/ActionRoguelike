@@ -30,7 +30,7 @@ public class DoorCreateDoormat : MonoBehaviour, Initializable
 
             if (plusRoom == myRoom && minusRoom != myRoom)
             {
-                Instantiate(DoormatPrefab, new Vector3(plus.x, plus.y, 0), Quaternion.identity);
+                Instantiate(DoormatPrefab, new Vector3(plus.x, plus.y, 0) + new Vector3(options[i].x, options[i].y, 0), Quaternion.identity);
                 return;
             }
         }
