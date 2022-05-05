@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OffsetCalculator : MonoBehaviour
 {
-    public static Vector2Int GetOffset(RoomData parent, RoomData child, Vector2Int parentDoor, Vector2Int childDoor, Vector2Int direction)
+    public static Vector2Int GetOffset(RoomData parent, Vector2Int parentDoor, Vector2Int childDoor, Vector2Int direction)
     {
         Prereq.Assert(direction.magnitude == 1, "Direction did not have a magnitude of 1");
 
@@ -15,35 +15,84 @@ public class OffsetCalculator : MonoBehaviour
         return offset; 
     }
 
-    public static Vector2Int GetDoorPosition(RoomData room, Vector2Int direction)
+    public static (bool, Vector2Int) GetDoorPosition(RoomData room, Vector2Int direction)
     {
         Prereq.Assert(direction.magnitude == 1, "Direction did not have a magnitude of 1");
 
         Color32[,] tiles = TextureReader.ReadSprite(room.Room);
 
-        Vector2Int searchDir = new Vector2Int(1, 0);
+        Vector2Int start = GetSearchStart(direction, room);
+        Vector2Int search_dir = GetSearchDirection(direction);
 
-        Vector2Int start = searchDir * (GetSizeInDirection(searchDir, room) - 1);
-
-        int count = 4; 
-        while (searchDir != direction)
+        while (InBounds(start, room))
         {
-            Prereq.Assert(count >= 0, "Could not wrap direction around! Direction: " + direction);
-            count--;
-
-            start += searchDir * GetSizeInDirection(searchDir, room);
-
-            searchDir = GetOrthog(searchDir);
+            if (ColorsEqual(tiles[start.x, start.y], ColorMapper.DoorColor))
+            {
+                return (true, start);
+            }
+            start += search_dir;
         }
+
+        return (false, Vector2Int.zero);
     }
 
-    private static int GetSizeInDirection(Vector2Int direction, RoomData room)
+    private static bool ColorsEqual(Color32 a, Color32 b)
     {
-        return Mathf.Max(Mathf.Abs(direction.x * room.XSize), Mathf.Abs(direction.y * room.YSize));
+        return a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a; 
     }
 
-    private static Vector2Int GetOrthog(Vector2Int dir)
+    private static bool InBounds(Vector2Int pos, RoomData room)
     {
-        return new Vector2Int(-dir.y, dir.x);
+        return pos.x >= 0 && pos.x < room.XSize && pos.y >= 0 && pos.y < room.YSize; 
+    }
+
+    private static Vector2Int GetSearchStart(Vector2Int dir, RoomData room)
+    {
+        if (dir == Vector2Int.down)
+        {
+            return new Vector2Int(0, 0);
+        }
+
+        if (dir == Vector2Int.right)
+        {
+            return new Vector2Int(room.XSize - 1, 0);
+        }
+
+        if (dir == Vector2Int.up)
+        {
+            return new Vector2Int(0, room.YSize - 1);
+        }
+
+        if (dir == Vector2Int.left)
+        {
+            return new Vector2Int(0, 0);
+        }
+
+        throw new System.Exception("Did not expect input direction " + dir);
+    }
+    
+    private static Vector2Int GetSearchDirection(Vector2Int dir)
+    {
+        if (dir == Vector2Int.down)
+        {
+            return new Vector2Int(1, 0);
+        }
+
+        if (dir == Vector2Int.right)
+        {
+            return new Vector2Int(0, 1);
+        }
+
+        if (dir == Vector2Int.up)
+        {
+            return new Vector2Int(1, 0);
+        }
+
+        if (dir == Vector2Int.left)
+        {
+            return new Vector2Int(0, 1);
+        }
+
+        throw new System.Exception("Did not expect input search direction " + dir);
     }
 }

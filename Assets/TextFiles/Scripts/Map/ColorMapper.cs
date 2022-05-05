@@ -39,4 +39,6 @@ public class ColorMapper : MonoBehaviour, Initializable
 
         return ColorMap[col].Traversable;
     }
+
+    public static readonly Color32 DoorColor = new Color32(120, 120, 0, 255);
 }

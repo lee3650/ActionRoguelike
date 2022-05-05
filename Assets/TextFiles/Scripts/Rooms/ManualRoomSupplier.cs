@@ -7,6 +7,6 @@ public class ManualRoomSupplier : RoomDataSupplier
     [SerializeField] List<RoomData> roomDatas;
     public override List<RoomData> ChooseRooms()
     {
-        return roomDatas;
+        return CopyList(roomDatas);
     }
 }
