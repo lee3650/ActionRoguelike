@@ -2,71 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SingleRoomDrawer : MonoBehaviour, LateInitializable
+public class SingleRoomDrawer : MonoBehaviour
 {
     [SerializeField] MapDrawer MapDrawer;
-    [SerializeField] bool drawDefaultRoom = false;
-    [SerializeField] Sprite defaultRoom;
-    [SerializeField] Sprite defaultEnemies;
-    [SerializeField] Texture2D defaultDecorations;
-    [SerializeField] Texture2D additiveEnv;
-    [SerializeField] Sprite destructiveEnv;
-    [SerializeField] Vector2Int room_offset;
     [SerializeField] ColorMapper ColorMapper;
     [SerializeField] EnemyColorMapper EnemyMapper;
     [SerializeField] Room RoomPrefab; 
 
-    public void LateInit()
+    public void DrawRoom(RoomData roomdata, Room currentRoom, Color32[,] room)
     {
-        if (!drawDefaultRoom)
-        {
-            return; 
-        }
-
-        print("~~~~~~~~~~~~~~drawing map!~~~~~~~~~~~~~~");
-
-        Color32[,] room = TextureReader.ReadSprite(defaultRoom);
-
-        TraverseManager.Initialize(room.GetLength(0), room.GetLength(1), room_offset, MapDrawer.TileSize);
-
-        WriteTextureToMap(room, room_offset);
-
-        Room currentRoom = Instantiate<Room>(RoomPrefab);
-
-        WriteRoomToMap(room, room_offset, currentRoom);
-
-        if (destructiveEnv != null)
-        {
-            Color32[,] overwrite = TextureReader.ReadSprite(destructiveEnv);
-            OverwriteTiles(room, overwrite);
-            SpawnRoomChildren(overwrite, room_offset, currentRoom);
-        }
-
-        if (additiveEnv != null)
-        {
-            Color32[,] nondestr = TextureReader.ReadTexture(additiveEnv);
-            SpawnRoomChildren(nondestr, room_offset, currentRoom);
-        }
-
-        MapDrawer.DrawSingleMap(room, room_offset);
-
-        Color32[,] wave = TextureReader.ReadSprite(defaultEnemies);
-
-        SpawnWave(wave, room_offset, currentRoom);
-
-        currentRoom.LateInit();
-    }
-
-    public void DrawRoom(RoomData roomdata)
-    {
-        Color32[,] room = TextureReader.ReadSprite(roomdata.Room);
-
-        WriteTextureToMap(room, roomdata.Offset);
-
-        Room currentRoom = Instantiate<Room>(RoomPrefab);
-
-        WriteRoomToMap(room, roomdata.Offset, currentRoom);
-
         if (roomdata.DestructiveEnv != null)
         {
             Color32[,] overwrite = TextureReader.ReadSprite(roomdata.DestructiveEnv);

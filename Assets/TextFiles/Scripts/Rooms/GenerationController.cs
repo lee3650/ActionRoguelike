@@ -6,6 +6,7 @@ public class GenerationController : MonoBehaviour, LateInitializable
 {
     [SerializeField] SingleRoomDrawer SingleRoomDrawer;
     [SerializeField] RoomDataSupplier RoomDataSupplier;
+    [SerializeField] Room RoomPrefab; 
 
     public void LateInit()
     {
@@ -24,9 +25,26 @@ public class GenerationController : MonoBehaviour, LateInitializable
 
         TraverseManager.Initialize(size.x, size.y, offset, MapDrawer.TileSize);
 
+        List<Room> corresRooms = new List<Room>();
+        List<Color32[,]> corresTex = new List<Color32[,]>();
+
         foreach (RoomData d in datas)
         {
-            SingleRoomDrawer.DrawRoom(d);
+            Room currentRoom = Instantiate<Room>(RoomPrefab);
+
+            Color32[,] room = TextureReader.ReadSprite(d.Room);
+
+            SingleRoomDrawer.WriteTextureToMap(room, d.Offset);
+
+            SingleRoomDrawer.WriteRoomToMap(room, d.Offset, currentRoom);
+
+            corresRooms.Add(currentRoom);
+            corresTex.Add(room);
+        }
+
+        for (int i = 0; i < datas.Count; i++)
+        {
+            SingleRoomDrawer.DrawRoom(datas[i], corresRooms[i], corresTex[i]);
         }
     }
 

@@ -8,6 +8,11 @@ public class RoomPlacer : RoomDataSupplier
 
     private List<RoomData> ExistingRooms = new List<RoomData>();
 
+    public void SetRoomChooser(RoomChooser chooser)
+    {
+        RoomChooser = chooser; 
+    }
+
     Vector2Int[] Directions = new Vector2Int[]
     {
         Vector2Int.right,
@@ -39,78 +44,18 @@ public class RoomPlacer : RoomDataSupplier
             RoomData cur = roomsToPlace[i];
             cur.Parent = parent;
 
-            bool placed = false;
+            (bool success, Vector2Int offset, int branch_length) = SingleRoomPlacer.PlaceRoom(branchLength, Directions, cur, ExistingRooms);
 
-            while (!placed)
+            if (success)
             {
-                if (branchLength < 4)
-                {
-                    for (int j = 0; j < Directions.Length; j++)
-                    {
-                        Vector2Int dir = Directions[j];
-                        (bool success, Vector2Int pos) parentresult = OffsetCalculator.GetDoorPosition(cur.Parent, dir);
-                        (bool success, Vector2Int pos) result = OffsetCalculator.GetDoorPosition(cur, -dir);
-                        if (result.success && parentresult.success)
-                        {
-                            Vector2Int offset = OffsetCalculator.GetOffset(cur.Parent, parentresult.pos, result.pos, dir);
-                            if (positionAvailable(cur, offset))
-                            {
-                                branchLength++;
-                                cur.Offset = offset;
-                                parent = cur;
-                                placed = true;
-                                ExistingRooms.Add(cur);
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                parent = parent.Parent;
-                cur.Parent = parent;
-
-                branchLength--;
-
-                if (parent == null)
-                {
-                    //I guess we're just done at this point
-                    print("ending early!");
-                    return ExistingRooms; 
-                    //throw new System.Exception("Unable to place module!");
-                }
+                branchLength = branch_length;
+                parent = cur;
+                cur.Offset = offset; 
+                ExistingRooms.Add(cur);
             }
+
         }
 
         return ExistingRooms; 
-    }
-
-    private bool positionAvailable(RoomData room, Vector2Int pos)
-    {
-        foreach (RoomData r in ExistingRooms)
-        {
-            Vector2Int[] corners = new Vector2Int[]
-            {
-                pos, 
-                MapDrawer.TileSize * new Vector2Int(0, room.YSize) + pos,
-                MapDrawer.TileSize * new Vector2Int(room.XSize, 0) + pos,
-                MapDrawer.TileSize * new Vector2Int(room.XSize, room.YSize) + pos,
-            };
-
-            for (int i = 0; i < corners.Length; i++)
-            {
-                if (PointInRoom(r, corners[i]))
-                {
-                    return false; 
-                }
-            }
-        }
-
-        return true; 
-    }
-
-    private bool PointInRoom(RoomData room, Vector2Int point)
-    {
-        return point.x >= room.Offset.x && point.x < room.Offset.x + (MapDrawer.TileSize * room.XSize)
-            && point.y >= room.Offset.y && point.y < room.Offset.y + (MapDrawer.TileSize * room.YSize);
     }
 }
