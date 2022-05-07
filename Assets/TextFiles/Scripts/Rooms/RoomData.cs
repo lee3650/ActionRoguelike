@@ -25,6 +25,23 @@ public class RoomData
         return result; 
     }
 
+    public RoomData()
+    {
+        Room = null;
+        DestructiveEnv = null;
+        AdditiveEnv = null;
+        Wave = null;
+        Offset = new Vector2Int();
+    }
+
+    public RoomData(Sprite room, Sprite destructive_env, Sprite additive_env, Sprite wave)
+    {
+        Room = room;
+        DestructiveEnv = destructive_env;
+        AdditiveEnv = additive_env;
+        Wave = wave; 
+    }
+
     /// <summary>
     /// Used to help with room placement
     /// </summary>
