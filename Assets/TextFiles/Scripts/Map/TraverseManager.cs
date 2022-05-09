@@ -46,6 +46,11 @@ public class TraverseManager : MonoBehaviour
         }
     }
 
+    public static Room GetRoom(Vector2Int pos)
+    {
+        return GetRoom(pos.x, pos.y);
+    }
+
     public static bool IsPointTraversable(Vector2Int pos)
     {
         return IsPointTraversable(pos.x, pos.y);

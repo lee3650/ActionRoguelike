@@ -8,8 +8,21 @@ public class Door : MonoBehaviour
     [SerializeField] SpriteRenderer sr;
     [SerializeField] float length = 0.25f;
 
+    private bool unopenable = false; 
+
+    public void LockDoor()
+    {
+        unopenable = true;
+        Close();
+    }
+
     public virtual void Open()
     {
+        if (unopenable)
+        {
+            return; 
+        }
+
         col.enabled = false;
         StopAllCoroutines();
         StartCoroutine(Fade(1, 0, length));
@@ -31,5 +44,6 @@ public class Door : MonoBehaviour
             timer += Time.deltaTime;
             yield return null; 
         }
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, end); 
     } 
 }

@@ -5,8 +5,14 @@ using UnityEngine;
 public class ManualRoomChooser : RoomChooser
 {
     [SerializeField] List<RoomData> Rooms;
+
     public override List<RoomData> ChooseRandomRooms()
     {
         return RoomDataSupplier.CopyList(Rooms);
+    }
+
+    public override RoomData GetBossRoom()
+    {
+        return null; 
     }
 }

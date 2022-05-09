@@ -53,7 +53,19 @@ public class RoomPlacer : RoomDataSupplier
                 cur.Offset = offset; 
                 ExistingRooms.Add(cur);
             }
+        }
 
+        RoomData boss = RoomChooser.GetBossRoom();
+        
+        if (boss != null)
+        {
+            boss.Parent = parent;
+            (bool success, Vector2Int offset, int branch_length) = SingleRoomPlacer.PlaceRoom(0, Directions, boss, ExistingRooms);
+
+            Prereq.Assert(success, "Could not place the boss room!");
+
+            boss.Offset = offset; 
+            ExistingRooms.Add(boss);
         }
 
         return ExistingRooms; 
