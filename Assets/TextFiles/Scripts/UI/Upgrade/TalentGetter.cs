@@ -12,5 +12,9 @@ public class TalentGetter : MonoBehaviour
         {
             return talentPolicy;
         }
+        set
+        {
+            talentPolicy = value; 
+        }
     }
 }

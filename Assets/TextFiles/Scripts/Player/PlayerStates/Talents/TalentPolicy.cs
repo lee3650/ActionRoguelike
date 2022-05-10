@@ -12,9 +12,35 @@ public abstract class TalentPolicy : MonoBehaviour, Dependency<TalentManager>
     [SerializeField] private bool isActiveTalent;
     [SerializeField] List<TalentPolicy> Upgrades;
     [SerializeField] bool RandomizeUpgrades;
+    [SerializeField] bool[] TalentShape;
+    [SerializeField] int TalentWidth;
 
+    private TalentPolicy[,] Shape = null;
+    
     protected List<TalentPolicy> AppliedUpgrades = new List<TalentPolicy>();
     protected TalentManager TM;
+
+    public TalentPolicy[,] GetShape()
+    {
+        if (isUpgrade)
+        {
+            return Parent.GetShape();
+        }
+
+        if (Shape != null)
+        {
+            return Shape; 
+        }
+
+        Shape = new TalentPolicy[TalentWidth, TalentShape.Length / TalentWidth];
+
+        for (int i = 0; i < TalentShape.Length; i++)
+        {
+            Shape[i % TalentWidth, i / TalentWidth] = TalentShape[i] ? this : null;
+        }
+
+        return Shape; 
+    }
 
     public void InjectDependency(TalentManager tm)
     {
