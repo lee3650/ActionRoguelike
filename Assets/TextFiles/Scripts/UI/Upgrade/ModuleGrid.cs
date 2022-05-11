@@ -11,14 +11,19 @@ public class ModuleGrid : MonoBehaviour, Initializable, IPointerClickHandler
     [SerializeField] Image ImagePrefab;
     [SerializeField] UpgradePoller UpgradePoller;
     [SerializeField] RectTransform canvas;
+    [SerializeField] XPManager XPManager;
+    [SerializeField] UpgradeController UpgradeController;
 
     public const float CellSize = 100;
 
     private TalentPolicy[,] TalentGrid;
-    private Image[,] ImageGrid; 
+    private Image[,] ImageGrid;
+
+    private TalentPolicy LastSelected = null;
 
     public void Init()
     {
+        XPManager.ModuleComplete += ModuleComplete;
         TalentGrid = new TalentPolicy[Width, Height];
         ImageGrid = new Image[Width, Height];
 
@@ -38,6 +43,11 @@ public class ModuleGrid : MonoBehaviour, Initializable, IPointerClickHandler
                 ImageGrid[x, y] = image; 
             }
         }
+    }
+
+    private void ModuleComplete()
+    {
+        UpgradePoller.SetDefaultPolicy(null);
     }
 
     private void SetNewPolicy(TalentPolicy policy)
@@ -147,6 +157,8 @@ public class ModuleGrid : MonoBehaviour, Initializable, IPointerClickHandler
             }
         }
 
+        Prereq.Assert(policy.Progress == 0, "Policy progress was not zero for policy " + policy.Title);
+        Prereq.Assert(policy.GetCost() > 0, "Policy cost was <= zero for policy " + policy.Title);
         XPManager.SetCurrentPolicy(policy);
         SetNewPolicy(policy);
     }
@@ -174,7 +186,36 @@ public class ModuleGrid : MonoBehaviour, Initializable, IPointerClickHandler
         {
             (Vector3 worldPos, float dist) = GetNearestGridItem(globalPos);
             Vector2Int index = GetItemIndex(worldPos);
-            UpgradePoller.SetDefaultPolicy(TalentGrid[index.x, index.y]);
+
+            if (LastSelected == TalentGrid[index.x, index.y])
+            {
+                //deselect
+                if (XPManager.HasPolicyInProgress())
+                {
+                    UpgradePoller.SetDefaultPolicy(XPManager.GetCurrentPolicy());
+                } 
+                else
+                {
+                    UpgradePoller.SetDefaultPolicy(null);
+                    UpgradePoller.ResetPolls();
+                    UpgradeController.ShowPreviousOptions();
+                }
+
+                LastSelected = null;
+            } 
+            else
+            {
+                //select
+                LastSelected = TalentGrid[index.x, index.y];
+                UpgradePoller.SetDefaultPolicy(TalentGrid[index.x, index.y]);
+
+                if (!XPManager.HasPolicyInProgress())
+                {
+                    //show upgrades, if applicable
+                    UpgradePoller.ResetPolls();
+                    UpgradeController.ShowUpgrades(LastSelected);
+                }
+            }
         }
     }
 }

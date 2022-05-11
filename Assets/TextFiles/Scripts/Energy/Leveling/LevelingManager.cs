@@ -15,6 +15,8 @@ public class LevelingManager : MonoBehaviour, Initializable
 
     private const int talentsToShow = 3;
 
+    public event System.Action LevelingManagerReady = delegate { };
+
     public void Init()
     {
         PlayerGetter.PlayerReady += PlayerReady;
@@ -30,22 +32,23 @@ public class LevelingManager : MonoBehaviour, Initializable
     private void PlayerReady(Transform obj)
     {
         TalentManager = obj.GetComponent<TalentManager>();
+        LevelingManagerReady();
     }
 
     public List<TalentPolicy> GetUpgradeOptions()
     {
         //0, 1, or 2
-        int numUpgrades = Random.Range(0, 3);
+        //int numUpgrades = Random.Range(0, 3);
 
-        List<TalentPolicy> upgrades = TalentManager.GetUpgradableTalents(numUpgrades);
+        //List<TalentPolicy> upgrades = TalentManager.GetUpgradableTalents(numUpgrades);
 
         //upgrades might be < numUpgrades
-        int newTalents = talentsToShow - upgrades.Count;
+        //int newTalents = talentsToShow - upgrades.Count;
 
         List<TalentPolicy> result = new List<TalentPolicy>();
-        result.AddRange(upgrades);
+        //result.AddRange(upgrades);
 
-        for (int i = 0; i < newTalents; i++)
+        for (int i = 0; i < talentsToShow; i++)
         {
             if (UpgradeOptions.Count == 0)
             {
@@ -53,9 +56,36 @@ public class LevelingManager : MonoBehaviour, Initializable
             }
 
             int op = Random.Range(0, UpgradeOptions.Count);
-            furlough.Add(UpgradeOptions[op]);
-            result.Add(UpgradeOptions[op]);
+
+            TalentPolicy tp = UpgradeOptions[op];
+
+            if (tp.Reusable)
+            {
+                Prereq.Assert(!tp.Upgradable && !tp.IsUpgrade, "Talent policy " + tp.Title + " was both upgradable and reusable or was an upgrade and reusable!");
+                tp = Instantiate(tp);
+            }
+
+            furlough.Add(tp);
+            result.Add(tp);
+
             UpgradeOptions.RemoveAt(op);
+        }
+
+        return result; 
+    }
+
+    public List<TalentPolicy> GetUpgradesForTalent(TalentPolicy talent)
+    {
+        List<TalentPolicy> result = new List<TalentPolicy>();
+
+        if (talent.Upgradable)
+        {
+            result.Add(talent.GetNextUpgrade());
+        }
+
+        if (talent.Upgradable)
+        {
+            result.Add(talent.GetNextUpgrade());
         }
 
         return result; 

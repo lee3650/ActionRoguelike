@@ -40,9 +40,28 @@ public class XPManager : MonoBehaviour, Initializable
         ProgressChanged = delegate { };
     }
 
+    public string GetCurrentPolicyTitle()
+    {
+        if (CurrentPolicy == null)
+        {
+            return "";
+        }
+        return CurrentPolicy.Title;
+    }
+
+    public TalentPolicy GetCurrentPolicy()
+    {
+        return CurrentPolicy; 
+    }
+
     public bool HasCurrentPolicy()
     {
         return CurrentPolicy != null;
+    }
+
+    public bool HasPolicyInProgress()
+    {
+        return HasCurrentPolicy() && GetXPPercentage() < 1; 
     }
 
     public void ProgressPolicy(int amt)

@@ -9,7 +9,7 @@ public class WaitForModule : MonoBehaviour
 
     void Update()
     {
-        if (XPManager.HasCurrentPolicy() && XPManager.GetXPPercentage() < 1)
+        if (XPManager.HasPolicyInProgress())
         {
             CloseButton.SetActive(true);
         }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UpgradeController : MonoBehaviour, LateInitializable
+public class UpgradeController : MonoBehaviour, Initializable
 {
     [SerializeField] GridController Menu;
     [SerializeField] TimeScaleManager TimeScaleManager;
@@ -10,22 +10,66 @@ public class UpgradeController : MonoBehaviour, LateInitializable
     [SerializeField] GameObject UpgradeText;
     [SerializeField] XPManager XPManager;
     [SerializeField] Transform[] PreInitialize;
+    [SerializeField] PopupText CompletedModuleText;
+    [SerializeField] LevelingManager LevelingManager;
 
-    public void LateInit()
+    private bool upgradeComplete = false;
+
+    private List<TalentPolicy> PolicyOptions;
+
+    public void Init()
+    {
+        LevelingManager.LevelingManagerReady += LevelingManagerReady;
+    }
+
+    private void LevelingManagerReady()
     {
         OrderedInit.PerformInitialization(PreInitialize);
-        ShowMenu();
         XPManager.ModuleComplete += ModuleComplete;
+        ShowMenu();
     }
+
     private void ModuleComplete()
     {
-        UpgradeText.SetActive(true); 
+        UpgradeText.SetActive(true);
+        upgradeComplete = true;
+    }
+
+    public void ShowPreviousOptions()
+    {
+        Menu.DisplayModules(PolicyOptions);
+    }
+
+    public void ShowUpgrades(TalentPolicy policy)
+    {
+        Menu.DisplayUpgrades(LevelingManager.GetUpgradesForTalent(policy));
     }
 
     private void ShowMenu()
     {
         TimeScaleManager.BeginUntimedFreeze();
-        Menu.DisplayModules(TestingModules);
+
+        UpgradeText.SetActive(false);
+
+        if (upgradeComplete)
+        {
+            upgradeComplete = false;
+            
+            CompletedModuleText.Show("Completed " + XPManager.GetCurrentPolicyTitle(), 1f);
+
+            LevelingManager.UpgradeSelected(XPManager.GetCurrentPolicy());
+
+            PolicyOptions = LevelingManager.GetUpgradeOptions();
+            Menu.DisplayModules(PolicyOptions);
+        } else
+        {
+            if (!XPManager.HasPolicyInProgress())
+            {
+                PolicyOptions = LevelingManager.GetUpgradeOptions();
+                Menu.DisplayModules(PolicyOptions);
+            }
+        }
+        
         Menu.gameObject.SetActive(true);
     }
 
@@ -46,7 +90,7 @@ public class UpgradeController : MonoBehaviour, LateInitializable
             }
             else
             {
-                if (XPManager.HasCurrentPolicy() && XPManager.GetXPPercentage() < 1)
+                if (XPManager.HasPolicyInProgress())
                 {
                     HideMenu();
                 }
