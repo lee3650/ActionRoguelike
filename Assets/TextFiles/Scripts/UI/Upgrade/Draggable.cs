@@ -28,12 +28,8 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDra
 
     public void InjectDependency(RectTransform dependency)
     {
+        print("set canvas!");
         Canvas = dependency;
-    }
-
-    public void SetCanvas(RectTransform canv)
-    {
-        Canvas = canv; 
     }
 
     public void LateInit()

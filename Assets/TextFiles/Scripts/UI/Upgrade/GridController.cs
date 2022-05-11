@@ -9,12 +9,11 @@ public class GridController : MonoBehaviour, LateInitializable
     [SerializeField] TalentGetter UpgradePrefab;
     [SerializeField] Transform ModuleParent;
     [SerializeField] UpgradePoller UpgradePoller;
-
-    [SerializeField] List<TalentPolicy> TestingModules;
+    [SerializeField] LevelingManager LevelingManager;
 
     public void LateInit()
     {
-        DisplayModules(TestingModules);
+        //DisplayModules(TestingModules);
     }
 
     public void DisplayModules(List<TalentPolicy> modules)

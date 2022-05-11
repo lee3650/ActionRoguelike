@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ModuleGrid : MonoBehaviour, LateInitializable, IPointerClickHandler
+public class ModuleGrid : MonoBehaviour, Initializable, IPointerClickHandler
 {
     [SerializeField] int Width;
     [SerializeField] int Height;
@@ -17,7 +17,7 @@ public class ModuleGrid : MonoBehaviour, LateInitializable, IPointerClickHandler
     private TalentPolicy[,] TalentGrid;
     private Image[,] ImageGrid; 
 
-    public void LateInit()
+    public void Init()
     {
         TalentGrid = new TalentPolicy[Width, Height];
         ImageGrid = new Image[Width, Height];
@@ -38,6 +38,12 @@ public class ModuleGrid : MonoBehaviour, LateInitializable, IPointerClickHandler
                 ImageGrid[x, y] = image; 
             }
         }
+    }
+
+    private void SetNewPolicy(TalentPolicy policy)
+    {
+        UpgradePoller.ResetPolls();
+        UpgradePoller.SetDefaultPolicy(policy);
     }
 
     public (Vector3, float) GetNearestGridItem(Vector3 current)
@@ -62,9 +68,10 @@ public class ModuleGrid : MonoBehaviour, LateInitializable, IPointerClickHandler
         return (closest, min);
     }
 
-    public void ApplyUpgrade(Vector3 worldPos, TalentPolicy upgrade)
+    public void ApplyUpgrade(TalentPolicy upgrade)
     {
-        //delegate
+        XPManager.SetCurrentPolicy(upgrade);
+        SetNewPolicy(upgrade);
     }
 
     public bool CanUpgradeBeApplied(Vector3 worldPos, TalentPolicy parent)
@@ -132,7 +139,6 @@ public class ModuleGrid : MonoBehaviour, LateInitializable, IPointerClickHandler
         {
             for (int y = 0; y < shape.GetLength(1); y++)
             {
-                print(string.Format("Index: {0}, x, y: ({1}, {2}), grid size: ({3}, {4}), shape size ({5}, {6})", index, x, y, TalentGrid.GetLength(0), TalentGrid.GetLength(1), shape.GetLength(0), shape.GetLength(1)));
                 if (shape[x, y] != null)
                 {
                     TalentGrid[x + index.x, y + index.y] = shape[x, y];
@@ -140,6 +146,9 @@ public class ModuleGrid : MonoBehaviour, LateInitializable, IPointerClickHandler
                 }
             }
         }
+
+        XPManager.SetCurrentPolicy(policy);
+        SetNewPolicy(policy);
     }
 
     private Vector2Int GetItemIndex(Vector3 worldPos)

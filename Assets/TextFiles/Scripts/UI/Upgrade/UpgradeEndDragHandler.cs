@@ -16,7 +16,7 @@ public class UpgradeEndDragHandler : DragEndHandler, Dependency<ModuleGrid>
         {
             if (ModuleGrid.CanUpgradeBeApplied(gridPos, Talent.Policy.Parent))
             {
-                ModuleGrid.ApplyUpgrade(gridPos, Talent.Policy);
+                ModuleGrid.ApplyUpgrade(Talent.Policy);
                 Destroy(gameObject);
                 return;
             }

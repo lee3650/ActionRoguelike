@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro; 
 
-public class UpgradePoller : MonoBehaviour, LateInitializable
+public class UpgradePoller : MonoBehaviour, Initializable
 {
     [SerializeField] List<MousePoll> MousePolls;
     [SerializeField] TextMeshProUGUI UpgradeName;
@@ -13,7 +13,7 @@ public class UpgradePoller : MonoBehaviour, LateInitializable
 
     private TalentPolicy DefaultPolicy;
 
-    public void LateInit()
+    public void Init()
     {
         DefaultPolicy = EmptyPolicy; 
     }
@@ -45,9 +45,9 @@ public class UpgradePoller : MonoBehaviour, LateInitializable
         }
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        bool found = false; 
+        bool found = false;
 
         for (int i = MousePolls.Count - 1; i >= 0; i--) 
         {
@@ -65,7 +65,9 @@ public class UpgradePoller : MonoBehaviour, LateInitializable
                 found = true;
                 UpgradeName.text = tg.Policy.Title;
                 UpgradeDescription.text = tg.Policy.Description;
-                UpgradeCost.text = "Cost: 7 scrap";
+
+                UpgradeCost.text = GetCostText(tg.Policy);
+
                 break;
             }
         }
@@ -74,7 +76,26 @@ public class UpgradePoller : MonoBehaviour, LateInitializable
         {
             UpgradeName.text = DefaultPolicy.Title;
             UpgradeDescription.text = DefaultPolicy.Description;
-            UpgradeCost.text = "";
+            UpgradeCost.text = GetCostText(DefaultPolicy);
+        }
+    }
+
+    private string GetCostText(TalentPolicy policy)
+    {
+        if (policy.GetCost() == 0)
+        {
+            return "";
+        }
+        else
+        {
+            if (policy.Progress == 0)
+            {
+                return "Cost: " + policy.GetCost() + " scrap";
+            }
+            else
+            {
+                return string.Format("{0} / {1} scrap", policy.Progress, policy.GetCost());
+            }
         }
     }
 }

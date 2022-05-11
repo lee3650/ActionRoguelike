@@ -14,6 +14,7 @@ public abstract class TalentPolicy : MonoBehaviour, Dependency<TalentManager>
     [SerializeField] bool RandomizeUpgrades;
     [SerializeField] bool[] TalentShape;
     [SerializeField] int TalentWidth;
+    [SerializeField] int Cost;
 
     private TalentPolicy[,] Shape = null;
     
@@ -40,6 +41,17 @@ public abstract class TalentPolicy : MonoBehaviour, Dependency<TalentManager>
         }
 
         return Shape; 
+    }
+
+    public int Progress
+    {
+        get;
+        set;
+    }
+
+    public int GetCost()
+    {
+        return Cost; 
     }
 
     public void InjectDependency(TalentManager tm)

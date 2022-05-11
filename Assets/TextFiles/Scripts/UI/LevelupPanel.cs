@@ -18,7 +18,7 @@ public class LevelupPanel : MonoBehaviour, LateInitializable
     public void LateInit()
     {
         LeveledUpPanel.SetActive(false);
-        XPManager.LeveledUp += LeveledUp;
+        //XPManager.LeveledUp += LeveledUp;
     }
 
     private void LeveledUp()

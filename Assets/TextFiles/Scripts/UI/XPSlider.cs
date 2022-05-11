@@ -10,7 +10,7 @@ public class XPSlider : MonoBehaviour, LateInitializable
 
     public void LateInit()
     {
-        XPManager.XPChanged += XPChanged;
+        XPManager.ProgressChanged += XPChanged;
     }
 
     private void XPChanged()
