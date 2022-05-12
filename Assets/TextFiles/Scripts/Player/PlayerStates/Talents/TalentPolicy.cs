@@ -115,21 +115,35 @@ public abstract class TalentPolicy : MonoBehaviour, Dependency<TalentManager>
         }
     }
 
-    public TalentPolicy GetNextUpgrade()
+    public void RandomizeUpgradeOrder()
     {
         if (RandomizeUpgrades)
         {
             Upgrades = (List<TalentPolicy>)UtilityRandom.SortByRandom(Upgrades);
         }
-        TalentPolicy result = Upgrades[0];
-        result.Parent = this;
+    }
+
+    public List<TalentPolicy> GetNextUpgrades(int n)
+    {
+        List<TalentPolicy> result = new List<TalentPolicy>();
+
+        for (int i = 0; i < n; i++)
+        {
+            if (i < Upgrades.Count)
+            {
+                Upgrades[i].Parent = this; 
+                result.Add(Upgrades[i]);
+            }
+        }
+
         return result;
     }
 
-    public void AppliedNextUpgrade()
+    public void AppliedUpgrade(TalentPolicy t)
     {
-        AppliedUpgrades.Add(Upgrades[0]);
-        Upgrades.RemoveAt(0);
+        AppliedUpgrades.Add(t);
+        Prereq.Assert(Upgrades.Contains(t), "Tried to apply an upgrade not contained in upgrades: " + t.title + ", " + title);
+        Upgrades.Remove(t);
         if (Upgrades.Count == 0)
         {
             Upgradable = false;

@@ -17,6 +17,20 @@ public class UtilityRandom : MonoBehaviour
         return input; 
     }
 
+    public static List<T> SortByRandomCopy<T>(List<T> input)
+    {
+        List<T> result = new List<T>();
+
+        foreach (T t in input)
+        {
+            result.Add(t);
+        }
+
+        result = (List<T>)SortByRandom(result);
+
+        return result;
+    }
+
     public static bool PercentChance(float chance)
     {
         return Random.Range(0f, 100f) <= chance; 

@@ -76,19 +76,7 @@ public class LevelingManager : MonoBehaviour, Initializable
 
     public List<TalentPolicy> GetUpgradesForTalent(TalentPolicy talent)
     {
-        List<TalentPolicy> result = new List<TalentPolicy>();
-
-        if (talent.Upgradable)
-        {
-            result.Add(talent.GetNextUpgrade());
-        }
-
-        if (talent.Upgradable)
-        {
-            result.Add(talent.GetNextUpgrade());
-        }
-
-        return result; 
+        return talent.GetNextUpgrades(2);
     }
 
     public void UpgradeSelected(TalentPolicy t)

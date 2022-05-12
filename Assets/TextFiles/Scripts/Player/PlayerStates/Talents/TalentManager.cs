@@ -14,6 +14,7 @@ public class TalentManager : MonoBehaviour
         return CurrentTalents; 
     }
 
+    /*
     public List<TalentPolicy> GetUpgradableTalents(int numUpgrades)
     {
         List<TalentPolicy> result = new List<TalentPolicy>();
@@ -35,6 +36,7 @@ public class TalentManager : MonoBehaviour
 
         return result; 
     }
+     */
 
     public void ApplyTalent(TalentPolicy t)
     {
@@ -45,7 +47,7 @@ public class TalentManager : MonoBehaviour
 
         if (t.IsUpgrade)
         {
-            t.Parent.AppliedNextUpgrade();
+            t.Parent.AppliedUpgrade(t);
         }
 
         CurrentTalents.Add(t);
