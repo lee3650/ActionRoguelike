@@ -18,7 +18,7 @@ public class ModuleCreator : MonoBehaviour, LateInitializable
                 if (shape[x, y] != null)
                 {
                     Transform image = Instantiate(ImagePrefab, transform);
-                    image.localPosition = new Vector3(x * ModuleGrid.CellSize, y * ModuleGrid.CellSize, 0);
+                    image.localPosition = new Vector3(x * GridDS.CellSize, y * GridDS.CellSize, 0);
                 }
             }
         }

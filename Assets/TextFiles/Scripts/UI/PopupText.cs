@@ -9,13 +9,14 @@ public class PopupText : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] TextMeshProUGUI text;
     [SerializeField] Image Background;
-
+    
     private bool visible = false;
 
     public void OnPointerClick(PointerEventData eventData)
     {
         if (!visible)
         {
+            StopAllCoroutines();
             text.color = UtilityFunctions.LerpAlpha(text.color, 0, 1, 1);
             Background.color = UtilityFunctions.LerpAlpha(Background.color, 0, 1, 1);
             visible = true;
@@ -28,6 +29,7 @@ public class PopupText : MonoBehaviour, IPointerClickHandler
 
     public void Show(string message, float fadeLength)
     {
+        StopAllCoroutines();
         text.color = UtilityFunctions.LerpAlpha(text.color, 1, 0, 1);
         Background.color = UtilityFunctions.LerpAlpha(Background.color, 1, 0, 1);
         text.text = message;

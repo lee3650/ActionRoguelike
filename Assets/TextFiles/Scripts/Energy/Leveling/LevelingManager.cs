@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelingManager : MonoBehaviour, Initializable
+public class LevelingManager : UpgradeOptionSupplier, Initializable
 {
     [SerializeField] List<TalentPolicy> FallbackOptions;
     [SerializeField] PlayerGetter PlayerGetter;
@@ -35,18 +35,9 @@ public class LevelingManager : MonoBehaviour, Initializable
         LevelingManagerReady();
     }
 
-    public List<TalentPolicy> GetUpgradeOptions()
+    public override List<TalentPolicy> GetUpgradeOptions()
     {
-        //0, 1, or 2
-        //int numUpgrades = Random.Range(0, 3);
-
-        //List<TalentPolicy> upgrades = TalentManager.GetUpgradableTalents(numUpgrades);
-
-        //upgrades might be < numUpgrades
-        //int newTalents = talentsToShow - upgrades.Count;
-
         List<TalentPolicy> result = new List<TalentPolicy>();
-        //result.AddRange(upgrades);
 
         for (int i = 0; i < talentsToShow; i++)
         {
@@ -74,7 +65,7 @@ public class LevelingManager : MonoBehaviour, Initializable
         return result; 
     }
 
-    public List<TalentPolicy> GetUpgradesForTalent(TalentPolicy talent)
+    public override List<TalentPolicy> GetUpgradesForTalent(TalentPolicy talent)
     {
         return talent.GetNextUpgrades(2);
     }

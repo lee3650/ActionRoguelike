@@ -4,338 +4,37 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ModuleGrid : MonoBehaviour, Initializable, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+public abstract class ModuleGrid : MonoBehaviour
 {
-    [SerializeField] int Width;
-    [SerializeField] int Height;
-    [SerializeField] Image ImagePrefab;
-    [SerializeField] UpgradePoller UpgradePoller;
+    [SerializeField] protected UpgradePoller UpgradePoller;
+    [SerializeField] UpgradeMenu UpgradeMenu;
     [SerializeField] RectTransform canvas;
-    [SerializeField] XPManager XPManager;
-    [SerializeField] UpgradeController UpgradeController;
-    [SerializeField] ImagePulser ImagePulser;
-    [SerializeField] GridElement GridElementPrefab;
-
-    private List<GridElement> GridElements;
-
-    private GridElement MousedOverElement = null;
-
-    public const float CellSize = 100;
-
-    private TalentPolicy[,] TalentGrid;
-    private Image[,] ImageGrid;
+    [SerializeField] protected GridDS Grid;
 
     private TalentPolicy LastSelected = null;
 
-    private List<TalentPolicy> UpgradeMask = new List<TalentPolicy>();
-
-    private bool mousedOver = false; 
-
-    public void Init()
+    public (Vector3 gridPos, float dist) GetNearestGridItem(Vector3 worldPos)
     {
-        GridElements = new List<GridElement>();
-
-        XPManager.ModuleComplete += ModuleComplete;
-        TalentGrid = new TalentPolicy[Width, Height];
-        ImageGrid = new Image[Width, Height];
-
-        float xCenter = (Width - 1)/ 2f;
-        float yCenter = (Height - 1) / 2f;
-
-        Vector3 origin = new Vector3(-xCenter * CellSize, -yCenter * CellSize);
-
-        for (int x = 0; x < ImageGrid.GetLength(0); x++)
-        {
-            for (int y = 0; y < ImageGrid.GetLength(1); y++)
-            {
-                Image image = Instantiate(ImagePrefab);
-                image.transform.SetParent(transform);
-                image.transform.localScale = new Vector3(1, 1, 1);
-                image.transform.localPosition = new Vector3(x * CellSize, y * CellSize, 0) + origin;
-                ImageGrid[x, y] = image; 
-            }
-        }
+        return Grid.GetNearestGridItem(worldPos);
     }
 
-    private void Update()
+    public bool IsPositionValid(Vector3 gridPos, TalentPolicy policy)
     {
-        //okay lol
-        //we're going to take the mouse position
-        //at every frame and use that to set states
-
-        if (mousedOver)
-        {
-            Vector3 mousePos = Input.mousePosition; //Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            GridElement nearest = FindNearestGridElement(mousePos);
-
-            if (nearest != null)
-            {
-                if (nearest != MousedOverElement)
-                {
-                    nearest.HandleEvent(GridElementEvent.MouseEnter);
-
-                    if (MousedOverElement != null)
-                    {
-                        MousedOverElement.HandleEvent(GridElementEvent.MouseExit);
-                    }
-                }
-            } else
-            {
-                if (MousedOverElement != null)
-                {
-                    MousedOverElement.HandleEvent(GridElementEvent.MouseExit);
-                }
-            }
-
-            MousedOverElement = nearest; 
-
-        } else
-        {
-            if (MousedOverElement != null)
-            {
-                MousedOverElement.HandleEvent(GridElementEvent.MouseExit);
-                MousedOverElement = null;
-            }
-        }
+        return Grid.IsPositionValid(gridPos, policy);
     }
 
-    private void ModuleComplete()
+    public bool CanUpgradeBeApplied(Vector3 gridPos, TalentPolicy parent)
     {
-        UpgradePoller.SetDefaultPolicy(null);
-
-        ResetElementStates();
-
-        ImagePulser.StopAll();
-
-        List<TalentPolicy> temp = new List<TalentPolicy>();
-
-        UpgradeMask = new List<TalentPolicy>();
-
-        for (int x = 0; x < TalentGrid.GetLength(0); x++)
-        {
-            for (int y = 0; y < TalentGrid.GetLength(1); y++)
-            {
-                if (TalentGrid[x, y] != null && TalentGrid[x, y].Upgradable && !temp.Contains(TalentGrid[x, y]))
-                {
-                    temp.Add(TalentGrid[x, y]);
-                }
-            }
-        }
-
-        temp = (List<TalentPolicy>)UtilityRandom.SortByRandom(temp);
-
-        int num = Random.Range(1, 3);
-
-        for (int i = 0; i < num; i++)
-        {
-            if (i < temp.Count)
-            {
-                temp[i].RandomizeUpgradeOrder();
-
-                UpgradeMask.Add(temp[i]);
-                List<Image> images = new List<Image>();
-                List<Vector2Int> points = GetTalentPositions(temp[i]);
-                
-                for (int j = 0; j < points.Count; j++)
-                {
-                    images.Add(ImageGrid[points[j].x, points[j].y]);
-                }
-
-                FindElement(temp[i]).HandleEvent(GridElementEvent.Upgradable);
-            }
-        }
+        return Grid.CanUpgradeBeApplied(gridPos, parent);
     }
 
-    public void ResetElementStates()
-    {
-        foreach (GridElement ge in GridElements)
-        {
-            ge.ResetState();
-        }
-    }
+    public abstract void WriteToGrid(TalentPolicy policy, Vector3 gridPos);
 
-    private GridElement FindElement(TalentPolicy tp)
-    {
-        foreach (GridElement e in GridElements)
-        {
-            if (tp == e.Talent)
-            {
-                return e;
-            }
-        }
+    public abstract void ApplyUpgrade(TalentPolicy upgrade);
 
-        return null;
-    }
+    public abstract List<SelectionAction> GetSelectionActions(TalentPolicy lastSelected, TalentPolicy newClick);
 
-    private void SetNewPolicy(TalentPolicy policy)
-    {
-        UpgradePoller.ResetPolls();
-        UpgradePoller.SetDefaultPolicy(policy);
-    }
-
-    public (Vector3, float) GetNearestGridItem(Vector3 current)
-    {
-        float min = 100000f;
-        Vector3 closest = new Vector3();
-
-        for (int x = 0; x < ImageGrid.GetLength(0); x++)
-        {
-            for (int y = 0; y < ImageGrid.GetLength(1); y++)
-            {
-                Transform t = ImageGrid[x, y].transform;
-                float dist = Vector3.Distance(t.position, current);
-                if (dist < min)
-                {
-                    min = dist;
-                    closest = t.position;
-                }
-            }
-        }
-
-        return (closest, min);
-    }
-
-    public void ApplyUpgrade(TalentPolicy upgrade)
-    {
-        XPManager.SetCurrentPolicy(upgrade);
-        SetNewPolicy(upgrade);
-    }
-
-    public bool CanUpgradeBeApplied(Vector3 worldPos, TalentPolicy parent)
-    {
-        TalentPolicy[,] shape = parent.GetShape();
-
-        Vector2Int offset = GetItemIndex(worldPos);
-
-        for (int x = 0; x < shape.GetLength(0); x++)
-        {
-            for (int y = 0; y < shape.GetLength(1); y++)
-            {
-                if (offset.x + x >= TalentGrid.GetLength(0) || offset.y + y >= TalentGrid.GetLength(1))
-                {
-                    return false; 
-                }
-                if (shape[x, y] != null && TalentGrid[offset.x + x, offset.y + y] == null)
-                {
-                    return false; 
-                }
-                if (shape[x, y] != null && TalentGrid[offset.x + x, offset.y + y] != shape[x, y])
-                {
-                    return false; 
-                }
-            }
-        }
-
-        return true; 
-    }
-
-    public bool IsPositionValid(Vector3 worldPos, TalentPolicy tp)
-    {
-        Vector2Int index = GetItemIndex(worldPos);
-
-        TalentPolicy[,] shape = tp.GetShape();
-
-        for (int x = 0; x < shape.GetLength(0); x++)
-        {
-            for (int y = 0; y < shape.GetLength(1); y++)
-            {
-                if (index.x + x >= TalentGrid.GetLength(0) || index.y + y >= TalentGrid.GetLength(1))
-                {
-                    return false; 
-                }
-
-                if (TalentGrid[index.x + x, index.y + y] != null && shape[x, y] != null)
-                {
-                    return false;
-                }
-            }
-        }
-
-        return true; 
-    }
-
-    public void WriteToGrid(TalentPolicy policy, Vector3 worldPos)
-    {
-        GridElement newElement = Instantiate(GridElementPrefab);
-
-        Vector2Int index = GetItemIndex(worldPos);
-
-        TalentPolicy[,] shape = policy.GetShape();
-
-        Color assignment = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f), 1);
-
-        List<Image> images = new List<Image>();
-
-        for (int x = 0; x < shape.GetLength(0); x++)
-        {
-            for (int y = 0; y < shape.GetLength(1); y++)
-            {
-                if (shape[x, y] != null)
-                {
-                    TalentGrid[x + index.x, y + index.y] = shape[x, y];
-                    ImageGrid[x + index.x, y + index.y].color = assignment;
-                    images.Add(ImageGrid[x + index.x, y + index.y]);
-                }
-            }
-        }
-
-        newElement.Initialize(policy, images, assignment);
-
-        GridElements.Add(newElement);
-
-        Prereq.Assert(policy.Progress == 0, "Policy progress was not zero for policy " + policy.Title);
-        Prereq.Assert(policy.GetCost() > 0, "Policy cost was <= zero for policy " + policy.Title);
-        XPManager.SetCurrentPolicy(policy);
-        ResetElementStates();
-        SetNewPolicy(policy);
-    }
-
-    public GridElement FindNearestGridElement(Vector3 worldPos)
-    {
-        (Vector3 pos, float dist) = GetNearestGridItem(worldPos);
-        Vector2Int index = GetItemIndex(pos);
-        TalentPolicy talent = TalentGrid[index.x, index.y];
-        if (talent == null)
-        {
-            return null;
-        }
-
-        return FindElement(talent);
-    }
-
-    private Vector2Int GetItemIndex(Vector3 worldPos)
-    {
-        for (int x = 0; x < ImageGrid.GetLength(0); x++)
-        {
-            for (int y = 0; y < ImageGrid.GetLength(1); y++)
-            {
-                if (ImageGrid[x, y].transform.position == worldPos)
-                {
-                    return new Vector2Int(x, y);
-                }
-            }
-        }
-        throw new System.Exception("Could not find index for world pos " + worldPos);
-    }
-
-    private List<Vector2Int> GetTalentPositions(TalentPolicy talent)
-    {
-        List<Vector2Int> result = new List<Vector2Int>();
-
-        for (int x = 0; x < TalentGrid.GetLength(0); x++)
-        {
-            for (int y = 0; y < TalentGrid.GetLength(1); y++)
-            {
-                if (TalentGrid[x, y] == talent)
-                {
-                    result.Add(new Vector2Int(x, y));
-                }
-            }
-        }
-
-        return result; 
-    }
+    public abstract TalentPolicy GetDefaultTalentPolicy();
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -343,72 +42,68 @@ public class ModuleGrid : MonoBehaviour, Initializable, IPointerClickHandler, IP
 
         if (RectTransformUtility.ScreenPointToWorldPointInRectangle(canvas, eventData.position, eventData.pressEventCamera, out globalPos))
         {
-            (Vector3 worldPos, float dist) = GetNearestGridItem(globalPos);
-            Vector2Int index = GetItemIndex(worldPos);
+            TalentPolicy newClick = Grid.GetPolicy(globalPos);
 
-            if (LastSelected == TalentGrid[index.x, index.y] || LastSelected != null && TalentGrid[index.x, index.y] == null)
+            List<SelectionAction> actions = GetSelectionActions(LastSelected, newClick);
+
+            LastSelected = newClick;
+
+            HandleSelectionActions(actions);
+        }
+    }
+
+    private void HandleSelectionActions(List<SelectionAction> actions)
+    {
+        foreach (SelectionAction a in actions)
+        {
+            switch (a.Type)
             {
-                DeselectTalent();
-            } 
-            else
-            {
-                //select
-
-                TalentPolicy temp = TalentGrid[index.x, index.y];
-
-                if (temp != null)
-                {
-                    DeselectTalent();
-
-                    UpgradePoller.SetDefaultPolicy(TalentGrid[index.x, index.y]);
-
-                    FindElement(temp).HandleEvent(GridElementEvent.Selected);
-
-                    if (!XPManager.HasPolicyInProgress())
-                    {
-                        //show upgrades, if applicable
-                        UpgradePoller.ResetPolls();
-
-                        if (UpgradeMask.Contains(temp))
-                        {
-                            UpgradeController.ShowUpgrades(temp);
-                        }
-                    }
-                }
-
-                LastSelected = temp;
+                case SelectionActionType.Deselect:
+                    LastSelected = null;
+                    DeselectTalent(a.Policy);
+                    break;
+                case SelectionActionType.Select:
+                    SelectTalent(a.Policy);
+                    break;
+                case SelectionActionType.ShowUpgrades:
+                    ShowUpgrades(a.Policy);
+                    break;
+                case SelectionActionType.ShowPreviousOptions:
+                    ShowPreviousOptions();
+                    break;
+                case SelectionActionType.ClearOptions:
+                    UpgradePoller.ResetPolls();
+                    break;
             }
         }
     }
 
-    private void DeselectTalent()
+    private void SelectTalent(TalentPolicy tp)
     {
-        if (LastSelected != null)
-        {
-            FindElement(LastSelected).HandleEvent(GridElementEvent.Deselected);
-        }
-
-        if (XPManager.HasPolicyInProgress())
-        {
-            UpgradePoller.SetDefaultPolicy(XPManager.GetCurrentPolicy());
-        }
-        else
-        {
-            UpgradePoller.SetDefaultPolicy(null);
-            UpgradePoller.ResetPolls();
-            UpgradeController.ShowPreviousOptions();
-        }
-
-        LastSelected = null;
+        UpgradePoller.SetDefaultPolicy(tp);
+        Grid.SendElementEvent(tp, GridElementEvent.Selected);
+        LastSelected = tp;
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    private void ShowUpgrades(TalentPolicy tp)
     {
-        mousedOver = true; 
+        UpgradePoller.ResetPolls();
+        UpgradeMenu.ShowUpgrades(tp);
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    private void ShowPreviousOptions()
     {
-        mousedOver = false;
+        UpgradePoller.SetDefaultPolicy(null);
+        UpgradePoller.ResetPolls();
+        UpgradeMenu.ShowPreviousOptions();
+    }
+
+    private void DeselectTalent(TalentPolicy tp)
+    {
+        Prereq.Assert(tp != null, "Deselected a null talent!");
+
+        Grid.SendElementEvent(tp, GridElementEvent.Deselected);
+
+        UpgradePoller.SetDefaultPolicy(GetDefaultTalentPolicy());
     }
 }

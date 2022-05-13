@@ -12,10 +12,9 @@ public class UpgradeController : MonoBehaviour, Initializable
     [SerializeField] Transform[] PreInitialize;
     [SerializeField] PopupText CompletedModuleText;
     [SerializeField] LevelingManager LevelingManager;
+    [SerializeField] UpgradeMenu UpgradeMenu;
 
     private bool upgradeComplete = false;
-
-    private List<TalentPolicy> PolicyOptions;
 
     public void Init()
     {
@@ -28,21 +27,11 @@ public class UpgradeController : MonoBehaviour, Initializable
         XPManager.ModuleComplete += ModuleComplete;
         ShowMenu();
     }
-
+    
     private void ModuleComplete()
     {
         UpgradeText.SetActive(true);
         upgradeComplete = true;
-    }
-
-    public void ShowPreviousOptions()
-    {
-        Menu.DisplayModules(PolicyOptions);
-    }
-
-    public void ShowUpgrades(TalentPolicy policy)
-    {
-        Menu.DisplayUpgrades(LevelingManager.GetUpgradesForTalent(policy));
     }
 
     private void ShowMenu()
@@ -50,7 +39,7 @@ public class UpgradeController : MonoBehaviour, Initializable
         TimeScaleManager.BeginUntimedFreeze();
 
         UpgradeText.SetActive(false);
-
+        
         if (upgradeComplete)
         {
             upgradeComplete = false;
@@ -59,14 +48,12 @@ public class UpgradeController : MonoBehaviour, Initializable
 
             LevelingManager.UpgradeSelected(XPManager.GetCurrentPolicy());
 
-            PolicyOptions = LevelingManager.GetUpgradeOptions();
-            Menu.DisplayModules(PolicyOptions);
+            UpgradeMenu.ShowNewOptions();
         } else
         {
             if (!XPManager.HasPolicyInProgress())
             {
-                PolicyOptions = LevelingManager.GetUpgradeOptions();
-                Menu.DisplayModules(PolicyOptions);
+                UpgradeMenu.ShowNewOptions();
             }
         }
         
