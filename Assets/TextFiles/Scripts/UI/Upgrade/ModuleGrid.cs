@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public abstract class ModuleGrid : MonoBehaviour
+public abstract class ModuleGrid : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] protected UpgradePoller UpgradePoller;
     [SerializeField] UpgradeMenu UpgradeMenu;
@@ -34,6 +34,9 @@ public abstract class ModuleGrid : MonoBehaviour
 
     public abstract List<SelectionAction> GetSelectionActions(TalentPolicy lastSelected, TalentPolicy newClick);
 
+    /// <summary>
+    /// What should be shown when a talent is deselected? 
+    /// </summary>
     public abstract TalentPolicy GetDefaultTalentPolicy();
 
     public void OnPointerClick(PointerEventData eventData)

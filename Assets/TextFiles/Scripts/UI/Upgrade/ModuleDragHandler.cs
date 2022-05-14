@@ -10,8 +10,6 @@ public class ModuleDragHandler : DragHandler, Dependency<ModuleGrid>
     [SerializeField] Color InvalidColor;
     [SerializeField] Color DefaultColor;
 
-    ModuleGrid ModuleGrid;
-
     public override void HandleDrag()
     {
         (Vector3 gridPos, float dist) = ModuleGrid.GetNearestGridItem(transform.position);
@@ -33,8 +31,10 @@ public class ModuleDragHandler : DragHandler, Dependency<ModuleGrid>
         }
     }
 
-    public void InjectDependency(ModuleGrid dependency)
+    private ModuleGrid ModuleGrid;
+
+    public void InjectDependency(ModuleGrid mg)
     {
-        ModuleGrid = dependency;
+        ModuleGrid = mg;
     }
 }

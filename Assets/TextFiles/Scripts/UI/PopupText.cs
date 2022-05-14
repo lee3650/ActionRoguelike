@@ -17,8 +17,8 @@ public class PopupText : MonoBehaviour, IPointerClickHandler
         if (!visible)
         {
             StopAllCoroutines();
-            text.color = UtilityFunctions.LerpAlpha(text.color, 0, 1, 1);
-            Background.color = UtilityFunctions.LerpAlpha(Background.color, 0, 1, 1);
+            text.color = UtilityFunctions.SetAlpha(text.color, 1);
+            Background.color = UtilityFunctions.SetAlpha(Background.color, 1);
             visible = true;
         }
         else
@@ -30,8 +30,8 @@ public class PopupText : MonoBehaviour, IPointerClickHandler
     public void Show(string message, float fadeLength)
     {
         StopAllCoroutines();
-        text.color = UtilityFunctions.LerpAlpha(text.color, 1, 0, 1);
-        Background.color = UtilityFunctions.LerpAlpha(Background.color, 1, 0, 1);
+        text.color = UtilityFunctions.SetAlpha(text.color, 0);
+        Background.color = UtilityFunctions.SetAlpha(Background.color, 0);
         text.text = message;
         gameObject.SetActive(true);
         visible = false;
@@ -48,6 +48,9 @@ public class PopupText : MonoBehaviour, IPointerClickHandler
             text.color = UtilityFunctions.LerpAlpha(text.color, 0, 1, timer / len);
             Background.color = UtilityFunctions.LerpAlpha(Background.color, 0, 1, timer / len);
         }
+
+        text.color = UtilityFunctions.SetAlpha(text.color, 1);
+        Background.color = UtilityFunctions.SetAlpha(Background.color, 1);
 
         visible = true;
     }

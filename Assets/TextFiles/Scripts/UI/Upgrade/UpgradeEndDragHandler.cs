@@ -23,6 +23,7 @@ public class UpgradeEndDragHandler : DragEndHandler, Dependency<ModuleGrid>
         }
     }
 
+
     public void InjectDependency(ModuleGrid dependency)
     {
         ModuleGrid = dependency; 

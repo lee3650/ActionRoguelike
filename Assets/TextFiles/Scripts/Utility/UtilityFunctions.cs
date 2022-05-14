@@ -79,6 +79,11 @@ public class UtilityFunctions : MonoBehaviour
 
     public static Color LerpAlpha(Color input, float start, float end, float t)
     {
-        return new Color(input.r, input.g, input.b, Mathf.Lerp(start, end, t));
+        return SetAlpha(input, Mathf.Lerp(start, end, t));
+    }
+
+    public static Color SetAlpha(Color input, float alpha)
+    {
+        return new Color(input.r, input.g, input.b, alpha);
     }
 }

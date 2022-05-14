@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ModuleCreator : MonoBehaviour, LateInitializable
 {
     [SerializeField] TalentGetter TalentGetter;
     [SerializeField] Transform ImagePrefab;
+    [SerializeField] LayoutElement LayoutElement;
 
     public void LateInit()  
     {
@@ -22,5 +24,8 @@ public class ModuleCreator : MonoBehaviour, LateInitializable
                 }
             }
         }
+
+        LayoutElement.minWidth = shape.GetLength(0) * GridDS.CellSize;
+        LayoutElement.minHeight = shape.GetLength(1) * GridDS.CellSize;
     }
 }

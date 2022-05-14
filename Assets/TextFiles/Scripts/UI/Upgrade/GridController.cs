@@ -9,7 +9,6 @@ public class GridController : MonoBehaviour, LateInitializable
     [SerializeField] TalentGetter UpgradePrefab;
     [SerializeField] Transform ModuleParent;
     [SerializeField] UpgradePoller UpgradePoller;
-    [SerializeField] LevelingManager LevelingManager;
 
     public void LateInit()
     {

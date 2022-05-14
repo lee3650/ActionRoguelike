@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class ModuleEndDragHandler : DragEndHandler, Dependency<ModuleGrid>
 {
-    ModuleGrid ModuleGrid;
     [SerializeField] TalentGetter Talent;
+
+    ModuleGrid ModuleGrid;
 
     public override void HandleDragEnds()
     {
@@ -25,6 +26,6 @@ public class ModuleEndDragHandler : DragEndHandler, Dependency<ModuleGrid>
 
     public void InjectDependency(ModuleGrid dependency)
     {
-        ModuleGrid = dependency; 
+        ModuleGrid = dependency;
     }
 }

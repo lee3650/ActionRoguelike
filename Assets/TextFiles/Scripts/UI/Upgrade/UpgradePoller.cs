@@ -63,10 +63,7 @@ public class UpgradePoller : MonoBehaviour, Initializable
             {
                 TalentGetter tg = mp.GetComponent<TalentGetter>();
                 found = true;
-                UpgradeName.text = tg.Policy.Title;
-                UpgradeDescription.text = tg.Policy.Description;
-
-                UpgradeCost.text = GetCostText(tg.Policy);
+                DisplayTalent(tg.Policy);
 
                 break;
             }
@@ -74,9 +71,19 @@ public class UpgradePoller : MonoBehaviour, Initializable
 
         if (!found)
         {
-            UpgradeName.text = DefaultPolicy.Title;
-            UpgradeDescription.text = DefaultPolicy.Description;
-            UpgradeCost.text = GetCostText(DefaultPolicy);
+            DisplayTalent(DefaultPolicy);
+        }
+    }
+
+    private void DisplayTalent(TalentPolicy Policy)
+    {
+        UpgradeName.text = Policy.Title;
+        UpgradeDescription.text = Policy.Description;
+        UpgradeCost.text = GetCostText(Policy);
+
+        foreach (TalentPolicy tp in Policy.GetAppliedUpgrades())
+        {
+            UpgradeDescription.text += string.Format("\n\nUpgrade: {0}\nCost: {1} scrap", tp.Description, tp.GetCost());
         }
     }
 

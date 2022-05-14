@@ -8,8 +8,6 @@ public class UpgradeDragHandler : DragHandler, Dependency<ModuleGrid>
     [SerializeField] Color ValidColor;
     [SerializeField] Color InvalidColor;
     [SerializeField] Color DefaultColor;
-
-    ModuleGrid ModuleGrid;
     
     public override void HandleDrag()
     {
@@ -32,6 +30,7 @@ public class UpgradeDragHandler : DragHandler, Dependency<ModuleGrid>
         }
     }
 
+    private ModuleGrid ModuleGrid;
     public void InjectDependency(ModuleGrid dependency)
     {
         ModuleGrid = dependency;

@@ -21,11 +21,6 @@ public abstract class TalentPolicy : MonoBehaviour, Dependency<TalentManager>
     protected List<TalentPolicy> AppliedUpgrades = new List<TalentPolicy>();
     protected TalentManager TM;
 
-    public void Awake()
-    {
-        Prereq.Assert(Cost != 0, "Cost was zero for talent " + name);
-    }
-
     public TalentPolicy[,] GetShape()
     {
         if (isUpgrade)
@@ -142,6 +137,11 @@ public abstract class TalentPolicy : MonoBehaviour, Dependency<TalentManager>
         }
 
         return result;
+    }
+
+    public List<TalentPolicy> GetAppliedUpgrades()
+    {
+        return AppliedUpgrades;
     }
 
     public void AppliedUpgrade(TalentPolicy t)
