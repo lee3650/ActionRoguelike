@@ -8,12 +8,13 @@ public class ProgressionController : MonoBehaviour
     [SerializeField] Transform[] PreInits;
     [SerializeField] UpgradeMenu UpgradeMenu;
     [SerializeField] ProgressionModuleGrid ModuleGrid;
+    [SerializeField] UpgradePoller Poller;
     [SerializeField] ProgressionOptionSupplier OptionSupplier;
 
     public void Start()
     {
         OrderedInit.PerformInitialization(PreInits);
-        ShowMenu();
+        //ShowMenu();
     }
 
     public void ShowMenu()
@@ -24,6 +25,7 @@ public class ProgressionController : MonoBehaviour
 
     public void HideMenu()
     {
+        Poller.ResetPolls();
         Panel.SetActive(false);
     }
 

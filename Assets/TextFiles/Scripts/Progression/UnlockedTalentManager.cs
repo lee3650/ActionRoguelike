@@ -9,6 +9,9 @@ public class UnlockedTalentManager : MonoBehaviour
     
     public static List<TalentPolicy> UnlockedPolicies = new List<TalentPolicy>();
 
+    /// <summary>
+    /// This is called before the player enters the game in order to correctly assign unlocked policies to what should appear in the pool of available talents
+    /// </summary>
     public void AddAvailableTalents()
     {
         UnlockedPolicies = new List<TalentPolicy>();

@@ -16,22 +16,32 @@ public class UpgradeController : MonoBehaviour, Initializable
 
     private bool upgradeComplete = false;
 
+    private bool finishedInit = false;
+
     public void Init()
     {
+        finishedInit = false;
         LevelingManager.LevelingManagerReady += LevelingManagerReady;
     }
 
     private void LevelingManagerReady()
     {
-        OrderedInit.PerformInitialization(PreInitialize);
         XPManager.ModuleComplete += ModuleComplete;
+        OrderedInit.PerformInitialization(PreInitialize);
         ShowMenu();
+        finishedInit = true;
     }
-    
+
     private void ModuleComplete()
     {
-        UpgradeText.SetActive(true);
-        upgradeComplete = true;
+        //During initialization, XP is added to gain talents
+        //but the UI should not appear
+        if (finishedInit)
+        {
+            UpgradeText.SetActive(true);
+            upgradeComplete = true;
+        }
+        LevelingManager.UpgradeSelected(XPManager.GetCurrentPolicy());
     }
 
     private void ShowMenu()
@@ -45,8 +55,6 @@ public class UpgradeController : MonoBehaviour, Initializable
             upgradeComplete = false;
             
             CompletedModuleText.Show("Completed " + XPManager.GetCurrentPolicyTitle(), 1f);
-
-            LevelingManager.UpgradeSelected(XPManager.GetCurrentPolicy());
 
             UpgradeMenu.ShowNewOptions();
         } else

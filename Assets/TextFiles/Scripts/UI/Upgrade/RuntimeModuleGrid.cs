@@ -22,9 +22,8 @@ public class RuntimeModuleGrid : ModuleGrid, Initializable, IPointerClickHandler
         {
             TalentPolicy tp = Instantiate(ProgressionOptionSupplier.StartingTalents[i]);
             WriteToGrid(tp, Grid.GetWorldPos(ProgressionOptionSupplier.StartingPositions[i]));
-            tp.Progress = tp.GetCost();
-            ModuleComplete();
-        } 
+            XPManager.AddXP(tp.GetCost());
+        }
     }
 
     private void ModuleComplete()
