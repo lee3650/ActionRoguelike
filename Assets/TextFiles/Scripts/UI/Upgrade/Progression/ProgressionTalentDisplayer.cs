@@ -21,8 +21,22 @@ public class ProgressionTalentDisplayer : TalentDisplayer
     public override void DisplaySelectedTalent(TalentPolicy tp)
     {
         DestroyOldView();
+        print("selected talent: " + tp.Title + ", " + tp.Description);
+        if (tp.GetAppliedUpgrades().Count > 0)
+        {
+            print("selected talent upgrade 0: " + tp.GetAppliedUpgrades()[0].Description);
+        } else
+        {
+            print("selected talent has no upgrades");
+        }
         List<TalentPolicy> talents = UtilityFunctions.CopyList<TalentPolicy>(tp.GetAppliedUpgrades());
         talents.Insert(0, tp);
+
+        foreach (TalentPolicy t in talents)
+        {
+            print("an applied upgrade: " + t.Title);
+        }
+
         oldView = DisplayListOfTalents(talents, tp, true);
     }
 
@@ -42,7 +56,7 @@ public class ProgressionTalentDisplayer : TalentDisplayer
         foreach (TalentPolicy tp in talents)
         {
             SingleTalentDisplay std = Instantiate(SingleTalentDisplay, TalentGroup);
-            std.DisplayTalent(t);
+            std.DisplayTalent(tp);
 
             if (tryShowRemove && t.GetCost() > 0)
             {

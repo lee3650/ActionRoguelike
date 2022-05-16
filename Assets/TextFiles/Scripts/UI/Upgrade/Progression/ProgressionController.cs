@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProgressionController : MonoBehaviour
+public class ProgressionController : MonoBehaviour, LateInitializable
 {
     [SerializeField] GameObject Panel;
     [SerializeField] Transform[] PreInits;
@@ -11,7 +11,7 @@ public class ProgressionController : MonoBehaviour
     [SerializeField] UpgradePoller Poller;
     [SerializeField] ProgressionOptionSupplier OptionSupplier;
 
-    public void Start()
+    public void LateInit()
     {
         OrderedInit.PerformInitialization(PreInits);
         //ShowMenu();

@@ -23,6 +23,13 @@ public class RuntimeModuleGrid : ModuleGrid, Initializable, IPointerClickHandler
             TalentPolicy tp = Instantiate(ProgressionOptionSupplier.StartingTalents[i]);
             WriteToGrid(tp, Grid.GetWorldPos(ProgressionOptionSupplier.StartingPositions[i]));
             XPManager.AddXP(tp.GetCost());
+            
+            //apply upgrades for tp
+            foreach (TalentPolicy u in tp.GetAppliedUpgrades())
+            {
+                ApplyUpgrade(u);
+                XPManager.AddXP(u.GetCost());
+            }
         }
     }
 

@@ -32,10 +32,21 @@ public class GridClickHandler : MonoBehaviour
             //select the newly clicked thing
             result.Add(new SelectionAction(newClick, SelectionActionType.Select));
 
+            string upgradeMaskString = "";
+            foreach (TalentPolicy tp in upgradeMask)
+            {
+                upgradeMaskString += tp.Title + "\n";
+            }
+            print("upgrade mask: " + upgradeMaskString);
+
             if (!policyInProgress && upgradeMask.Contains(newClick))
             {
                 //show upgrades if there isn't a policy in progress and this is a member of the mask
+                print("showing upgrades!");
                 result.Add(new SelectionAction(newClick, SelectionActionType.ShowUpgrades));
+            } else
+            {
+                print("Not showing upgrades!");
             }
         }
 

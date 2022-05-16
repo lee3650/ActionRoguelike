@@ -16,7 +16,13 @@ public class ProgressionModuleGrid : ModuleGrid, Initializable
 
     public override void ApplyUpgrade(TalentPolicy upgrade)
     {
-        throw new System.NotImplementedException();
+        print("applying upgrade in module grid: " + upgrade.Title);
+        OptionSupplier.AppliedUpgrade(upgrade);
+
+        ShowUpgrades(upgrade.Parent);
+
+        print("upgrade parent applied upgrades count: " + upgrade.Parent.GetAppliedUpgrades().Count);
+        print("upgrade parent applied upgrade 0: " + upgrade.Parent.GetAppliedUpgrades()[0].Description);
     }
 
     public void RemovePolicy(TalentPolicy tp)
@@ -41,7 +47,7 @@ public class ProgressionModuleGrid : ModuleGrid, Initializable
 
     public override List<SelectionAction> GetSelectionActions(TalentPolicy lastSelected, TalentPolicy newClick)
     {
-        return GridClickHandler.HandleClick(lastSelected, newClick, OptionSupplier.GetUpgradeOptions(), false);
+        return GridClickHandler.HandleClick(lastSelected, newClick, new List<TalentPolicy>() { newClick }, false);
     }
 
     public override TalentPolicy GetDefaultTalentPolicy()

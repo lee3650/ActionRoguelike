@@ -69,6 +69,7 @@ public abstract class ModuleGrid : MonoBehaviour, IPointerClickHandler
                     SelectTalent(a.Policy);
                     break;
                 case SelectionActionType.ShowUpgrades:
+                    print("showing upgrades!");
                     ShowUpgrades(a.Policy);
                     break;
                 case SelectionActionType.ShowPreviousOptions:
@@ -88,7 +89,7 @@ public abstract class ModuleGrid : MonoBehaviour, IPointerClickHandler
         LastSelected = tp;
     }
 
-    private void ShowUpgrades(TalentPolicy tp)
+    protected void ShowUpgrades(TalentPolicy tp)
     {
         UpgradePoller.ResetPolls();
         UpgradeMenu.ShowUpgrades(tp);

@@ -151,6 +151,7 @@ public abstract class TalentPolicy : MonoBehaviour, Dependency<TalentManager>
 
     public void AppliedUpgrade(TalentPolicy t)
     {
+        print("applying upgrade in policy: " + t.title);
         AppliedUpgrades.Add(t);
         Prereq.Assert(Upgrades.Contains(t), "Tried to apply an upgrade not contained in upgrades: " + t.title + ", " + title);
         Upgrades.Remove(t);
@@ -158,6 +159,16 @@ public abstract class TalentPolicy : MonoBehaviour, Dependency<TalentManager>
         {
             Upgradable = false;
         }
+    }
+
+    public void AddUpgrade(TalentPolicy upgrade)
+    {
+        Upgrades.Add(upgrade);
+    }
+
+    public void RemoveUpgrade(TalentPolicy upgrade)
+    {
+        Upgrades.Remove(upgrade);
     }
 
     public bool Upgradable

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProgUpgradeEndHandler : DragEndHandler, Dependency<ProgressionModuleGrid>
+public class ProgUpgradeEndHandler : DragEndHandler, Dependency<ModuleGrid>
 {
     [SerializeField] TalentGetter Talent;
 
@@ -30,8 +30,8 @@ public class ProgUpgradeEndHandler : DragEndHandler, Dependency<ProgressionModul
 
     private ProgressionModuleGrid ModuleGrid;
 
-    public void InjectDependency(ProgressionModuleGrid dependency)
+    public void InjectDependency(ModuleGrid dependency)
     {
-        ModuleGrid = dependency;
+        ModuleGrid = (ProgressionModuleGrid)dependency;
     }
 }
