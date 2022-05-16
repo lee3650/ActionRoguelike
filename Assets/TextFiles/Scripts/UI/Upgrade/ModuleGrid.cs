@@ -11,7 +11,7 @@ public abstract class ModuleGrid : MonoBehaviour, IPointerClickHandler
     [SerializeField] RectTransform canvas;
     [SerializeField] protected GridDS Grid;
 
-    private TalentPolicy LastSelected = null;
+    protected TalentPolicy LastSelected = null;
 
     public (Vector3 gridPos, float dist) GetNearestGridItem(Vector3 worldPos)
     {
@@ -83,7 +83,7 @@ public abstract class ModuleGrid : MonoBehaviour, IPointerClickHandler
 
     private void SelectTalent(TalentPolicy tp)
     {
-        UpgradePoller.SetDefaultPolicy(tp);
+        UpgradePoller.SelectPolicy(tp);
         Grid.SendElementEvent(tp, GridElementEvent.Selected);
         LastSelected = tp;
     }
@@ -96,7 +96,7 @@ public abstract class ModuleGrid : MonoBehaviour, IPointerClickHandler
 
     private void ShowPreviousOptions()
     {
-        UpgradePoller.SetDefaultPolicy(null);
+        UpgradePoller.SelectPolicy(null);
         UpgradePoller.ResetPolls();
         UpgradeMenu.ShowPreviousOptions();
     }
@@ -107,6 +107,6 @@ public abstract class ModuleGrid : MonoBehaviour, IPointerClickHandler
 
         Grid.SendElementEvent(tp, GridElementEvent.Deselected);
 
-        UpgradePoller.SetDefaultPolicy(GetDefaultTalentPolicy());
+        UpgradePoller.SelectPolicy(GetDefaultTalentPolicy());
     }
 }

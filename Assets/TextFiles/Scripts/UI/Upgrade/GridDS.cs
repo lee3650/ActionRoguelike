@@ -15,6 +15,37 @@ public class GridDS : MonoBehaviour
     
     private List<GridElement> GridElements;
 
+    public void RemovePolicy(TalentPolicy tp)
+    {
+        GridElement e = FindElement(tp);
+
+        if (e != null)
+        {
+            GridElements.Remove(e);
+
+            foreach (Image i in e.Images)
+            {
+                //that'll need to change at some point most likely 
+                i.color = Color.white; 
+            }
+
+            List<Vector2Int> positions = GetTalentPositions(tp);
+
+            foreach (Vector2Int p in positions)
+            {
+                TalentGrid[p.x, p.y] = null;
+            }
+
+            Destroy(e.gameObject);
+        }
+    }
+
+    public Vector3 GetWorldPos(Vector2Int index)
+    {
+        print("searching for world pos (" + index.x + ", " + index.y + ") with grid size (" + ImageGrid.GetLength(0) + ", " + ImageGrid.GetLength(1) + ")");
+        return ImageGrid[index.x, index.y].transform.position;
+    }
+
     public void CreateGrid(int Width, int Height)
     {
         GridElements = new List<GridElement>();
@@ -202,7 +233,7 @@ public class GridDS : MonoBehaviour
         return FindElement(talent);
     }
 
-    private Vector2Int GetItemIndex(Vector3 worldPos)
+    public Vector2Int GetItemIndex(Vector3 worldPos)
     {
         for (int x = 0; x < ImageGrid.GetLength(0); x++)
         {

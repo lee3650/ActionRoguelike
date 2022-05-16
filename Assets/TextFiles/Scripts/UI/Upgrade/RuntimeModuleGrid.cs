@@ -17,11 +17,19 @@ public class RuntimeModuleGrid : ModuleGrid, Initializable, IPointerClickHandler
         Grid.CreateGrid(Width, Height);
 
         XPManager.ModuleComplete += ModuleComplete;
+
+        for (int i = 0; i < ProgressionOptionSupplier.StartingTalents.Count; i++)
+        {
+            TalentPolicy tp = Instantiate(ProgressionOptionSupplier.StartingTalents[i]);
+            WriteToGrid(tp, Grid.GetWorldPos(ProgressionOptionSupplier.StartingPositions[i]));
+            tp.Progress = tp.GetCost();
+            ModuleComplete();
+        } 
     }
 
     private void ModuleComplete()
     {
-        UpgradePoller.SetDefaultPolicy(null);
+        UpgradePoller.SelectPolicy(null);
 
         Grid.ResetElementStates();
 
@@ -33,7 +41,7 @@ public class RuntimeModuleGrid : ModuleGrid, Initializable, IPointerClickHandler
     private void SetNewPolicy(TalentPolicy policy)
     {
         UpgradePoller.ResetPolls();
-        UpgradePoller.SetDefaultPolicy(policy);
+        UpgradePoller.SelectPolicy(policy);
         Grid.ResetElementStates();
     }
 

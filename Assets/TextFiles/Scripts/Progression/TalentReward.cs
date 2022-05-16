@@ -5,11 +5,11 @@ using UnityEngine;
 public class TalentReward : RewardOption
 {
     [SerializeField] TalentPolicy MyPolicy;
-    [SerializeField] UnlockedTalentManager UnlockedTalentManager;
+    [SerializeField] ProgressionOptionSupplier Options;
 
     public override void UnlockReward()
     {
-        UnlockedTalentManager.UnlockTalent(MyPolicy);
+        Options.AddAvailableTalent(MyPolicy);
     }
 
     public override string GetTitle()

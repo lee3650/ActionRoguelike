@@ -16,7 +16,17 @@ public class ProgressionModuleGrid : ModuleGrid, Initializable
 
     public override void ApplyUpgrade(TalentPolicy upgrade)
     {
+        throw new System.NotImplementedException();
+    }
 
+    public void RemovePolicy(TalentPolicy tp)
+    {
+        Grid.RemovePolicy(tp);
+        if (!tp.IsUpgrade)
+        {
+            UpgradePoller.SelectPolicy(null);
+            LastSelected = null;
+        }
     }
 
     public void OnFailedPurchase()
@@ -42,6 +52,6 @@ public class ProgressionModuleGrid : ModuleGrid, Initializable
     public override void WriteToGrid(TalentPolicy policy, Vector3 gridPos)
     {
         Grid.AddGridElement(policy, gridPos);
-        OptionSupplier.AppliedPolicy(policy, UtilityFunctions.RoundVectorToInt(Grid.GetNearestGridItem(gridPos).Item1));
+        OptionSupplier.AppliedPolicy(policy, UtilityFunctions.RoundVectorToInt(Grid.GetItemIndex(gridPos)));
     }
 }

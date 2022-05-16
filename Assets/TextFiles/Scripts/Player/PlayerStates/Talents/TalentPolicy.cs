@@ -17,9 +17,14 @@ public abstract class TalentPolicy : MonoBehaviour, Dependency<TalentManager>
     [SerializeField] int Cost;
 
     private TalentPolicy[,] Shape = null;
-    
+
     protected List<TalentPolicy> AppliedUpgrades = new List<TalentPolicy>();
     protected TalentManager TM;
+
+    void Awake()
+    {
+        Prereq.Assert(Cost != 0, "Cost was zero for talent policy " + title);
+    }
 
     public TalentPolicy[,] GetShape()
     {

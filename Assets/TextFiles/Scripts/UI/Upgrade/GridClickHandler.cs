@@ -49,6 +49,8 @@ public struct SelectionAction
     {
         Policy = tp;
         Type = type;
+
+        MonoBehaviour.print(string.Format("Selection action {0} on talent {1}", type.ToString(), tp == null ? "none" : tp.Title));
     }
 
     public TalentPolicy Policy;

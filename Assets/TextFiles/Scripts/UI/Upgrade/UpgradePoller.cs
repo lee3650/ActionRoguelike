@@ -6,16 +6,16 @@ using TMPro;
 public class UpgradePoller : MonoBehaviour, Initializable
 {
     [SerializeField] List<MousePoll> MousePolls;
-    [SerializeField] TextMeshProUGUI UpgradeName;
-    [SerializeField] TextMeshProUGUI UpgradeDescription;
-    [SerializeField] TextMeshProUGUI UpgradeCost;
     [SerializeField] TalentPolicy EmptyPolicy;
+    [SerializeField] TalentDisplayer TalentDisplayer;
 
-    private TalentPolicy DefaultPolicy;
+    private TalentPolicy SelectedPolicy;
+    private TalentPolicy lastShown;
 
     public void Init()
     {
-        DefaultPolicy = EmptyPolicy; 
+        SelectedPolicy = EmptyPolicy;
+        lastShown = EmptyPolicy;
     }
 
     public void ResetPolls()
@@ -33,15 +33,15 @@ public class UpgradePoller : MonoBehaviour, Initializable
         MousePolls.Add(poll);
     }
 
-    public void SetDefaultPolicy(TalentPolicy policy)
+    public void SelectPolicy(TalentPolicy policy)
     {
         if (policy == null)
         {
-            DefaultPolicy = EmptyPolicy; 
+            SelectedPolicy = EmptyPolicy; 
         } 
         else
         {
-            DefaultPolicy = policy;
+            SelectedPolicy = policy;
         }
     }
 
@@ -63,46 +63,32 @@ public class UpgradePoller : MonoBehaviour, Initializable
             {
                 TalentGetter tg = mp.GetComponent<TalentGetter>();
                 found = true;
-                DisplayTalent(tg.Policy);
-
+                if (lastShown != tg.Policy) 
+                {
+                    lastShown = tg.Policy;
+                    DisplayTalent(tg.Policy);
+                } 
                 break;
             }
         }
 
         if (!found)
         {
-            DisplayTalent(DefaultPolicy);
+            if (lastShown != SelectedPolicy)
+            {
+                lastShown = SelectedPolicy;
+                DisplaySelectedTalent();
+            }
         }
+    }
+
+    private void DisplaySelectedTalent()
+    {
+        TalentDisplayer.DisplaySelectedTalent(SelectedPolicy);
     }
 
     private void DisplayTalent(TalentPolicy Policy)
     {
-        UpgradeName.text = Policy.Title;
-        UpgradeDescription.text = Policy.Description;
-        UpgradeCost.text = GetCostText(Policy);
-
-        foreach (TalentPolicy tp in Policy.GetAppliedUpgrades())
-        {
-            UpgradeDescription.text += string.Format("\n\nUpgrade: {0}\nCost: {1} scrap", tp.Description, tp.GetCost());
-        }
-    }
-
-    private string GetCostText(TalentPolicy policy)
-    {
-        if (policy.GetCost() == 0)
-        {
-            return "";
-        }
-        else
-        {
-            if (policy.Progress == 0)
-            {
-                return "Cost: " + policy.GetCost() + " scrap";
-            }
-            else
-            {
-                return string.Format("{0} / {1} scrap", policy.Progress, policy.GetCost());
-            }
-        }
+        TalentDisplayer.DisplayTalent(Policy);
     }
 }

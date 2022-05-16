@@ -86,4 +86,14 @@ public class UtilityFunctions : MonoBehaviour
     {
         return new Color(input.r, input.g, input.b, alpha);
     }
+
+    public static List<T> CopyList<T>(List<T> input)
+    {
+        List<T> result = new List<T>();
+        foreach (T t in input)
+        {
+            result.Add(t);
+        }
+        return result; 
+    }
 }

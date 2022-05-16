@@ -4,20 +4,25 @@ using UnityEngine;
 
 public class ProgressionOptionSupplier : UpgradeOptionSupplier
 {
-    [SerializeField] List<TalentPolicy> AvailableTalents;
+    [SerializeField] private List<TalentPolicy> AvailableTalents = new List<TalentPolicy>();
 
     [SerializeField] private int AvailableScrap = 15;
 
     public static List<TalentPolicy> StartingTalents = new List<TalentPolicy>();
     public static List<Vector2Int> StartingPositions = new List<Vector2Int>();
 
-    public void RemovedPolicy(TalentPolicy policy)
+    public void RemovePolicy(TalentPolicy policy)
     {
-        int i = StartingTalents.IndexOf(policy);
-        StartingPositions.RemoveAt(i);
-        StartingTalents.RemoveAt(i);
+        if (!policy.IsUpgrade)
+        {
+            int i = StartingTalents.IndexOf(policy);
+            StartingPositions.RemoveAt(i);
+            StartingTalents.RemoveAt(i);
 
-        AvailableScrap += policy.GetCost();
+            AvailableScrap += policy.GetCost();
+
+            AvailableTalents.Add(policy);
+        }
     }
 
     public void AppliedPolicy(TalentPolicy policy, Vector2Int index)
@@ -31,6 +36,11 @@ public class ProgressionOptionSupplier : UpgradeOptionSupplier
 
         printAvailableTalents();
         printStartingTalents();
+    }
+
+    public void AddAvailableTalent(TalentPolicy tp)
+    {
+        AvailableTalents.Add(tp);
     }
 
     public int GetAvailableScrap()

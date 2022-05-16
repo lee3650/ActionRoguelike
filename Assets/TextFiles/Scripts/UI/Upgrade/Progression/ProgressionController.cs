@@ -7,6 +7,8 @@ public class ProgressionController : MonoBehaviour
     [SerializeField] GameObject Panel;
     [SerializeField] Transform[] PreInits;
     [SerializeField] UpgradeMenu UpgradeMenu;
+    [SerializeField] ProgressionModuleGrid ModuleGrid;
+    [SerializeField] ProgressionOptionSupplier OptionSupplier;
 
     public void Start()
     {
@@ -23,5 +25,15 @@ public class ProgressionController : MonoBehaviour
     public void HideMenu()
     {
         Panel.SetActive(false);
+    }
+
+    public void RemovePolicy(TalentPolicy tp)
+    {
+        ModuleGrid.RemovePolicy(tp);
+        OptionSupplier.RemovePolicy(tp);
+        if (!tp.IsUpgrade)
+        {
+            UpgradeMenu.ShowNewOptions();
+        }
     }
 }

@@ -14,18 +14,6 @@ public class XPManager : MonoBehaviour, Initializable
 
     private TalentPolicy CurrentPolicy;
 
-    /*
-    [SerializeField] int startingLevel = 1;
-    [SerializeField] float startXP = 0f;
-    [SerializeField] float startXPReq = 4.5f;
-    [SerializeField] float XPSlope = 1.5f;
-    [SerializeField] float XPPower = 1f;
-    [Space(20)]
-    [SerializeField] int curLevel;
-    [SerializeField] float curXP;
-    [SerializeField] float xpReq;
-     */
-
     public void Init()
     {
         instance = this;

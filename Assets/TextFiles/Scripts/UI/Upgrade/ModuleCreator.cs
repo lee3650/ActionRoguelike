@@ -11,7 +11,6 @@ public class ModuleCreator : MonoBehaviour, LateInitializable
 
     public void LateInit()  
     {
-        print("constructing module!");
         TalentPolicy[,] shape = TalentGetter.Policy.GetShape();
         for (int x = 0; x < shape.GetLength(0); x++)
         {
