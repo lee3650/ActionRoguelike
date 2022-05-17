@@ -15,15 +15,44 @@ public abstract class TalentPolicy : MonoBehaviour, Dependency<TalentManager>
     [SerializeField] bool[] TalentShape;
     [SerializeField] int TalentWidth;
     [SerializeField] int Cost;
+    [SerializeField] private int id;
+
+    /// <summary>
+    /// This should never be modified (except through the inspector)
+    /// </summary>
+    [SerializeField] private List<TalentPolicy> AllEquippableUpgrades = new List<TalentPolicy>(); 
 
     private TalentPolicy[,] Shape = null;
 
-    protected List<TalentPolicy> AppliedUpgrades = new List<TalentPolicy>();
+    [SerializeField] protected List<TalentPolicy> AppliedUpgrades = new List<TalentPolicy>();
     protected TalentManager TM;
 
     void Awake()
     {
         Prereq.Assert(Cost != 0, "Cost was zero for talent policy " + title);
+    }
+
+    /// <summary>
+    /// Don't modify this - use indexes to create a mask
+    /// </summary>
+    public List<TalentPolicy> GetAllEquippableUpgrades()
+    {
+        List<int> used = new List<int>();
+        for (int i = 0; i < AllEquippableUpgrades.Count; i++)
+        {
+            Prereq.Assert(used.Contains(AllEquippableUpgrades[i].ID) == false, "ID was present already for upgrade " + AllEquippableUpgrades[i].Title);
+            used.Add(AllEquippableUpgrades[i].ID);
+        }
+
+        return AllEquippableUpgrades;
+    }
+
+    public int ID
+    {
+        get
+        {
+            return id; 
+        }
     }
 
     public TalentPolicy[,] GetShape()
@@ -152,8 +181,10 @@ public abstract class TalentPolicy : MonoBehaviour, Dependency<TalentManager>
     public void AppliedUpgrade(TalentPolicy t)
     {
         print("applying upgrade in policy: " + t.title);
-        AppliedUpgrades.Add(t);
         Prereq.Assert(Upgrades.Contains(t), "Tried to apply an upgrade not contained in upgrades: " + t.title + ", " + title);
+
+        AppliedUpgrades.Add(t);
+        t.Parent = this; 
         Upgrades.Remove(t);
         if (Upgrades.Count == 0)
         {
@@ -161,14 +192,46 @@ public abstract class TalentPolicy : MonoBehaviour, Dependency<TalentManager>
         }
     }
 
-    public void AddUpgrade(TalentPolicy upgrade)
+    public void AddUpgrade(int upgradeID)
     {
+        TalentPolicy upgrade = GetEquippableUpgrade(upgradeID);
+        Prereq.Assert(upgrade != null, "Upgrade with id " + upgradeID + " was null on talent " + title + " with equippable upgrades: " + AllEquippableUpgrades.Count);
         Upgrades.Add(upgrade);
+        upgrade.Parent = this; 
     }
 
-    public void RemoveUpgrade(TalentPolicy upgrade)
+    public List<TalentPolicy> GetEquippableUpgrades(List<int> ids)
     {
-        Upgrades.Remove(upgrade);
+        List<TalentPolicy> result = new List<TalentPolicy>();
+
+        foreach (TalentPolicy tid in AllEquippableUpgrades)
+        {
+            if (ids.Contains(tid.ID))
+            {
+                result.Add(tid);
+            }
+        }
+
+        return result; 
+    }
+
+    public TalentPolicy GetEquippableUpgrade(int id)
+    {
+        foreach (TalentPolicy ti in AllEquippableUpgrades)
+        {
+            if (ti.ID == id)
+            {
+                return ti;
+            }
+        }
+
+        return null;
+    }
+
+    public void UnappliedUpgrade(TalentPolicy upgrade)
+    {
+        AppliedUpgrades.Remove(upgrade);
+        Upgrades.Add(upgrade);
     }
 
     public bool Upgradable

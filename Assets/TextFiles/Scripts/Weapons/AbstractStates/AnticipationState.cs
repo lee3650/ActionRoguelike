@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnticipationState : AbstractAnticipation, Dependency<HandAndArmGetter>, Dependency<ReversedTracker>, StatSupplier
+public class AnticipationState : AbstractAnticipation, Dependency<HandAndArmGetter>, Dependency<ReversedTracker>, StatSupplier, Dependency<StatsList>
 {
     [SerializeField] Weapon MyWeapon;
+    [SerializeField] bool UseStatsList = false;
+
+    private StatsList statsList;
 
     public void InjectDependency(ReversedTracker reversedTracker)
     {
@@ -20,6 +23,10 @@ public class AnticipationState : AbstractAnticipation, Dependency<HandAndArmGett
     {
         SetupState();
         MyWeapon.SetAttackStage(AttackStage.Anticipation);
+        if (UseStatsList)
+        {
+            AnticipationLength = statsList.GetStat(StatsList.AnticipationKey);
+        }
     }
 
     public override void UpdateState()
@@ -35,5 +42,10 @@ public class AnticipationState : AbstractAnticipation, Dependency<HandAndArmGett
     public (string, string)[] GetStats()
     {
         return new (string, string)[] { ("Anticipation Length", AnticipationLength + "") };
+    }
+
+    public void InjectDependency(StatsList dependency)
+    {
+        statsList = dependency;
     }
 }

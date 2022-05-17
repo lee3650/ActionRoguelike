@@ -4,22 +4,35 @@ using UnityEngine;
 
 public class ProgressionOptionSupplier : UpgradeOptionSupplier, Initializable
 {
-    [SerializeField] private List<TalentPolicy> AvailableTalents = new List<TalentPolicy>();
+    [SerializeField] private List<TalentPolicy> AvailablePrefabs = new List<TalentPolicy>();
+    private List<TalentPolicy> AvailableTalents = new List<TalentPolicy>();
     [SerializeField] private List<TalentAndUpgrades> StartingUpgrades = new List<TalentAndUpgrades>();
     [SerializeField] private int AvailableScrap = 15;
 
-    private Dictionary<TalentPolicy, List<TalentPolicy>> Upgrades = new Dictionary<TalentPolicy, List<TalentPolicy>>();
+    public static Dictionary<int, List<int>> AppliedUpgrades = new Dictionary<int, List<int>>();
 
-    public static List<TalentPolicy> StartingTalents = new List<TalentPolicy>();
+    private Dictionary<int, List<int>> Upgrades = new Dictionary<int, List<int>>();
+
+    public static List<int> StartingTalents = new List<int>();
     public static List<Vector2Int> StartingPositions = new List<Vector2Int>();
 
     public void Init()
     {
+        AppliedUpgrades = new Dictionary<int, List<int>>();
+        Upgrades = new Dictionary<int, List<int>>();
+        StartingTalents = new List<int>();
+        StartingPositions = new List<Vector2Int>();
+
+        foreach (TalentPolicy t in AvailablePrefabs)
+        {
+            AvailableTalents.Add(Instantiate(t));
+        }
+
         foreach (TalentAndUpgrades tu in StartingUpgrades)
         {
-            foreach (TalentPolicy tp in tu.Upgrades)
+            foreach (int id in tu.Upgrades)
             {
-                UnlockUpgrade(tu.Parent, tp);
+                UnlockUpgrade(tu.Parent, id);
             }
         }
     }
@@ -27,15 +40,25 @@ public class ProgressionOptionSupplier : UpgradeOptionSupplier, Initializable
     public void AppliedUpgrade(TalentPolicy upgrade)
     {
         upgrade.Parent.AppliedUpgrade(upgrade);
-        Upgrades[upgrade.Parent].Remove(upgrade);
+        Upgrades[upgrade.Parent.ID].Remove(upgrade.ID);
+        
+        if (AppliedUpgrades.ContainsKey(upgrade.Parent.ID))
+        {
+            AppliedUpgrades[upgrade.Parent.ID].Add(upgrade.ID);
+        } else
+        {
+            AppliedUpgrades[upgrade.Parent.ID] = new List<int>() { upgrade.ID };
+        }
+
         AvailableScrap -= upgrade.GetCost();
+        print("applying upgrade: " + upgrade.ID);
     }
 
     public void RemovePolicy(TalentPolicy policy)
     {
         if (!policy.IsUpgrade)
         {
-            int i = StartingTalents.IndexOf(policy);
+            int i = StartingTalents.IndexOf(policy.ID);
             StartingPositions.RemoveAt(i);
             StartingTalents.RemoveAt(i);
 
@@ -43,11 +66,22 @@ public class ProgressionOptionSupplier : UpgradeOptionSupplier, Initializable
 
             AvailableTalents.Add(policy);
         }
+        else
+        {
+            TalentPolicy parent = policy.Parent;
+            parent.UnappliedUpgrade(policy);
+
+            AvailableScrap += policy.GetCost();
+
+            Upgrades[parent.ID].Add(policy.ID);
+            AppliedUpgrades[parent.ID].Remove(policy.ID);
+
+        }
     }
 
     public void AppliedPolicy(TalentPolicy policy, Vector2Int index)
     {
-        StartingTalents.Add(policy);
+        StartingTalents.Add(policy.ID);
         StartingPositions.Add(index);
 
         AvailableScrap -= policy.GetCost();
@@ -81,9 +115,9 @@ public class ProgressionOptionSupplier : UpgradeOptionSupplier, Initializable
     {
         print("starting talents");
 
-        foreach (TalentPolicy tp in StartingTalents)
+        foreach (int tp in StartingTalents)
         {
-            print(tp.Title);
+            print(tp);
         }
     }
 
@@ -99,23 +133,38 @@ public class ProgressionOptionSupplier : UpgradeOptionSupplier, Initializable
 
     public override List<TalentPolicy> GetUpgradesForTalent(TalentPolicy tp)
     {
-        if (Upgrades.TryGetValue(tp, out List<TalentPolicy> val))
+        if (Upgrades.TryGetValue(tp.ID, out List<int> val))
         {
-            return val;
+            print("returning equippable upgrades for talent " + tp.Title + " vals " + val.Count);
+            return tp.GetEquippableUpgrades(val);
         }
+        print("could not find upgrades for talent " + tp.Title);
         return new List<TalentPolicy>();
     }
 
-    public void UnlockUpgrade(TalentPolicy parent, TalentPolicy upgrade)
+    private TalentPolicy FindPolicyById(int id)
     {
-        parent.AddUpgrade(upgrade);
-        upgrade.Parent = parent; 
-        if (Upgrades.ContainsKey(parent))
+        foreach (TalentPolicy tp in AvailableTalents)
         {
-            Upgrades[parent].Add(upgrade);
+            if (tp.ID == id)
+            {
+                return tp;
+            }
+        }
+        return null;
+    }
+
+    public void UnlockUpgrade(TalentPolicy parent, int upgrade)
+    {
+        parent = FindPolicyById(parent.ID);
+        parent.AddUpgrade(upgrade);
+        
+        if (Upgrades.ContainsKey(parent.ID))
+        {
+            Upgrades[parent.ID].Add(upgrade);
         } else
         {
-            Upgrades[parent] = new List<TalentPolicy>() { upgrade };
+            Upgrades[parent.ID] = new List<int>() { upgrade };
         }
     }
 }

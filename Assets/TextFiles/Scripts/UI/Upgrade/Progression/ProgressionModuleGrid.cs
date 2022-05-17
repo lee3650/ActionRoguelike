@@ -32,6 +32,10 @@ public class ProgressionModuleGrid : ModuleGrid, Initializable
         {
             UpgradePoller.SelectPolicy(null);
             LastSelected = null;
+        } 
+        else
+        {
+            UpgradePoller.RefreshPolicy();
         }
     }
 

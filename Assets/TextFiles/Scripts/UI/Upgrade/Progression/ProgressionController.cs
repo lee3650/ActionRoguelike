@@ -31,11 +31,25 @@ public class ProgressionController : MonoBehaviour, LateInitializable
 
     public void RemovePolicy(TalentPolicy tp)
     {
+        if (tp.GetAppliedUpgrades().Count > 0)
+        {
+            for (int i = tp.GetAppliedUpgrades().Count - 1; i >= 0; i--)
+            {
+                RemovePolicy(tp.GetAppliedUpgrades()[i]);
+            }
+        }
+
         ModuleGrid.RemovePolicy(tp);
         OptionSupplier.RemovePolicy(tp);
+
         if (!tp.IsUpgrade)
         {
+            Poller.ResetPolls();
             UpgradeMenu.ShowNewOptions();
+        } else
+        {
+            Poller.ResetPolls();
+            UpgradeMenu.ShowUpgrades(tp.Parent);
         }
     }
 }

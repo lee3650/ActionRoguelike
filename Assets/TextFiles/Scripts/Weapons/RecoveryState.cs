@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RecoveryState : AbstractRecovery, Dependency<HandAndArmGetter>, Dependency<ReversedTracker>, StatSupplier
+public class RecoveryState : AbstractRecovery, Dependency<HandAndArmGetter>, Dependency<ReversedTracker>, StatSupplier, Dependency<StatsList>
 {
     [SerializeField] MeleeWeapon MyWeapon;
+    [SerializeField] bool UsePlayerStats;
+
+    private StatsList PlayerStats;
 
     public void InjectDependency(ReversedTracker reversedTracker)
     {
@@ -19,6 +22,10 @@ public class RecoveryState : AbstractRecovery, Dependency<HandAndArmGetter>, Dep
     public override void EnterState()
     {
         SetupState();
+        if (UsePlayerStats)
+        {
+            RecoveryLength = PlayerStats.GetStat(StatsList.RecoveryKey);
+        }
     }
 
     public override void UpdateState()
@@ -35,5 +42,10 @@ public class RecoveryState : AbstractRecovery, Dependency<HandAndArmGetter>, Dep
     public (string, string)[] GetStats()
     {
         return new (string, string)[] { ("Recovery Length", RecoveryLength + "") };
+    }
+
+    public void InjectDependency(StatsList dependency)
+    {
+        PlayerStats = dependency; 
     }
 }

@@ -6,6 +6,7 @@ public class UnlockedTalentManager : MonoBehaviour
 {
     [SerializeField] List<TalentPolicy> DefaultPolicies = new List<TalentPolicy>();
     [SerializeField] ProgressionOptionSupplier ProgressionOptionSupplier;
+    [SerializeField] TalentIDManager TalentIDManager;
     
     public static List<TalentPolicy> UnlockedPolicies = new List<TalentPolicy>();
 
@@ -16,6 +17,9 @@ public class UnlockedTalentManager : MonoBehaviour
     {
         UnlockedPolicies = new List<TalentPolicy>();
         UnlockedPolicies.AddRange(DefaultPolicies);
-        UnlockedPolicies.AddRange(ProgressionOptionSupplier.GetUpgradeOptions());
+        foreach (TalentPolicy tp in ProgressionOptionSupplier.GetUpgradeOptions())
+        {
+            UnlockedPolicies.Add(TalentIDManager.GetPrefab(tp.ID));
+        }
     }
 }

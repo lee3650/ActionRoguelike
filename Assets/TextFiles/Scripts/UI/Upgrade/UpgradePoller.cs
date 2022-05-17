@@ -45,6 +45,11 @@ public class UpgradePoller : MonoBehaviour, Initializable
         }
     }
 
+    public void RefreshPolicy()
+    {
+        lastShown = null;
+    }
+
     private void Update()
     {
         bool found = false;

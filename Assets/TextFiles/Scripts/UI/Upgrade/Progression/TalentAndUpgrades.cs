@@ -6,5 +6,5 @@ using UnityEngine;
 public class TalentAndUpgrades
 {
     public TalentPolicy Parent; 
-    public List<TalentPolicy> Upgrades;
+    public List<int> Upgrades;
 }

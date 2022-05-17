@@ -10,6 +10,10 @@ public class StatsList : MonoBehaviour, Initializable
     private Dictionary<string, float> StatValues = new Dictionary<string, float>();
     private Dictionary<string, HashSet<StatListener>> StatListeners = new Dictionary<string, HashSet<StatListener>>();
 
+    public const string AnticipationKey = "AnticipateLength";
+    public const string RecoveryKey = "RecoveryLength";
+    public const string WeaponLengthKey = "WeaponLength";
+
     public void Init()
     {
         StatValues = new Dictionary<string, float>();

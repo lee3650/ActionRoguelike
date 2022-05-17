@@ -9,6 +9,7 @@ public class RuntimeModuleGrid : ModuleGrid, Initializable, IPointerClickHandler
     [SerializeField] int Height;
     [SerializeField] XPManager XPManager;
     [SerializeField] GridClickHandler GridClickHandler;
+    [SerializeField] TalentIDManager TalentIDManager;
 
     private List<TalentPolicy> UpgradeMask = new List<TalentPolicy>();
 
@@ -20,15 +21,28 @@ public class RuntimeModuleGrid : ModuleGrid, Initializable, IPointerClickHandler
 
         for (int i = 0; i < ProgressionOptionSupplier.StartingTalents.Count; i++)
         {
-            TalentPolicy tp = Instantiate(ProgressionOptionSupplier.StartingTalents[i]);
+            TalentPolicy tp = Instantiate(TalentIDManager.GetPrefab(ProgressionOptionSupplier.StartingTalents[i]));
+
+            print("added talent policy: " + tp.Title);
+            
             WriteToGrid(tp, Grid.GetWorldPos(ProgressionOptionSupplier.StartingPositions[i]));
             XPManager.AddXP(tp.GetCost());
-            
-            //apply upgrades for tp
-            foreach (TalentPolicy u in tp.GetAppliedUpgrades())
+
+            List<int> upgrades = new List<int>();
+            if (ProgressionOptionSupplier.AppliedUpgrades.ContainsKey(ProgressionOptionSupplier.StartingTalents[i]))
             {
-                ApplyUpgrade(u);
-                XPManager.AddXP(u.GetCost());
+                upgrades = ProgressionOptionSupplier.AppliedUpgrades[ProgressionOptionSupplier.StartingTalents[i]];
+            }
+
+            //apply upgrades for tp
+            foreach (int u in upgrades)
+            {
+                tp.AddUpgrade(u);
+                TalentPolicy upgrade = tp.GetEquippableUpgrade(u);
+                print("got upgrade " + upgrade.Description + " from id " + u);
+                upgrade.Parent = tp; 
+                ApplyUpgrade(upgrade);
+                XPManager.AddXP(upgrade.GetCost());
             }
         }
     }
