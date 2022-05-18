@@ -94,7 +94,7 @@ public class ProgressionOptionSupplier : UpgradeOptionSupplier, Initializable
 
     public void AddAvailableTalent(TalentPolicy tp)
     {
-        AvailableTalents.Add(tp);
+        AvailableTalents.Add(Instantiate(tp));
     }
 
     public int GetAvailableScrap()

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerHealState : State, Talent, Dependency<MovementUtility>, Dependency<HealthManager>, Dependency<ManaManager>, Dependency<ActiveTalentManager>, Dependency<PlayerRoomSetter>, Dependency<PlayerMoveState>
+public class PlayerHealState : State, Talent, Dependency<MovementUtility>, Dependency<HealthManager>, Dependency<ManaManager>, Dependency<ActiveTalentManager>, Dependency<PlayerMoveState>
 {
     [SerializeField] float HealAmt;
     [SerializeField] float HealLength;
@@ -13,23 +13,17 @@ public class PlayerHealState : State, Talent, Dependency<MovementUtility>, Depen
     private PlayerMoveState moveState;
     private PlayerInput PlayerInput;
     private ActiveTalentManager ActiveTalentManager;
-    private PlayerRoomSetter PlayerRoomSetter;
     private MovementUtility MovementUtility;
 
     public bool CanUseTalent()
     {
-        return ManaManager.ChargesRemaining(1) && hm.GetHealthPercentage() < 0.995f && !PlayerRoomSetter.RoomClear;
+        return ManaManager.ChargesRemaining(1) && hm.GetHealthPercentage() < 0.995f;
     }
 
     public void InjectDependency(MovementUtility mu)
     {
         MovementUtility = mu;
         PlayerInput = mu.GetPlayerInput();
-    }
-
-    public void InjectDependency(PlayerRoomSetter prs)
-    {
-        PlayerRoomSetter = prs;
     }
 
     public void InjectDependency(ActiveTalentManager atm)

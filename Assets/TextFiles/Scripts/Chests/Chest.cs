@@ -5,7 +5,8 @@ using UnityEngine;
 public class Chest : MonoBehaviour, LateInitializable
 {
     [SerializeField] HealthManager HealthManager;
-    [SerializeField] Weapon[] PossibleWeapons; 
+    [SerializeField] GameObject DropPrefab;
+    [SerializeField] int MaxDrops = 3; 
 
     public void LateInit()
     {
@@ -14,8 +15,11 @@ public class Chest : MonoBehaviour, LateInitializable
 
     private void OnDeath()
     {
-        Weapon w = PossibleWeapons[Random.Range(0, PossibleWeapons.Length)];
-        Instantiate(w, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+        int drops = Random.Range(1, MaxDrops);
+        for (int i = 0; i < drops; i++)
+        {
+            Instantiate(DropPrefab, (Vector2)transform.position + 1.5f * Random.insideUnitCircle, Quaternion.identity);
+        }
         Destroy(gameObject);
     }
 }
