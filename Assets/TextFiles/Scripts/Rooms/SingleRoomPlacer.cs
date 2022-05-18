@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class SingleRoomPlacer
 {
-    const int MAX_BRANCH_LENGTH = 4;
+    public const int MAX_BRANCH_LENGTH = 4;
 
     public static (bool success, Vector2Int offset, int branch_length) PlaceRoom(int branchLength, Vector2Int[] Directions, RoomData cur, List<RoomData> ExistingRooms)
     {

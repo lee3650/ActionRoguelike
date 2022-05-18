@@ -8,6 +8,8 @@ public class RoomPlacer : RoomDataSupplier
 
     private List<RoomData> ExistingRooms = new List<RoomData>();
 
+    private List<RoomData> DeadEndRooms = new List<RoomData>();
+
     public void SetRoomChooser(RoomChooser chooser)
     {
         RoomChooser = chooser; 
@@ -24,6 +26,8 @@ public class RoomPlacer : RoomDataSupplier
     public override List<RoomData> ChooseRooms()
     {
         ExistingRooms = new List<RoomData>();
+
+        DeadEndRooms = new List<RoomData>();
 
         int branchLength = 0;
 
@@ -52,6 +56,12 @@ public class RoomPlacer : RoomDataSupplier
                 parent = cur;
                 cur.Offset = offset; 
                 ExistingRooms.Add(cur);
+
+                if (branchLength == SingleRoomPlacer.MAX_BRANCH_LENGTH)
+                {
+                    print("adding room to dead end list");
+                    DeadEndRooms.Add(cur);
+                }
             }
         }
 
@@ -61,6 +71,20 @@ public class RoomPlacer : RoomDataSupplier
         {
             boss.Parent = parent;
             (bool success, Vector2Int offset, int branch_length) = SingleRoomPlacer.PlaceRoom(0, Directions, boss, ExistingRooms);
+
+            if (!success)
+            {
+                print("placing boss room using dead end rooms!");
+                foreach (RoomData room in DeadEndRooms)
+                {
+                    boss.Parent = room;
+                    (success, offset, branch_length) = SingleRoomPlacer.PlaceRoom(0, Directions, boss, ExistingRooms);
+                    if (success)
+                    {
+                        break;
+                    }
+                }
+            }
 
             Prereq.Assert(success, "Could not place the boss room!");
 
