@@ -13,6 +13,7 @@ public class StatsList : MonoBehaviour, Initializable
     public const string AnticipationKey = "AnticipateLength";
     public const string RecoveryKey = "RecoveryLength";
     public const string WeaponLengthKey = "WeaponLength";
+    public const string BaseDamageKey = "BaseDamage";
 
     public void Init()
     {

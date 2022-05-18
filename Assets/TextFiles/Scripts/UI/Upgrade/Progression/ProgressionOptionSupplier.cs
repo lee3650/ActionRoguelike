@@ -131,6 +131,11 @@ public class ProgressionOptionSupplier : UpgradeOptionSupplier, Initializable
         return AvailableTalents;
     }
 
+    public void IncreaseAvailableScrap(int amt)
+    {
+        AvailableScrap += amt; 
+    }
+
     public override List<TalentPolicy> GetUpgradesForTalent(TalentPolicy tp)
     {
         if (Upgrades.TryGetValue(tp.ID, out List<int> val))

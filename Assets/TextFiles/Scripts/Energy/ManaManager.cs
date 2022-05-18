@@ -38,6 +38,13 @@ public class ManaManager : MonoBehaviour, Initializable, StatListener, LateIniti
         ManaChanged();
     }
 
+    public void LerpCharges(float length, float delta, int number)
+    {
+        float diff = (number * ChargeAmt * delta) / length;
+        curMana -= diff;
+        ManaChanged();
+    }
+
     public bool ChargesRemaining(int number)
     {
         return curMana >= number * ChargeAmt;

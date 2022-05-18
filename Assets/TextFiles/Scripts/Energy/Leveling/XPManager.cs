@@ -54,6 +54,11 @@ public class XPManager : MonoBehaviour, Initializable
 
     public void ProgressPolicy(int amt)
     {
+        if (CurrentPolicy.Progress >= CurrentPolicy.GetCost())
+        {
+            return; 
+        }
+
         CurrentPolicy.Progress += amt;
 
         ProgressChanged();

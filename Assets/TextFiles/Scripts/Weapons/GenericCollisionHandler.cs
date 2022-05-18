@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GenericCollisionHandler : WeaponCollisionHandler, LateInitializable, Dependency<AttackModifierList>, StatSupplier
+public class GenericCollisionHandler : WeaponCollisionHandler, LateInitializable, Dependency<AttackModifierList>, StatSupplier, Dependency<StatsList>, StatListener 
 {
     [SerializeField] GenericWeapon MyWeapon;
     [SerializeField] WielderSupplier WielderSupplier;
     [SerializeField] List<GameEvent> MyEventTemplates;
-
+    [SerializeField] bool UsePlayerDamageStat = false;
+    
     private AttackModifierList AttackModifiers; 
 
     //We also need to know when we hit any collider so we can stop... um...
@@ -15,6 +16,27 @@ public class GenericCollisionHandler : WeaponCollisionHandler, LateInitializable
     public event System.Action<Entity> HitEntity = delegate { };
 
     private List<Entity> hitEntities = new List<Entity>();
+
+    private StatsList PlayerStats;
+
+    private GameEvent baseEvent = null;
+
+    public void InjectDependency(StatsList dependency)
+    {
+        if (UsePlayerDamageStat)
+        {
+            PlayerStats = dependency;
+            PlayerStats.RegisterListener(StatsList.BaseDamageKey, this);
+            baseEvent = new GameEvent(SignalType.Physical, PlayerStats.GetStat(StatsList.BaseDamageKey), WielderSupplier.GetWielder(),
+                new StatDictionary(new string[] { }, new string[] { }));
+            MyEventTemplates.Insert(0, baseEvent);
+        }
+    }
+
+    public void StatChanged(string stat, float newVal)
+    {
+        baseEvent.Magnitude = newVal; 
+    }
 
     public void InjectDependency(AttackModifierList aml)
     {
@@ -51,10 +73,9 @@ public class GenericCollisionHandler : WeaponCollisionHandler, LateInitializable
             {
                 List<GameEvent> effectiveEvents = new List<GameEvent>();
                 effectiveEvents.AddRange(MyEventTemplates);
-                if (AttackModifiers == null)
-                {
-                    throw new System.Exception("Attack modifiers was not injected!");
-                }
+
+                Prereq.Assert(AttackModifiers != null, "Attack modifiers was not injected!");
+                
                 effectiveEvents.AddRange(AttackModifiers.GetAttackModifiers());
 
                 foreach (GameEvent ge in effectiveEvents)

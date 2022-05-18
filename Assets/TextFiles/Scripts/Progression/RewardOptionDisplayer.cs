@@ -9,6 +9,7 @@ public class RewardOptionDisplayer : MonoBehaviour
     [SerializeField] TextMeshProUGUI DescriptionText;
     [SerializeField] TextMeshProUGUI CostText;
     [SerializeField] GameObject BuyButton;
+    [SerializeField] RewardLoader RewardLoader;
 
     private RewardOption CurrentOption;
 
@@ -33,7 +34,8 @@ public class RewardOptionDisplayer : MonoBehaviour
             CurrentOption.Unlocked = true;
             CurrentOption.UnlockReward();
             MetaCurrencyManager.SpendBalance(CurrentOption.Cost);
-            BuyButton.SetActive(false); 
+            BuyButton.SetActive(false);
+            RewardLoader.UnlockedReward(CurrentOption);
         } else
         {
             print(string.Format("Failed because can unlock is {0}, balance is {1} and cost is {2}", CurrentOption.CanUnlock(), MetaCurrencyManager.Balance, CurrentOption.Cost));

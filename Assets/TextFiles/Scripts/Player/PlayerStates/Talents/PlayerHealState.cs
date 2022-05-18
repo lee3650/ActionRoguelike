@@ -17,7 +17,7 @@ public class PlayerHealState : State, Talent, Dependency<MovementUtility>, Depen
 
     public bool CanUseTalent()
     {
-        return ManaManager.ChargesRemaining(1) && hm.GetHealthPercentage() < 0.995f;
+        return ManaManager.ChargesRemaining(2) && hm.GetHealthPercentage() < 0.995f;
     }
 
     public void InjectDependency(MovementUtility mu)
@@ -82,7 +82,7 @@ public class PlayerHealState : State, Talent, Dependency<MovementUtility>, Depen
     {
         timer += Time.fixedDeltaTime;
 
-        ManaManager.LerpCharge(HealLength, Time.fixedDeltaTime);
+        ManaManager.LerpCharges(HealLength, Time.fixedDeltaTime, 2);
 
         MovementUtility.MoveTowardInput();
 
